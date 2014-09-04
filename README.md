@@ -11,8 +11,8 @@ darkhart
 - Brooks Roley
 
 #### MVP For Monday Scope
-Classic rails on postgres app with standard CRUD routes/views/erb templates.  
-- One persistant game with unlimited play round.
+Rails API with functioning game logic, serving data via JSON to a standalone JavaScript client. MVP client will be bare minimum JS to accomplish console-based play of the game for proof of concept.
+- One persistant game with unlimited play rounds.
 - 4 hardcoded users with name and score attributes.
 - Real card data.
 
