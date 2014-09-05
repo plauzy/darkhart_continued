@@ -22,17 +22,17 @@ ActiveRecord::Schema.define(version: 20140905044433) do
     t.datetime "updated_at"
   end
 
-  create_table "cards_in_plays", force: true do |t|
+  create_table "games", force: true do |t|
+    t.string "name", limit: 30
+  end
+
+  create_table "playable_cards", force: true do |t|
     t.integer  "user_id"
     t.integer  "game_id"
     t.integer  "whitecard_id"
     t.boolean  "playable",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "games", force: true do |t|
-    t.string "name", limit: 30
   end
 
   create_table "rounds", force: true do |t|
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20140905044433) do
 
   create_table "submissions", force: true do |t|
     t.integer "round_id"
-    t.integer "cards_in_play_id"
+    t.integer "playable_card_id"
     t.boolean "winner",           default: false
   end
 

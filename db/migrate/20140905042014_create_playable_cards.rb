@@ -1,6 +1,6 @@
-class CreateCardsInPlay < ActiveRecord::Migration
+class CreatePlayableCards < ActiveRecord::Migration
   def change
-    create_table :cards_in_plays do |t|
+    create_table :playable_cards do |t|
       t.integer :user_id
       t.integer :game_id
       t.integer :whitecard_id
