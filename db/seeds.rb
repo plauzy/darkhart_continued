@@ -17,22 +17,22 @@ w3 = Whitecard.create(:content => "ribbet")
 
 
 
-cip1 = CardsInPlay.create(:user_id => ian.id, :game_id => game.id, :whitecard_id => w1.id)
-cip2 = CardsInPlay.create(:user_id => ian.id, :game_id => game.id, :whitecard_id => w2.id)
-cip3 = CardsInPlay.create(:user_id => cass.id, :game_id => game.id, :whitecard_id => w3.id)
+playable_card_1 = PlayableCard.create(:user_id => ian.id, :game_id => game.id, :whitecard_id => w1.id)
+playable_card_2 = PlayableCard.create(:user_id => ian.id, :game_id => game.id, :whitecard_id => w2.id)
+playable_card_3 = PlayableCard.create(:user_id => cass.id, :game_id => game.id, :whitecard_id => w3.id)
 
-cip1.user #success
-cip1.whitecard #Success
-ian.cards_in_play #Success
-cass.cards_in_play.first.whitecard #Success
+playable_card_1.user #success
+playable_card_1.whitecard #Success
+ian.playable_card #Success
+cass.playable_card.first.whitecard #Success
 # -------------------------------------------------
 
-s1 = Submission.create(:round_id => round.id, :cards_in_play_id => cip2.id)
-s2 = Submission.create(:round_id => round.id, :cards_in_play_id => cip3.id)
+s1 = Submission.create(:round_id => round.id, :playable_card_id => playable_card_2.id)
+s2 = Submission.create(:round_id => round.id, :playable_card_id => playable_card_3.id)
 
 round.submissions #Success
 s1.round #Success
-s1.cards_in_play.whitecard
+s1.playable_card.whitecard
 
 s1.winner = true
 s1.save
@@ -41,11 +41,11 @@ s1.save
 winner = round.submissions.where(["round_id = ? and winner = ?", round.id, 'true']).first
 
 #get whitecard of winner
-winner.cards_in_play.whitecard
+winner.playable_card.whitecard
 
 
 
-# ------------ 
+# ------------
 # Game.create(:name => "Game 2")
 # Round.create(:game_id => 1)
 # g = Game.first
@@ -55,9 +55,9 @@ winner.cards_in_play.whitecard
 # g.name == r.game.name # false!
 
 # pat = User.create(:name => "Pat")
-# card = CardsInPlay.create(:user_id => pat.id)
-# u = User.first 
-# c = CardsInPlay.first 
+# card = PlayableCard.create(:user_id => pat.id)
+# u = User.first
+# c = PlayableCard.first
 # u.name == c.user.name
 # u.name = "turtle"
 # u.name == c.user.name
