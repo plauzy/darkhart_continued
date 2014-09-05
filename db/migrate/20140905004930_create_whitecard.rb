@@ -1,4 +1,4 @@
-class CreateWhitecard < ActiveRecord::Migration
+class CreateWhitecards < ActiveRecord::Migration
   def change
     create_table :whitecards do |t|
      t.string :content
