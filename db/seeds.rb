@@ -1,7 +1,64 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+game = Game.create(:name => "New Game")
+pat = User.create(:name => 'Pat')
+
+b1 = Blackcard.create(:content => "Where is my mind?")
+round = Round.create(:game_id => game.id, :leader_id => pat.id, :round_num => 1, :blackcard_id => b1.id)
+
+round.blackcard #Success
+
+# -----------------------------------------------
+
+ian = User.create(:name => 'Ian')
+cass = User.create(:name => "Cassidy")
+
+w1 = Whitecard.create(:content => "meow")
+w2 = Whitecard.create(:content => "bark")
+w3 = Whitecard.create(:content => "ribbet")
+
+
+
+cip1 = CardsInPlay.create(:user_id => ian.id, :game_id => game.id, :whitecard_id => w1.id)
+cip2 = CardsInPlay.create(:user_id => ian.id, :game_id => game.id, :whitecard_id => w2.id)
+cip3 = CardsInPlay.create(:user_id => cass.id, :game_id => game.id, :whitecard_id => w3.id)
+
+cip1.user #success
+cip1.whitecard #Success
+ian.cards_in_play #Success
+cass.cards_in_play.first.whitecard #Success
+# -------------------------------------------------
+
+s1 = Submission.create(:round_id => round.id, :cards_in_play_id => cip2.id)
+s2 = Submission.create(:round_id => round.id, :cards_in_play_id => cip3.id)
+
+round.submissions #Success
+s1.round #Success
+s1.cards_in_play.whitecard
+
+s1.winner = true
+s1.save
+
+#see winner of a round, given you have an instance of that round...
+winner = round.submissions.where(["round_id = ? and winner = ?", round.id, 'true']).first
+
+#get whitecard of winner
+winner.cards_in_play.whitecard
+
+
+
+# ------------ 
+# Game.create(:name => "Game 2")
+# Round.create(:game_id => 1)
+# g = Game.first
+# r = g.rounds.first
+# g.name == r.game.name
+# g.name = "Meow"
+# g.name == r.game.name # false!
+
+# pat = User.create(:name => "Pat")
+# card = CardsInPlay.create(:user_id => pat.id)
+# u = User.first 
+# c = CardsInPlay.first 
+# u.name == c.user.name
+# u.name = "turtle"
+# u.name == c.user.name
+
