@@ -32,6 +32,7 @@ s2 = Submission.create(:round_id => round.id, :cards_in_play_id => cip3.id)
 
 round.submissions #Success
 s1.round #Success
+s1.cards_in_play.whitecard
 
 s1.winner = true
 s1.save
@@ -42,4 +43,22 @@ winner = round.submissions.where(["round_id = ? and winner = ?", round.id, 'true
 #get whitecard of winner
 winner.cards_in_play.whitecard
 
+
+
+# ------------ 
+# Game.create(:name => "Game 2")
+# Round.create(:game_id => 1)
+# g = Game.first
+# r = g.rounds.first
+# g.name == r.game.name
+# g.name = "Meow"
+# g.name == r.game.name # false!
+
+# pat = User.create(:name => "Pat")
+# card = CardsInPlay.create(:user_id => pat.id)
+# u = User.first 
+# c = CardsInPlay.first 
+# u.name == c.user.name
+# u.name = "turtle"
+# u.name == c.user.name
 
