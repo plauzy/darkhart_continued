@@ -1,3 +1,3 @@
 class Blackcard < ActiveRecord::Base
-  belongs_to :round
+  has_one :round
 end
