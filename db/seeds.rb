@@ -27,19 +27,20 @@ ian.cards_in_play #Success
 cass.cards_in_play.first.whitecard #Success
 # -------------------------------------------------
 
-s1 = Submission.create(:round_id => round.id, :cards_in_play_id => cip1.id)
+# s1 = Submission.create(:round_id => round.id, :cards_in_play_id => cip1.id)
 s2 = Submission.create(:round_id => round.id, :cards_in_play_id => cip2.id)
-s2 = Submission.create(:round_id => round.id, :cards_in_play_id => cip3.id)
+s3 = Submission.create(:round_id => round.id, :cards_in_play_id => cip3.id)
 
-round.submissions
+round.submissions #Success
+s1.round #Success
+s2.round #Success
 
+s2.winner = true
+s2.save
 
 #see winner of a round, given you have an instance of that round...
-round.submissions.where("id = '?'", round.id)
+round.submissions.where(["round_id = ? and winner = ?", round.id, true])
 
 
 
-
-
-b2 = Blackcard.create(:content => "How many times does a boomchuck go boom?")
 
