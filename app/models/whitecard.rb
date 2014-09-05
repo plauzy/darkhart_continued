@@ -1,4 +1,3 @@
 class Whitecard < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :deck
+  has_one :cards_in_play
 end
