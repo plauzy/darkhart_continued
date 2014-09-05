@@ -5,8 +5,8 @@ RSpec.describe Game, :type => :model do
     Game.destroy_all
   end
 
-  it '' do
-
+  it 'Creating a new game adds a game object' do
+    expect{Game.new}.to change(Game.count).by(1)
   end
 
 end

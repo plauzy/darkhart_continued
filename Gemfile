@@ -10,3 +10,4 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
 end
+gem "rspec-rails", :group => [:development, :test]

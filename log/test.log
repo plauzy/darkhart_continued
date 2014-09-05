@@ -1,0 +1,7 @@
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.4ms)[0m  SELECT "games".* FROM "games"
+PG::UndefinedTable: ERROR:  relation "games" does not exist
+LINE 1: SELECT "games".* FROM "games"
+                              ^
+: SELECT "games".* FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
