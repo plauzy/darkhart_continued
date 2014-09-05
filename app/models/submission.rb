@@ -1,4 +1,4 @@
 class Submission < ActiveRecord::Base
   belongs_to :round
-  belongs_to :cards_in_play
+  belongs_to :playable_card
 end
