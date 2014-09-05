@@ -32,7 +32,9 @@ s2 = Submission.create(:round_id => round.id, :cards_in_play_id => cip2.id)
 s2 = Submission.create(:round_id => round.id, :cards_in_play_id => cip3.id)
 
 round.submissions
-#see winner of a round
+
+
+#see winner of a round, given you have an instance of that round...
 round.submissions.where("id = '?'", round.id)
 
 

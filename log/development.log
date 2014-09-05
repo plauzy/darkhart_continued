@@ -503,3 +503,92 @@ Migrating to CreateScores (20140905044433)
   [1m[36m (0.2ms)[0m  [1mBEGIN[0m
   [1m[35mSQL (0.3ms)[0m  INSERT INTO "submissions" ("cards_in_play_id", "round_id") VALUES ($1, $2) RETURNING "id"  [["cards_in_play_id", 3], ["round_id", 1]]
   [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) [0m
+  [1m[35m (1.4ms)[0m  CREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateWhitecard (20140905004930)
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36m (2.7ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905004930"]]
+  [1m[36m (5.6ms)[0m  [1mCOMMIT[0m
+Migrating to CreateBlackcard (20140905005236)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905005236"]]
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+Migrating to CreateUser (20140905005329)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (2.5ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905005329"]]
+  [1m[36m (0.6ms)[0m  [1mCOMMIT[0m
+Migrating to CreateRound (20140905005517)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (3.0ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905005517"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+Migrating to CreateGame (20140905005821)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (2.5ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905005821"]]
+  [1m[36m (0.8ms)[0m  [1mCOMMIT[0m
+Migrating to CreateCardsInPlay (20140905042014)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (2.1ms)[0m  [1mCREATE TABLE "cards_in_plays" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905042014"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+Migrating to CreateSubmission (20140905042020)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (1.8ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "cards_in_play_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905042020"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+Migrating to CreateScores (20140905044433)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (1.7ms)[0m  [1mCREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) [0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140905044433"]]
+  [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.9ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "New Game"]]
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-05 06:14:20.367213"], ["name", "Pat"], ["updated_at", "2014-09-05 06:14:20.367213"]]
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Where is my mind?"], ["created_at", "2014-09-05 06:14:20.381788"], ["updated_at", "2014-09-05 06:14:20.381788"]]
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 1], ["game_id", 1], ["leader_id", 1], ["round_num", 1]]
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 06:14:28.533757"], ["name", "Ian"], ["updated_at", "2014-09-05 06:14:28.533757"]]
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-05 06:14:28.538701"], ["name", "Cassidy"], ["updated_at", "2014-09-05 06:14:28.538701"]]
+  [1m[35m (7.2ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "meow"], ["created_at", "2014-09-05 06:14:28.555901"], ["updated_at", "2014-09-05 06:14:28.555901"]]
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "bark"], ["created_at", "2014-09-05 06:14:28.561292"], ["updated_at", "2014-09-05 06:14:28.561292"]]
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "ribbet"], ["created_at", "2014-09-05 06:14:28.564356"], ["updated_at", "2014-09-05 06:14:28.564356"]]
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.7ms)[0m  [1mINSERT INTO "cards_in_plays" ("created_at", "game_id", "updated_at", "user_id", "whitecard_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["created_at", "2014-09-05 06:14:28.594160"], ["game_id", 1], ["updated_at", "2014-09-05 06:14:28.594160"], ["user_id", 2], ["whitecard_id", 1]]
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "cards_in_plays" ("created_at", "game_id", "updated_at", "user_id", "whitecard_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["created_at", "2014-09-05 06:14:28.601516"], ["game_id", 1], ["updated_at", "2014-09-05 06:14:28.601516"], ["user_id", 2], ["whitecard_id", 2]]
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "cards_in_plays" ("created_at", "game_id", "updated_at", "user_id", "whitecard_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["created_at", "2014-09-05 06:14:28.811575"], ["game_id", 1], ["updated_at", "2014-09-05 06:14:28.811575"], ["user_id", 3], ["whitecard_id", 3]]
+  [1m[35m (0.4ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "submissions" ("cards_in_play_id", "round_id") VALUES ($1, $2) RETURNING "id"  [["cards_in_play_id", 1], ["round_id", 1]]
+  [1m[36m (1.1ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "submissions" ("cards_in_play_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["cards_in_play_id", 2], ["round_id", 1]]
+  [1m[35m (7.0ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "submissions" ("cards_in_play_id", "round_id") VALUES ($1, $2) RETURNING "id"  [["cards_in_play_id", 3], ["round_id", 1]]
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
