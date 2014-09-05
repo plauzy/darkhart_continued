@@ -5,3 +5,340 @@ LINE 1: SELECT "games".* FROM "games"
                               ^
 : SELECT "games".* FROM "games"
   [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[36mSQL (0.4ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (6.7ms)[0m  CREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.6ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (2.8ms)[0m  CREATE TABLE "playable_cards" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.6ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35m (2.5ms)[0m  CREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) 
+  [1m[36m (2.4ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.4ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.0ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) 
+  [1m[36m (2.2ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.4ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (1.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905044433')[0m
+  [1m[35m (0.9ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905004930')
+  [1m[36m (0.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005236')[0m
+  [1m[35m (0.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005329')
+  [1m[36m (0.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005517')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005821')
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905042014')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905042020')
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.6ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "blackcards"[0m
+  [1m[35m (0.3ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "blackcards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:52:29.263700"], ["updated_at", "2014-09-05 18:52:29.263700"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:54:29.483841"], ["updated_at", "2014-09-05 18:54:29.483841"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:55:38.358229"], ["updated_at", "2014-09-05 18:55:38.358229"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.4ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:55:38.372415"], ["updated_at", "2014-09-05 18:55:38.372415"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:56:19.786582"], ["updated_at", "2014-09-05 18:56:19.786582"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.4ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:56:19.808961"], ["updated_at", "2014-09-05 18:56:19.808961"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:56:42.243240"], ["updated_at", "2014-09-05 18:56:42.243240"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:56:42.267405"], ["updated_at", "2014-09-05 18:56:42.267405"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.5ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:57:50.413951"], ["updated_at", "2014-09-05 18:57:50.413951"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.3ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 18:57:50.437400"], ["name", "Brooks"], ["updated_at", "2014-09-05 18:57:50.437400"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:57:50.448737"], ["updated_at", "2014-09-05 18:57:50.448737"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:58:50.891948"], ["updated_at", "2014-09-05 18:58:50.891948"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 18:58:50.916980"], ["name", "Brooks"], ["updated_at", "2014-09-05 18:58:50.916980"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "users" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"  [["created_at", "2014-09-05 18:58:50.921827"], ["updated_at", "2014-09-05 18:58:50.921827"]]
+PG::NotNullViolation: ERROR:  null value in column "name" violates not-null constraint
+DETAIL:  Failing row contains (3, null, null, null, 2014-09-05 18:58:50.921827, 2014-09-05 18:58:50.921827).
+: INSERT INTO "users" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.4ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-05 18:58:50.930745"], ["updated_at", "2014-09-05 18:58:50.930745"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 18:59:54.843615"], ["updated_at", "2014-09-05 18:59:54.843615"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 18:59:54.869390"], ["name", "Brooks"], ["updated_at", "2014-09-05 18:59:54.869390"]]
+  [1m[36m (0.3ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.4ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-05 18:59:55.273170"], ["updated_at", "2014-09-05 18:59:55.273170"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.8ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 19:01:18.130739"], ["updated_at", "2014-09-05 19:01:18.130739"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.3ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 19:01:18.153927"], ["name", "Brooks"], ["updated_at", "2014-09-05 19:01:18.153927"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 19:01:18.160749"], ["name", "Brooks"], ["updated_at", "2014-09-05 19:01:18.160749"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "users" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"  [["created_at", "2014-09-05 19:01:18.164847"], ["updated_at", "2014-09-05 19:01:18.164847"]]
+PG::NotNullViolation: ERROR:  null value in column "name" violates not-null constraint
+DETAIL:  Failing row contains (7, null, null, null, 2014-09-05 19:01:18.164847, 2014-09-05 19:01:18.164847).
+: INSERT INTO "users" ("created_at", "updated_at") VALUES ($1, $2) RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-05 19:01:18.173973"], ["updated_at", "2014-09-05 19:01:18.173973"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-05 19:02:12.467548"], ["updated_at", "2014-09-05 19:02:12.467548"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mRound Load (0.5ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 19:02:12.504468"], ["name", "Brooks"], ["updated_at", "2014-09-05 19:02:12.504468"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.4ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.3ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.5ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-05 19:02:12.922508"], ["updated_at", "2014-09-05 19:02:12.922508"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK

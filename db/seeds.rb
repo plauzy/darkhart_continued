@@ -44,7 +44,9 @@ s1.save
 winner = round.submissions.where(["round_id = ? and winner = ?", round.id, 'true']).first.playable_card.user
 winner = Submission.where(["round_id = ? and winner = ?", round.id, 'true']).first.playable_card.user
 #get whitecard of winner
-winner.playable_card.whitecard
+
+
+# winner.playable_card.whitecard
 
 
 

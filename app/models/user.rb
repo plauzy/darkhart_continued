@@ -3,4 +3,6 @@ class User < ActiveRecord::Base
   has_many :games, through: :scores
 
   has_many :playable_cards
+
+  validates :name, presence: true
 end
