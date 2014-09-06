@@ -6,16 +6,18 @@ module GameManager
   end
 
   def new_game(*user_ids)
-    seats = populate_seats(*user_ids)
-    deal_cards_to_seats(seats)
+    game_users = user_ids.map { |user_id| user = User.find_by_id(user_id) }
+    seats = populate_seats(game_users)
+    # deal_cards_to_seats(seats)
   end
 
-  private
+  # private
 
-  def populate_seats(*user_ids)
-    seats = user_ids.map { |user_id| seat = Seat.create(user_id: user_id) }
+  def populate_seats(game_users)
+    game_users.seat(Seat.create)
     new_game = Game.create
     new_game.seats << seats
+    new_game.save
     return seats
   end
 
