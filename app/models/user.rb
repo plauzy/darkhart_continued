@@ -1,8 +1,7 @@
 class User < ActiveRecord::Base
-  has_many :scores
-  has_many :games, through: :scores
-
-  has_many :playable_cards
+  has_many :seats
+  has_many :games, through: :seats
 
   validates :name, presence: true
+
 end

@@ -27,10 +27,9 @@ ActiveRecord::Schema.define(version: 20140905044433) do
   end
 
   create_table "playable_cards", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "game_id"
+    t.integer  "seat_id"
     t.integer  "whitecard_id"
-    t.boolean  "playable",     default: true
+    t.boolean  "submitted",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -38,11 +37,11 @@ ActiveRecord::Schema.define(version: 20140905044433) do
   create_table "rounds", force: true do |t|
     t.integer "game_id"
     t.integer "leader_id"
-    t.integer "round_num"
     t.integer "blackcard_id"
+    t.integer "round_num"
   end
 
-  create_table "scores", force: true do |t|
+  create_table "seats", force: true do |t|
     t.integer "user_id"
     t.integer "game_id"
   end
