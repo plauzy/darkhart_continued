@@ -37,7 +37,7 @@ module GameManager
       user_array = @current_game.seats.to_a
       for round_num in (1..number_of_rounds)
         new_round = Round.create( game_id: @current_game.id,
-                                  leader_id: user_array.first,
+                                  leader_id: user_array.first.user.id,
                                   blackcard_id: random_blackcard.id,
                                   round_num: round_num)
         @current_game.rounds << new_round
@@ -56,4 +56,40 @@ module GameManager
       Blackcard.find_by_id(offset)
     end
   end
+
+  class RoundController
+    def initialize(game_object, round_num)
+      @game = game_object
+      @round = @game.rounds[round_num-1]
+      @submission=[]
+      @current_round
+
+    end
+
+    def reveal_black_card #make sure this returns an ordered list
+      return @round.blackcard.content
+    end
+
+    def make_submission(playable_card) #Figure out where round object is coming from
+      user = playable_card.seat
+      Submission.create(:playable_card_id => playable_card.id) # :round_id => ?
+
+    end
+
+    def check
+
+    end
+
+    def prompt_round_leader_for_decision
+
+    end
+
+    def tell_players_winning_card
+    end
+
+    def iterate_round
+    end
+
+  end
+
 end
