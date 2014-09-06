@@ -22,7 +22,7 @@ class GameSkeleton
   def deal_cards_to_seats()
     @new_game.seats.each do |seat|
       10.times do
-        PlayableCard.create(seat_id: seat.id, whitecard_id: random_whitecard.id)
+        PlayableCard.create(seat_id: seat.id, whitecard_id: Helper.random_whitecard.id)
       end
     end
   end
@@ -32,7 +32,7 @@ class GameSkeleton
     for round_num in (1..number_of_rounds)
       new_round = Round.create( game_id: @new_game.id,
         leader_id: user_array.first.user.id,
-        blackcard_id: random_blackcard.id,
+        blackcard_id: Helper.random_blackcard.id,
         round_num: round_num)
       @new_game.rounds << new_round
       @new_game.save
