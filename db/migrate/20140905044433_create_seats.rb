@@ -1,4 +1,4 @@
-class CreateScores < ActiveRecord::Migration
+class CreateSeats < ActiveRecord::Migration
   def change
     create_table :seats do |t|
       t.integer :user_id

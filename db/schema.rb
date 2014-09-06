@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20140905044433) do
     t.integer "blackcard_id"
   end
 
-  create_table "scores", force: true do |t|
+  create_table "seats", force: true do |t|
     t.integer "user_id"
     t.integer "game_id"
   end
