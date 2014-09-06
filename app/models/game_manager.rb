@@ -7,8 +7,8 @@ module GameManager
 
 
   class GameMaker
-
-    def initialize(user_ids, number_of_rounds)
+    attr_reader :current_game
+      def initialize(user_ids, number_of_rounds)
       @current_game = Game.create
       @game_users = user_ids.map { |user_id| user = User.find_by_id(user_id) }
       @seats = populate_seats()
@@ -61,33 +61,40 @@ module GameManager
     def initialize(game_object, round_num)
       @game = game_object
       @round = @game.rounds[round_num-1]
-      @submission=[]
-      @current_round
-
+      @submissions = []
     end
 
     def reveal_black_card #make sure this returns an ordered list
       return @round.blackcard.content
     end
 
-    def make_submission(playable_card) #Figure out where round object is coming from
+    def make_submission(playable_card) #Make sure View checks that a user can only submit ONCE per round
       user = playable_card.seat
-      Submission.create(:playable_card_id => playable_card.id) # :round_id => ?
-
+      @submissions << Submission.create(playable_card_id: playable_card.id, round_id: @round.id)
+      playable_card.submitted = true
+      playable_card.save
+      check_if_all_cards_submitted
     end
 
-    def check
-
+    def check_if_all_cards_submitted
+      if @submissions.length == @game.seats.length-1
+        prompt_round_leader_for_decision
+      else
+        false
+      end
     end
 
     def prompt_round_leader_for_decision
+      return @submissions
+    end
 
+    def round_leader_choose_winner(winning_submission)
+      winning_submission.winner = true
+      winning_submission.save
     end
 
     def tell_players_winning_card
-    end
-
-    def iterate_round
+      return @submissions.select{|card| card.winner == true }.first
     end
 
   end
