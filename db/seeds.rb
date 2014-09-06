@@ -1,7 +1,8 @@
 pat = User.create(:name => 'Pat')
 ian = User.create(:name => 'Ian')
-cass = User.create(:name => "Cassidy")
+cass = User.create(:name =>"Cassidy")
 brooks = User.create(:name => "Brooks")
+
 game = Game.create(:name => "New Game")
 
 s1 = Seat.create(:user_id => pat.id, :game_id => game.id)
