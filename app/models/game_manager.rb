@@ -6,7 +6,7 @@ module GameManager
   end
 
 
-  class GameMaker
+  class GameSetup
     attr_reader :current_game
       def initialize(user_ids, number_of_rounds)
       @current_game = Game.create
