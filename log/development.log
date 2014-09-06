@@ -1661,3 +1661,197 @@ Migrating to CreateScores (20140905044433)
   [1m[36mSubmission Load (0.4ms)[0m  [1mSELECT  "submissions".* FROM "submissions"  WHERE (round_id = 1 and winner = 'true')  ORDER BY "submissions"."id" ASC LIMIT 1[0m
   [1m[35mPlayableCard Load (0.2ms)[0m  SELECT  "playable_cards".* FROM "playable_cards"  WHERE "playable_cards"."id" = $1 LIMIT 1  [["id", 2]]
   [1m[36mUser Load (0.2ms)[0m  [1mSELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 2]]
+  [1m[36mSQL (0.9ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (8.1ms)[0m  CREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (13.2ms)[0m  CREATE TABLE "playable_cards" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (6.9ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35m (2.1ms)[0m  CREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) 
+  [1m[36m (1.9ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (2.9ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.9ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (6.5ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) 
+  [1m[36m (1.2ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.3ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905044433')[0m
+  [1m[35m (0.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905004930')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005236')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005329')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005517')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005821')
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905042014')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905042020')
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (6.5ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "New Game"]]
+  [1m[35m (5.8ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 23:50:51.246798"], ["name", "Pat"], ["updated_at", "2014-09-05 23:50:51.246798"]]
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (6.2ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Where is my mind?"], ["created_at", "2014-09-05 23:50:51.263453"], ["updated_at", "2014-09-05 23:50:51.263453"]]
+  [1m[35m (4.9ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (6.4ms)[0m  INSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"  [["blackcard_id", 1], ["game_id", 1], ["leader_id", 1], ["round_num", 1]]
+  [1m[36m (4.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mBlackcard Load (0.3ms)[0m  SELECT  "blackcards".* FROM "blackcards"  WHERE "blackcards"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-05 23:50:51.351689"], ["name", "Ian"], ["updated_at", "2014-09-05 23:50:51.351689"]]
+  [1m[35m (6.4ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-05 23:50:51.359652"], ["name", "Cassidy"], ["updated_at", "2014-09-05 23:50:51.359652"]]
+  [1m[36m (6.2ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "meow"], ["created_at", "2014-09-05 23:50:51.375441"], ["updated_at", "2014-09-05 23:50:51.375441"]]
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "bark"], ["created_at", "2014-09-05 23:50:51.377914"], ["updated_at", "2014-09-05 23:50:51.377914"]]
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "ribbet"], ["created_at", "2014-09-05 23:50:51.379975"], ["updated_at", "2014-09-05 23:50:51.379975"]]
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "playable_cards" ("created_at", "game_id", "updated_at", "user_id", "whitecard_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["created_at", "2014-09-05 23:50:51.389658"], ["game_id", 1], ["updated_at", "2014-09-05 23:50:51.389658"], ["user_id", 2], ["whitecard_id", 1]]
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "game_id", "updated_at", "user_id", "whitecard_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["created_at", "2014-09-05 23:50:51.391882"], ["game_id", 1], ["updated_at", "2014-09-05 23:50:51.391882"], ["user_id", 2], ["whitecard_id", 2]]
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "game_id", "updated_at", "user_id", "whitecard_id") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["created_at", "2014-09-05 23:50:51.393603"], ["game_id", 1], ["updated_at", "2014-09-05 23:50:51.393603"], ["user_id", 3], ["whitecard_id", 3]]
+  [1m[36m (0.3ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mWhitecard Load (0.2ms)[0m  [1mSELECT  "whitecards".* FROM "whitecards"  WHERE "whitecards"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPlayableCard Load (0.3ms)[0m  SELECT  "playable_cards".* FROM "playable_cards"  WHERE "playable_cards"."user_id" = $1  ORDER BY "playable_cards"."id" ASC LIMIT 1  [["user_id", 3]]
+  [1m[36mWhitecard Load (0.1ms)[0m  [1mSELECT  "whitecards".* FROM "whitecards"  WHERE "whitecards"."id" = $1 LIMIT 1[0m  [["id", 3]]
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (6.4ms)[0m  [1mINSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["playable_card_id", 2], ["round_id", 1]]
+  [1m[35m (5.9ms)[0m  COMMIT
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"  [["playable_card_id", 3], ["round_id", 1]]
+  [1m[36m (0.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT  "rounds".* FROM "rounds"  WHERE "rounds"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mPlayableCard Load (0.2ms)[0m  [1mSELECT  "playable_cards".* FROM "playable_cards"  WHERE "playable_cards"."id" = $1 LIMIT 1[0m  [["id", 2]]
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT  "whitecards".* FROM "whitecards"  WHERE "whitecards"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mSQL (0.2ms)[0m  [1mUPDATE "submissions" SET "winner" = $1 WHERE "submissions"."id" = 1[0m  [["winner", "t"]]
+  [1m[35m (0.3ms)[0m  COMMIT
+  [1m[36mSubmission Load (0.3ms)[0m  [1mSELECT  "submissions".* FROM "submissions"  WHERE "submissions"."round_id" = $1 AND (round_id = 1 and winner = 'true')  ORDER BY "submissions"."id" ASC LIMIT 1[0m  [["round_id", 1]]
+  [1m[35mPlayableCard Load (0.2ms)[0m  SELECT  "playable_cards".* FROM "playable_cards"  WHERE "playable_cards"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 2]]
+  [1m[35mSubmission Load (0.2ms)[0m  SELECT  "submissions".* FROM "submissions"  WHERE (round_id = 1 and winner = 'true')  ORDER BY "submissions"."id" ASC LIMIT 1
+  [1m[36mPlayableCard Load (0.1ms)[0m  [1mSELECT  "playable_cards".* FROM "playable_cards"  WHERE "playable_cards"."id" = $1 LIMIT 1[0m  [["id", 2]]
+  [1m[35mUser Load (0.1ms)[0m  SELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (2.5ms)[0m  DROP TABLE "blackcards"
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "games"
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (1.1ms)[0m  DROP TABLE "playable_cards"
+  [1m[36m (2.0ms)[0m  [1mCREATE TABLE "playable_cards" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "rounds"
+  [1m[36m (1.9ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "scores"
+  [1m[36m (1.6ms)[0m  [1mCREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "submissions"
+  [1m[36m (1.6ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (3.3ms)[0m  DROP TABLE "users"
+  [1m[36m (3.0ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.8ms)[0m  DROP TABLE "whitecards"
+  [1m[36m (1.7ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.2ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (3.1ms)[0m  DROP TABLE "blackcards"
+  [1m[36m (9.9ms)[0m  [1mCREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.0ms)[0m  DROP TABLE "games"
+  [1m[36m (2.1ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (1.0ms)[0m  DROP TABLE "playable_cards"
+  [1m[36m (2.2ms)[0m  [1mCREATE TABLE "playable_cards" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "rounds"
+  [1m[36m (3.0ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "scores"
+  [1m[36m (1.6ms)[0m  [1mCREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) [0m
+  [1m[35m (1.0ms)[0m  DROP TABLE "submissions"
+  [1m[36m (1.6ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (1.1ms)[0m  DROP TABLE "users"
+  [1m[36m (9.9ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.9ms)[0m  DROP TABLE "whitecards"
+  [1m[36m (1.6ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.3ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36m (5046.2ms)[0m  [1mDROP DATABASE IF EXISTS "darkhart_development"[0m
+PG::ObjectInUse: ERROR:  database "darkhart_development" is being accessed by other users
+DETAIL:  There is 1 other session using the database.
+: DROP DATABASE IF EXISTS "darkhart_development"
+  [1m[35m (116.7ms)[0m  DROP DATABASE IF EXISTS "darkhart_test"
+  [1m[36m (0.4ms)[0m  [1mCREATE DATABASE "darkhart_development" ENCODING = 'unicode'[0m
+PG::DuplicateDatabase: ERROR:  database "darkhart_development" already exists
+: CREATE DATABASE "darkhart_development" ENCODING = 'unicode'
+  [1m[35m (236.5ms)[0m  CREATE DATABASE "darkhart_test" ENCODING = 'unicode'
+  [1m[36mSQL (0.2ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (2.3ms)[0m  DROP TABLE "blackcards"
+  [1m[36m (13.2ms)[0m  [1mCREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.0ms)[0m  DROP TABLE "games"
+  [1m[36m (1.9ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (1.0ms)[0m  DROP TABLE "playable_cards"
+  [1m[36m (2.0ms)[0m  [1mCREATE TABLE "playable_cards" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "rounds"
+  [1m[36m (1.8ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "scores"
+  [1m[36m (1.7ms)[0m  [1mCREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) [0m
+  [1m[35m (0.9ms)[0m  DROP TABLE "submissions"
+  [1m[36m (1.6ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (1.1ms)[0m  DROP TABLE "users"
+  [1m[36m (3.9ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.3ms)[0m  DROP TABLE "whitecards"
+  [1m[36m (2.0ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.2ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36m (115.2ms)[0m  [1mDROP DATABASE IF EXISTS "darkhart_development"[0m
+  [1m[35m (112.9ms)[0m  DROP DATABASE IF EXISTS "darkhart_test"
+  [1m[36m (237.8ms)[0m  [1mCREATE DATABASE "darkhart_development" ENCODING = 'unicode'[0m
+  [1m[35m (243.5ms)[0m  CREATE DATABASE "darkhart_test" ENCODING = 'unicode'
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (7.5ms)[0m  CREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (5.6ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (2.3ms)[0m  CREATE TABLE "playable_cards" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (1.9ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35m (1.8ms)[0m  CREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) 
+  [1m[36m (2.5ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (3.7ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (3.8ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.9ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) 
+  [1m[36m (1.0ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.2ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (3.0ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905044433')[0m
+  [1m[35m (2.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905004930')
+  [1m[36m (0.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005236')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005329')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005517')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005821')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905042014')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905042020')
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mSQL (0.3ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (7.1ms)[0m  CREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.7ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (2.2ms)[0m  CREATE TABLE "playable_cards" ("id" serial primary key, "user_id" integer, "game_id" integer, "whitecard_id" integer, "playable" boolean DEFAULT 't', "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (2.2ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "round_num" integer, "blackcard_id" integer) [0m
+  [1m[35m (1.8ms)[0m  CREATE TABLE "scores" ("id" serial primary key, "user_id" integer, "game_id" integer) 
+  [1m[36m (1.8ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (2.7ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (1.7ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.7ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) 
+  [1m[36m (1.0ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.3ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (0.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905044433')[0m
+  [1m[35m (0.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905004930')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005236')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005329')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005517')[0m
+  [1m[35m (0.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005821')
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905042014')[0m
+  [1m[35m (0.3ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905042020')
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
