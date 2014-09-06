@@ -1,5 +1,9 @@
 class ApplicationController < ActionController::API
-  respond_to :json
+  def index
+    # puts "Hello World"
+    render json: {content:"Hello World"}
+  end
+
   def get_round
     #if round is complete, return round recap and id of current round.
     #elsif round is in progress, return data necessary for card submission:
@@ -9,6 +13,7 @@ class ApplicationController < ActionController::API
       #else player has already submitted a card, return error message.
     render json: {content:"Hello World"}
   end
+
   def submit_card
     #if user is leader, recieve their chosen whitecard.
     #elsif user is a player, recive their whitecard for consideration by leader.
