@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+
   respond_to :json
 
   #post '/api/games/:game_id'
@@ -61,8 +62,4 @@ class ApplicationController < ActionController::API
     #if user is leader, recieve their chosen whitecard.
     #elsif user is a player, recive their whitecard for consideration by leader.
   end
-
-
-
-
 end
