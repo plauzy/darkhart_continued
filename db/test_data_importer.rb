@@ -1,4 +1,4 @@
-module TestGameImporter
+module TestDataImporter
   def self.import
 
     4.times do 
@@ -26,7 +26,7 @@ module TestGameImporter
   end
 end
 
-TestGameImporter.import
+TestDataImporter.import
 
 
 # user = FactoryGirl.create(:user)
