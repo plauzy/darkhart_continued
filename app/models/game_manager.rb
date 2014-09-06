@@ -8,13 +8,14 @@ module GameManager
 
   class GameMaker
 
-    def initialize(*user_ids)
+    def initialize(user_ids, number_of_rounds)
       @current_game = Game.create
       @game_users = user_ids.map { |user_id| user = User.find_by_id(user_id) }
       @seats = populate_seats()
       deal_cards_to_seats()
-      @rounds = make_rounds(10) #hardcoded. 10, punted for mVP.
+      @rounds = make_rounds(number_of_rounds)
     end
+
     private
 
     def populate_seats()
@@ -36,9 +37,9 @@ module GameManager
       user_array = @current_game.seats.to_a
       for round_num in (1..number_of_rounds)
         new_round = Round.create( game_id: @current_game.id,
-          leader_id: user_array.first,
-          blackcard_id: random_blackcard.id,
-          round_num: round_num)
+                                  leader_id: user_array.first,
+                                  blackcard_id: random_blackcard.id,
+                                  round_num: round_num)
         @current_game.rounds << new_round
         @current_game.save
         user_array.rotate!
