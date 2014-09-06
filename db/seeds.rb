@@ -1,13 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
-# Code retrieved and modified from https://github.com/nodanaonlyzuul/against-humanity
-
 require 'json'
 
 cards = JSON.parse(File.read("./db/third_party/cards.json"))
@@ -28,11 +18,11 @@ questions, answers = cards.partition{ |card| card["cardType"] == "Q"}
 # end
 
 questions.each do |question|
-  # BlackCard.create(content:question["text"]) unless question["numAnswers"]>1
+  Blackcard.create(content:question["text"]) unless question["numAnswers"]>1
   p question["text"] unless question["numAnswers"] > 1
 end
 
 answers.each do |answer|
-  # WhiteCard.create(content:answer["text"])
+  Whitecard.create(content:answer["text"])
   p answer["text"]
 end
