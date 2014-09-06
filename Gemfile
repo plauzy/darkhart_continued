@@ -4,6 +4,7 @@ gem 'rails', '4.1.4'
 gem 'rails-api'
 gem 'spring'
 gem 'pg'
+gem 'puma'
 
 group :development, :test do
   gem 'rspec-rails'

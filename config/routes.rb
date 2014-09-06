@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root 'application#index'
   get '/api/users/:user_id' => 'application#xxx' # List of all games user is in.
   post '/api/users/:user_id' => 'application#xxx' # Create a new user
 
