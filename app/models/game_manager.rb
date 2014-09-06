@@ -7,13 +7,15 @@ module GameManager
 
 
   class GameSetup
-    attr_reader :current_game
-      def initialize(user_ids, number_of_rounds)
+    attr_reader :current_game, :seats
+
+    def initialize(name="default", user_ids, number_of_rounds)
       @current_game = Game.create
       @game_users = user_ids.map { |user_id| user = User.find_by_id(user_id) }
       @seats = populate_seats()
       deal_cards_to_seats()
       @rounds = make_rounds(number_of_rounds)
+      return @current_game
     end
 
     private
@@ -60,6 +62,7 @@ module GameManager
   class RoundController
     def initialize(game_object, round_num)
       @game = game_object
+      @seats = game_object.seats
       @round = @game.rounds[round_num-1]
       @submissions = []
     end
@@ -76,6 +79,16 @@ module GameManager
       check_if_all_cards_submitted
     end
 
+    def round_leader_choose_winner(winning_submission)
+      winning_submission.winner = true
+      winning_submission.save
+    end
+
+    def tell_players_winning_card
+      return @submissions.select{|card| card.winner == true }.first
+    end
+
+  private
     def check_if_all_cards_submitted
       if @submissions.length == @game.seats.length-1
         prompt_round_leader_for_decision
@@ -84,17 +97,27 @@ module GameManager
       end
     end
 
-    def prompt_round_leader_for_decision
+    def prompt_round_leader_for_decision #this method fires off action to show blackcard holder the sbumissions
       return @submissions
     end
 
-    def round_leader_choose_winner(winning_submission)
-      winning_submission.winner = true
-      winning_submission.save
-    end
+  end
 
-    def tell_players_winning_card
-      return @submissions.select{|card| card.winner == true }.first
+
+
+
+  def tits(num_rounds = 3)
+    game = GameSetup.new([1,2,3,4], num_rounds)
+
+    num_rounds.times do |i|
+      round = RoundController.new(game, i)
+      round.reveal_blackcard #shows users the blackcard
+      #when a player submits
+      round.make_submission(playable_card) #happens x many times
+
+      #when blackcard holer has submissions
+      round.round_leader_choose_winner
+      round.tell_players_winning_card
     end
 
   end
