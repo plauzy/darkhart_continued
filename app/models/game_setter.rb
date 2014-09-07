@@ -1,10 +1,11 @@
 class GameSetter 
 
-  def initialize(seat_id)
-    @seat = Seat.find_by_id(seat_id)
+  def initialize(user_id, game_id)
+    @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
     @game = @seat.game
     @round_num = @game.current_round
-    @round = Round.where(["round_num = ? and game_id = ?", @game.current_round, @game.id )
+    @round = Round.where(["round_num = ? and game_id = ?", @game.current_round, @game.id )[0]
+    @submissions = @round.submissions
     @state = {}
   end
 
@@ -40,13 +41,28 @@ class GameSetter
     @submissions.where(winner: true)[0] ? false : true
   end
 
-  def build_header
-    @state["round"] = @round.round_num
-    @state["active"] = round_active?
-    @state["player_self"] = player_self
-    @state["leader"] = leader_blackcard
-    @state["need_submission?"] = need_submission?
-  end
+end
+
+__END__
+
+{authentication: [user_id],
+game_id: 1,
+submission_id: 1}
+
+{authentication: [user_id],
+game_id: 1, 
+playable_card_id: 1}
+
+
+
+
+  # def build_header
+  #   @state["round"] = @round.round_num
+  #   @state["active"] = round_active?
+  #   @state["player_self"] = player_self
+  #   @state["leader"] = leader_blackcard
+  #   @state["need_submission?"] = need_submission?
+  # end
 
 
   # def build_player_submission
@@ -60,23 +76,6 @@ class GameSetter
   #   @seat["game_id"] = @game.id
   #   @seat
   # end
-
-
-
-
-
-end
-
-{authentication: [user_id],
-game_id: 1,
-submission_id: 1}
-
-{authentication: [user_id],
-game_id: 1, 
-playable_card_id: 1}
-
-
-__END__
 
 
 
