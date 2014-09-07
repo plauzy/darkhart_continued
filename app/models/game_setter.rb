@@ -1,50 +1,42 @@
-class GameSetter
-  def initialize(seat_id)
-    @seat = Seat.find_by_id(seat_id)
+class GameSetter 
+
+  def initialize(user_id, game_id)
+    @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
     @game = @seat.game
+    @round_num = @game.round_num
+    @round = Round.where(["round_num = ? and game_id = ?", @game.round_num, @game.id]).first
+    @submissions = @round.submissions
   end
 
-  def current_round(game)
-    Round.find(game.current_round)
+  def make_user_submission(playable_card)
+    submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id) unless playable_card.submitted == true
+    playable_card.submitted = true 
+    playable_card.save!
   end
 
-  def make_submission(playable_card) #Make sure View checks that a user can only submit ONCE per round
-    submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id)
-    playable_card.submitted = true
-    playable_card.save
-    check_if_all_cards_submitted
-  end
-
-  def round_leader_choose_winner(winning_submission)
+  def choose_winner(winning_submission)
     winning_submission.winner = true
-    winning_submission.save
+    winning_submission.save!
+
+    winning_seat = winning_submission.owner_seat
+    winning_seat.socre+=1
+    winning_seat.save!
+
+    increment_round 
+    deal_new_card_to_seats
   end
 
   private
 
-  def check_if_all_cards_submitted
-    if @submissions.length == @game.seats.length-1
-      prompt_round_leader_for_decision
-    else
-      false
+    def increment_round 
+      @game.round_num+=1
+      @game.save!
     end
-  end
 
+    def deal_new_card_to_seats
+      @game.seats.each do |seat|
+        whitecard = Whitecard.all.sample
+        seat.playable_cards << PlayableCard.create(whitecard_id: whitecard.id)
+      end
+    end
 end
-
-
-
-#   def tell_players_winning_card
-#     return @submissions.select{|card| card.winner == true }.first
-#   end
-
-
-#   def prompt_round_leader_for_decision #this method fires off action to show blackcard holder the sbumissions
-#     return @submissions
-#   end
-
-
-
-
-
-

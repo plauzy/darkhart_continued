@@ -15,7 +15,7 @@ module TestDataImporter
     #cards dealt to users
     4.times do |i|
       seats << FactoryGirl.create(:seat, user: users.pop, game: game )
-      4.times do
+      5.times do
         FactoryGirl.create(:playable_card, whitecard: whitecards.pop, seat: seats[i])
       end
     end
@@ -23,7 +23,7 @@ module TestDataImporter
 
     4.times do |i|
       leader_id = seats.last.id
-      round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop, round_num: i, leader_id: leader_id)
+      round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop, round_num: i+1, leader_id: leader_id)
       submissions = []
 
       3.times do |i|
@@ -34,11 +34,17 @@ module TestDataImporter
         submissions <<  FactoryGirl.create(:submission, playable_card: card_to_submit, round: round)
         card_to_submit.submitted = true
         card_to_submit.save!
+
+        #deal new whitecard
+        FactoryGirl.create(:playable_card, whitecard: whitecards.pop, seat: seat)
       end
 
       chosen_sub = submissions.sample
       chosen_sub.winner = true
       chosen_sub.save!
+
+
+
 
       seats.rotate!
     end
