@@ -1,7 +1,7 @@
 # module TestDataImporter
 #   def self.import
 
-#     4.times do 
+#     4.times do
 #       FactoryGirl.create(:user)
 #     end
 
@@ -9,12 +9,12 @@
 #     users = User.all[0..3]
 
 #     whitecards = Whitecard.all.to_a
-#     blackcards = Blackcard.all.to_a 
+#     blackcards = Blackcard.all.to_a
 
 #     #cards dealt to users
-#     4.times do 
+#     4.times do
 #       seat = FactoryGirl.create(:seat, user: users.pop, game: game )
-#       4.times do 
+#       4.times do
 #         FactoryGirl.create(:playable_card, whitecard: whitecards.pop, seat: seat)
 #       end
 #     end
@@ -31,7 +31,7 @@
 module TestDataImporter
   def self.import
 
-    4.times do 
+    4.times do
       FactoryGirl.create(:user)
     end
 
@@ -39,13 +39,13 @@ module TestDataImporter
     users = User.all[0..3]
 
     whitecards = Whitecard.all.to_a
-    blackcards = Blackcard.all.to_a 
+    blackcards = Blackcard.all.to_a
     seats = []
 
     #cards dealt to users
     4.times do |i|
       seats << FactoryGirl.create(:seat, user: users.pop, game: game )
-      4.times do 
+      4.times do
         FactoryGirl.create(:playable_card, whitecard: whitecards.pop, seat: seats[i])
       end
     end
@@ -53,7 +53,7 @@ module TestDataImporter
 
     4.times do |i|
       leader_id = seats.last.id
-      round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop, round_num: i, leader_id: leader_id)
+      round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop, round_num: i+1, leader_id: leader_id)
       submissions = []
 
       3.times do |i|
@@ -62,7 +62,7 @@ module TestDataImporter
         card_to_submit = playable_cards.pop
 
         submissions << FactoryGirl.create(:submission, playable_card: card_to_submit, round: round)
-        card_to_submit.submitted = true 
+        card_to_submit.submitted = true
         card_to_submit.save!
       end
 
@@ -75,7 +75,7 @@ module TestDataImporter
 
     #round 5
 
-    leader_id = seats.last.id 
+    leader_id = seats.last.id
     round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop, round_num: 5, leader_id: leader_id)
     submissions = []
 
@@ -85,14 +85,14 @@ module TestDataImporter
       card_to_submit = playable_cards.pop
 
       submissions << FactoryGirl.create(:submission, playable_card: card_to_submit, round: round)
-      card_to_submit.submitted = true 
+      card_to_submit.submitted = true
       card_to_submit.save!
     end
 
 
 
 
- 
+
     #round 2
 
 
