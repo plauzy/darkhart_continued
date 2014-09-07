@@ -1,10 +1,10 @@
 class GameGetter
   attr_reader :current_round, :game, :seat
 
-  def initialize(seat_id, round = 0)
-    @seat = Seat.find_by_id(seat_id)
+  def initialize(game_id, user_id, round = 0)
+    @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
     @game = @seat.game
-    if round == 0 || round > @game.total_rounds
+    if round == 0 || (round > @game.total_rounds)
       @round = Helper.current_round(@game)[0]
     else
       @round = @game.rounds.where(round_num: round)[0]
@@ -56,6 +56,7 @@ class GameGetter
 # Header Methods --------------
 
   def build_header
+    @state["game_id"] = @game.id
     @state["round"] = @round.round_num
     @state["active"] = round_active?
     @state["player_self"] = player_self
@@ -64,11 +65,12 @@ class GameGetter
   end
 
   def player_self
-    { player_name: @seat.name,
+    { # user_id: @seat.user_id,
+      seat_id: @seat.id,
+      player_name: @seat.name,
       player_score: @seat.score,
       player_email: @seat.email,
-      seat_id: @seat.id,
-      player_cards: playable_cards, }
+      player_cards: playable_cards }
   end
 
   def playable_cards

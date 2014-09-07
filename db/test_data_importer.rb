@@ -61,7 +61,7 @@ module TestDataImporter
         playable_cards = seat.playable_cards.to_a
         card_to_submit = playable_cards.pop
 
-        submissions << FactoryGirl.create(:submission, playable_card: card_to_submit, round: round)
+        submissions <<  FactoryGirl.create(:submission, playable_card: card_to_submit, round: round)
         card_to_submit.submitted = true
         card_to_submit.save!
       end
