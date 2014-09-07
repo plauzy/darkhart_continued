@@ -1,4 +1,3 @@
-require 'pp'
 class GameGetter
   attr_reader :current_round, :game, :seat
 
@@ -21,7 +20,7 @@ class GameGetter
   def game_state
     build_header
     if round_active? && leader?
-
+      p "----------------------Found leader"
     elsif round_active?
       build_submissions
     else
@@ -72,10 +71,11 @@ class GameGetter
   end
 
   def player_self
-    { name: @seat.name,
-      score: @seat.score,
+    { player_name: @seat.name,
+      player_score: @seat.score,
+      player_email: @seat.email,
       seat_id: @seat.id,
-      cards: playable_cards }
+      player_cards: playable_cards, }
   end
 
   def playable_cards
@@ -97,6 +97,7 @@ class GameGetter
     @submissions.each do |sub|
       sub_details = { player_name: sub.owner_name,
                       player_score: sub.owner_score,
+                      player_email: sub.email,
                       submission_content: sub.card_content }
       @state["losing_submissions"] << sub_details if sub.winner == false
       @state["winning_submission"] = sub_details if sub.winner == true
@@ -107,11 +108,16 @@ class GameGetter
 
   def build_submissions
     @state["submissions"] = @submissions.map do |sub|
-      { submitted?: true,
-        player_name: sub.owner_name,
+      { player_name: sub.owner_name,
         player_score: sub.owner_score,
+        player_email: sub.email,
         submission_id: sub.id,
         submission_content: sub.card_content }
+    end
+    @state["missing_submissions"] = waiting_on?.map do |seat|
+      { player_name: seat.name,
+        player_score: seat.score,
+        player_email: seat.email }
     end
   end
 end
