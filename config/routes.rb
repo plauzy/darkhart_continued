@@ -1,11 +1,7 @@
 Rails.application.routes.draw do
-  root 'application#index'
-  get '/api/users/:user_id' => 'application#xxx' # List of all games user is in.
-  post '/api/users/:user_id' => 'application#xxx' # Create a new user
+  get 'api/users/:user_id' => 'application#user_state' # Returns all games the user is in.
+  get 'api/games/:game_id/users/:user_id/round/:round_id' => 'application#game_state' # Returns state of a game
 
-  get '/api/games/:game_id' => 'application#active_games'# Returns status of a game
-  post '/api/games/:game_id' => 'application#xxx' # Creates new game
-
-  get '/api/games/:game_id/rounds/:round_id' => 'application#get_round' # Round data
-  put '/api/games/:game_id/rounds/:round_id' => 'application#submit_card' # Send in chosen card
+  post 'api/games' => 'application#new_game' # Creates new game and returns game_state
+  post 'api/games/:game_id/users/:user_id/cards/:card_id' => 'application#update_game' #Submits a card
 end

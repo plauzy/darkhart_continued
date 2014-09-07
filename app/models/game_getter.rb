@@ -4,8 +4,8 @@ class GameGetter
   def initialize(seat_id, round = 0)
     @seat = Seat.find_by_id(seat_id)
     @game = @seat.game
-    if round == 0
-      @round = Helper.current_round(@game)
+    if round == 0 || round > @game.total_rounds
+      @round = Helper.current_round(@game)[0]
     else
       @round = @game.rounds.where(round_num: round)[0]
     end
@@ -19,14 +19,7 @@ class GameGetter
 
   def game_state
     build_header
-    if round_active? && leader?
-      p "----------------------Found leader"
-    elsif round_active?
-      build_submissions
-    else
-      build_recap
-    end
-
+    round_active? ? build_submissions : build_recap
     pp @state
   end
 
@@ -114,11 +107,14 @@ class GameGetter
         submission_id: sub.id,
         submission_content: sub.card_content }
     end
-    @state["missing_submissions"] = waiting_on?.map do |seat|
-      { player_name: seat.name,
-        player_score: seat.score,
-        player_email: seat.email }
+    if waiting_on?
+      @state["missing_submissions"] = waiting_on?.select { |s| s != @seat }.map do |seat|
+        { player_name: seat.name,
+          player_score: seat.score,
+          player_email: seat.email }
+      end
     end
   end
 end
+
 
