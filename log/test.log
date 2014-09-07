@@ -342,3 +342,1428 @@ DETAIL:  Failing row contains (7, null, null, null, 2014-09-05 19:01:18.164847, 
   [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
   [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
   [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mSQL (39.9ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (259.7ms)[0m  CREATE TABLE "blackcards" ("id" serial primary key, "content" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (24.8ms)[0m  [1mCREATE TABLE "games" ("id" serial primary key, "name" character varying(30)) [0m
+  [1m[35m (19.4ms)[0m  CREATE TABLE "playable_cards" ("id" serial primary key, "seat_id" integer, "whitecard_id" integer, "submitted" boolean DEFAULT 'f', "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (3.1ms)[0m  [1mCREATE TABLE "rounds" ("id" serial primary key, "game_id" integer, "leader_id" integer, "blackcard_id" integer, "round_num" integer) [0m
+  [1m[35m (3.4ms)[0m  CREATE TABLE "seats" ("id" serial primary key, "user_id" integer, "game_id" integer) 
+  [1m[36m (3.7ms)[0m  [1mCREATE TABLE "submissions" ("id" serial primary key, "round_id" integer, "playable_card_id" integer, "winner" boolean DEFAULT 'f') [0m
+  [1m[35m (3.7ms)[0m  CREATE TABLE "users" ("id" serial primary key, "name" character varying(30) NOT NULL, "email" character varying(255), "password" character varying(255), "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (3.2ms)[0m  [1mCREATE TABLE "whitecards" ("id" serial primary key, "content" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.3ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) 
+  [1m[36m (1.9ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (15.0ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (15.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905044433')[0m
+  [1m[35m (0.9ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905004930')
+  [1m[36m (0.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005236')[0m
+  [1m[35m (0.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005329')
+  [1m[36m (0.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905005517')[0m
+  [1m[35m (0.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905005821')
+  [1m[36m (0.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20140905042014')[0m
+  [1m[35m (0.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20140905042020')
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.5ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (16.1ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 01:57:25.223999"], ["updated_at", "2014-09-07 01:57:25.223999"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.5ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.4ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 01:57:25.268965"], ["name", "test dummy"], ["updated_at", "2014-09-07 01:57:25.268965"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 01:57:25.278667"], ["name", "Brooks"], ["updated_at", "2014-09-07 01:57:25.278667"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.5ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 01:57:25.808403"], ["updated_at", "2014-09-07 01:57:25.808403"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 01:59:29.750576"], ["updated_at", "2014-09-07 01:59:29.750576"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.5ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 01:59:29.780875"], ["name", "test dummy"], ["updated_at", "2014-09-07 01:59:29.780875"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 01:59:29.785576"], ["name", "Brooks"], ["updated_at", "2014-09-07 01:59:29.785576"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 01:59:30.172257"], ["updated_at", "2014-09-07 01:59:30.172257"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.7ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 01:59:55.865556"], ["updated_at", "2014-09-07 01:59:55.865556"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.5ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.4ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.4ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 01:59:55.894497"], ["name", "test dummy"], ["updated_at", "2014-09-07 01:59:55.894497"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 01:59:55.897463"], ["updated_at", "2014-09-07 01:59:55.897463"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 01:59:55.905344"], ["name", "Brooks"], ["updated_at", "2014-09-07 01:59:55.905344"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.4ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 01:59:56.293739"], ["updated_at", "2014-09-07 01:59:56.293739"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:00:18.978372"], ["updated_at", "2014-09-07 02:00:18.978372"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.3ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:00:19.010570"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:00:19.010570"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:00:19.013545"], ["updated_at", "2014-09-07 02:00:19.013545"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:00:19.021534"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:00:19.021534"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:00:19.422336"], ["updated_at", "2014-09-07 02:00:19.422336"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:01:23.212304"], ["updated_at", "2014-09-07 02:01:23.212304"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.5ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:01:23.244772"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:01:23.244772"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:01:23.247840"], ["updated_at", "2014-09-07 02:01:23.247840"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:01:23.255743"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:01:23.255743"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:01:23.655066"], ["updated_at", "2014-09-07 02:01:23.655066"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.4ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:01:46.241231"], ["updated_at", "2014-09-07 02:01:46.241231"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.3ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:01:46.270266"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:01:46.270266"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:01:46.272673"], ["updated_at", "2014-09-07 02:01:46.272673"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:01:46.279122"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:01:46.279122"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.6ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:01:46.672731"], ["updated_at", "2014-09-07 02:01:46.672731"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:04:48.467536"], ["updated_at", "2014-09-07 02:04:48.467536"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.3ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.3ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:04:48.494738"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:04:48.494738"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.3ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mUser Load (0.4ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.5ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.6ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:04:48.888806"], ["updated_at", "2014-09-07 02:04:48.888806"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:05:31.419551"], ["updated_at", "2014-09-07 02:05:31.419551"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:05:31.447130"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:05:31.447130"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:05:31.450054"], ["updated_at", "2014-09-07 02:05:31.450054"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"  [["blackcard_id", 13], ["game_id", 15], ["leader_id", 14], ["round_num", 5783]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:05:31.465982"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:05:31.465982"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.4ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:05:31.868489"], ["updated_at", "2014-09-07 02:05:31.868489"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.4ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:14:01.014246"], ["updated_at", "2014-09-07 02:14:01.014246"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35mSubmission Load (0.7ms)[0m  SELECT "submissions".* FROM "submissions"
+  [1m[36mPlayableCard Load (0.5ms)[0m  [1mSELECT "playable_cards".* FROM "playable_cards"[0m
+  [1m[35mSeat Load (0.5ms)[0m  SELECT "seats".* FROM "seats"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:14:01.065090"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:14:01.065090"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (15.2ms)[0m  INSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"  [["game_id", 17], ["user_id", 16]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:14:01.089410"], ["updated_at", "2014-09-07 02:14:01.089410"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test White Card"], ["created_at", "2014-09-07 02:14:01.097630"], ["updated_at", "2014-09-07 02:14:01.097630"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["created_at", "2014-09-07 02:14:01.106729"], ["seat_id", 1], ["updated_at", "2014-09-07 02:14:01.106729"], ["whitecard_id", 9]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 15], ["game_id", 17], ["leader_id", 1], ["round_num", 5783]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.2ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.2ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.2ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.2ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.2ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.2ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:14:01.125470"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:14:01.125470"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 18], ["user_id", 17]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:14:01.128789"], ["updated_at", "2014-09-07 02:14:01.128789"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:14:01.130320"], ["updated_at", "2014-09-07 02:14:01.130320"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:14:01.131751"], ["seat_id", 2], ["updated_at", "2014-09-07 02:14:01.131751"], ["whitecard_id", 10]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 16], ["game_id", 18], ["leader_id", 2], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mSubmission Load (0.2ms)[0m  [1mSELECT "submissions".* FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 3]]
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (15.7ms)[0m  [1mINSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["playable_card_id", 2], ["round_id", 3]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:14:01.221476"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:14:01.221476"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:14:01.618389"], ["updated_at", "2014-09-07 02:14:01.618389"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:14:16.773577"], ["updated_at", "2014-09-07 02:14:16.773577"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.3ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35mSubmission Load (0.4ms)[0m  SELECT "submissions".* FROM "submissions"
+  [1m[36mPlayableCard Load (0.9ms)[0m  [1mSELECT "playable_cards".* FROM "playable_cards"[0m
+  [1m[35mSeat Load (0.4ms)[0m  SELECT "seats".* FROM "seats"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:14:16.813463"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:14:16.813463"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"  [["game_id", 20], ["user_id", 19]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:14:16.822719"], ["updated_at", "2014-09-07 02:14:16.822719"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test White Card"], ["created_at", "2014-09-07 02:14:16.829452"], ["updated_at", "2014-09-07 02:14:16.829452"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["created_at", "2014-09-07 02:14:16.840579"], ["seat_id", 3], ["updated_at", "2014-09-07 02:14:16.840579"], ["whitecard_id", 12]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 18], ["game_id", 20], ["leader_id", 3], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.1ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:14:16.857217"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:14:16.857217"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 21], ["user_id", 20]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:14:16.860027"], ["updated_at", "2014-09-07 02:14:16.860027"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:14:16.861316"], ["updated_at", "2014-09-07 02:14:16.861316"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:14:16.862664"], ["seat_id", 4], ["updated_at", "2014-09-07 02:14:16.862664"], ["whitecard_id", 13]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 19], ["game_id", 21], ["leader_id", 4], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 5]]
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["playable_card_id", 4], ["round_id", 5]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 5]]
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:14:16.919529"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:14:16.919529"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.2ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:14:17.305278"], ["updated_at", "2014-09-07 02:14:17.305278"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:16:57.598023"], ["updated_at", "2014-09-07 02:16:57.598023"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.4ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35mSubmission Load (0.4ms)[0m  SELECT "submissions".* FROM "submissions"
+  [1m[36mPlayableCard Load (0.4ms)[0m  [1mSELECT "playable_cards".* FROM "playable_cards"[0m
+  [1m[35mSeat Load (0.4ms)[0m  SELECT "seats".* FROM "seats"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:16:57.637158"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:16:57.637158"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"  [["game_id", 23], ["user_id", 22]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:16:57.647246"], ["updated_at", "2014-09-07 02:16:57.647246"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test White Card"], ["created_at", "2014-09-07 02:16:57.653381"], ["updated_at", "2014-09-07 02:16:57.653381"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["created_at", "2014-09-07 02:16:57.664554"], ["seat_id", 5], ["updated_at", "2014-09-07 02:16:57.664554"], ["whitecard_id", 15]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 21], ["game_id", 23], ["leader_id", 5], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:16:57.681385"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:16:57.681385"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 24], ["user_id", 23]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:16:57.684151"], ["updated_at", "2014-09-07 02:16:57.684151"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:16:57.685434"], ["updated_at", "2014-09-07 02:16:57.685434"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:16:57.686763"], ["seat_id", 6], ["updated_at", "2014-09-07 02:16:57.686763"], ["whitecard_id", 16]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 22], ["game_id", 24], ["leader_id", 6], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 7]]
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["playable_card_id", 6], ["round_id", 7]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 7]]
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.2ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:16:57.747892"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:16:57.747892"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 25], ["user_id", 24]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:16:57.750895"], ["updated_at", "2014-09-07 02:16:57.750895"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:16:57.752308"], ["updated_at", "2014-09-07 02:16:57.752308"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:16:57.753860"], ["seat_id", 7], ["updated_at", "2014-09-07 02:16:57.753860"], ["whitecard_id", 17]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 23], ["game_id", 25], ["leader_id", 7], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:16:57.774684"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:16:57.774684"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.3ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:16:58.172707"], ["updated_at", "2014-09-07 02:16:58.172707"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:20:27.673480"], ["updated_at", "2014-09-07 02:20:27.673480"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mGame Load (0.5ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.4ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.5ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35mSubmission Load (0.4ms)[0m  SELECT "submissions".* FROM "submissions"
+  [1m[36mPlayableCard Load (0.4ms)[0m  [1mSELECT "playable_cards".* FROM "playable_cards"[0m
+  [1m[35mSeat Load (0.4ms)[0m  SELECT "seats".* FROM "seats"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:20:27.710895"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:20:27.710895"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"  [["game_id", 27], ["user_id", 26]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:20:27.722998"], ["updated_at", "2014-09-07 02:20:27.722998"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test White Card"], ["created_at", "2014-09-07 02:20:27.729702"], ["updated_at", "2014-09-07 02:20:27.729702"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["created_at", "2014-09-07 02:20:27.737908"], ["seat_id", 8], ["updated_at", "2014-09-07 02:20:27.737908"], ["whitecard_id", 19]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 25], ["game_id", 27], ["leader_id", 8], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:20:27.757187"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:20:27.757187"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 28], ["user_id", 27]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:20:27.760138"], ["updated_at", "2014-09-07 02:20:27.760138"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:20:27.761553"], ["updated_at", "2014-09-07 02:20:27.761553"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:20:27.763020"], ["seat_id", 9], ["updated_at", "2014-09-07 02:20:27.763020"], ["whitecard_id", 20]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 26], ["game_id", 28], ["leader_id", 9], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 10]]
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["playable_card_id", 9], ["round_id", 10]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 10]]
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:20:27.824358"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:20:27.824358"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 29], ["user_id", 28]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:20:27.827385"], ["updated_at", "2014-09-07 02:20:27.827385"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:20:27.828805"], ["updated_at", "2014-09-07 02:20:27.828805"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:20:27.830369"], ["seat_id", 10], ["updated_at", "2014-09-07 02:20:27.830369"], ["whitecard_id", 21]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:20:28.217513"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:20:28.217513"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.2ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:20:28.227049"], ["updated_at", "2014-09-07 02:20:28.227049"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.4ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.6ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:22:05.705351"], ["updated_at", "2014-09-07 02:22:05.705351"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.3ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.4ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35mSubmission Load (0.4ms)[0m  SELECT "submissions".* FROM "submissions"
+  [1m[36mPlayableCard Load (0.4ms)[0m  [1mSELECT "playable_cards".* FROM "playable_cards"[0m
+  [1m[35mSeat Load (0.4ms)[0m  SELECT "seats".* FROM "seats"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:22:05.742641"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:05.742641"]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"  [["game_id", 31], ["user_id", 30]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:05.753716"], ["updated_at", "2014-09-07 02:22:05.753716"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:05.760765"], ["updated_at", "2014-09-07 02:22:05.760765"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["created_at", "2014-09-07 02:22:05.769206"], ["seat_id", 11], ["updated_at", "2014-09-07 02:22:05.769206"], ["whitecard_id", 23]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 29], ["game_id", 31], ["leader_id", 11], ["round_num", 5783]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.3ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.2ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.2ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.2ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.2ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.2ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:05.787936"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:05.787936"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 32], ["user_id", 31]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:05.790838"], ["updated_at", "2014-09-07 02:22:05.790838"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:05.792135"], ["updated_at", "2014-09-07 02:22:05.792135"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:05.793478"], ["seat_id", 12], ["updated_at", "2014-09-07 02:22:05.793478"], ["whitecard_id", 24]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 30], ["game_id", 32], ["leader_id", 12], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.5ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 12]]
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["playable_card_id", 12], ["round_id", 12]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 12]]
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.2ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:05.855251"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:05.855251"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 33], ["user_id", 32]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:05.858254"], ["updated_at", "2014-09-07 02:22:05.858254"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:05.859704"], ["updated_at", "2014-09-07 02:22:05.859704"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:05.861216"], ["seat_id", 13], ["updated_at", "2014-09-07 02:22:05.861216"], ["whitecard_id", 25]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.3ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.3ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.2ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.2ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.2ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.2ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.2ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:06.251257"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:06.251257"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 34], ["user_id", 33]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:06.254532"], ["updated_at", "2014-09-07 02:22:06.254532"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:06.255977"], ["updated_at", "2014-09-07 02:22:06.255977"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:06.257508"], ["seat_id", 14], ["updated_at", "2014-09-07 02:22:06.257508"], ["whitecard_id", 26]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "rounds" ("blackcard_id", "leader_id", "round_num") VALUES ($1, $2, $3) RETURNING "id"  [["blackcard_id", 32], ["leader_id", 14], ["round_num", 5783]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.2ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.1ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36mWhitecard Load (0.1ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35mSubmission Load (0.1ms)[0m  SELECT "submissions".* FROM "submissions"
+  [1m[36mPlayableCard Load (0.1ms)[0m  [1mSELECT "playable_cards".* FROM "playable_cards"[0m
+  [1m[35mSeat Load (0.1ms)[0m  SELECT "seats".* FROM "seats"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:22:06.266743"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:06.266743"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"  [["game_id", 35], ["user_id", 34]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:06.269418"], ["updated_at", "2014-09-07 02:22:06.269418"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:06.270776"], ["updated_at", "2014-09-07 02:22:06.270776"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["created_at", "2014-09-07 02:22:06.272171"], ["seat_id", 15], ["updated_at", "2014-09-07 02:22:06.272171"], ["whitecard_id", 27]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "round_num") VALUES ($1, $2, $3) RETURNING "id"[0m  [["blackcard_id", 33], ["game_id", 35], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.2ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.2ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.2ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.2ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.2ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.2ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:06.281732"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:06.281732"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 36], ["user_id", 35]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:06.284287"], ["updated_at", "2014-09-07 02:22:06.284287"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:06.285500"], ["updated_at", "2014-09-07 02:22:06.285500"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:06.287029"], ["seat_id", 16], ["updated_at", "2014-09-07 02:22:06.287029"], ["whitecard_id", 28]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id") VALUES ($1, $2, $3) RETURNING "id"  [["blackcard_id", 34], ["game_id", 36], ["leader_id", 16]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:06.293533"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:22:06.293533"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mWhitecard Load (0.2ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test"], ["created_at", "2014-09-07 02:22:06.301119"], ["updated_at", "2014-09-07 02:22:06.301119"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mBlackcard Load (0.6ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:22:40.955834"], ["updated_at", "2014-09-07 02:22:40.955834"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "blackcards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.3ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" DEFAULT VALUES RETURNING "id"
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "games"
+  [1m[36m (0.2ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mGame Load (0.2ms)[0m  [1mSELECT "games".* FROM "games"[0m
+  [1m[35mRound Load (0.3ms)[0m  SELECT "rounds".* FROM "rounds"
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users"[0m
+  [1m[35mBlackcard Load (0.2ms)[0m  SELECT "blackcards".* FROM "blackcards"
+  [1m[36mWhitecard Load (0.3ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35mSubmission Load (0.4ms)[0m  SELECT "submissions".* FROM "submissions"
+  [1m[36mPlayableCard Load (0.4ms)[0m  [1mSELECT "playable_cards".* FROM "playable_cards"[0m
+  [1m[35mSeat Load (0.4ms)[0m  SELECT "seats".* FROM "seats"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "games" ("name") VALUES ($1) RETURNING "id"  [["name", "Test Game"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:22:40.992293"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:40.992293"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"  [["game_id", 38], ["user_id", 37]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:41.001856"], ["updated_at", "2014-09-07 02:22:41.001856"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:41.008284"], ["updated_at", "2014-09-07 02:22:41.008284"]]
+  [1m[36m (0.2ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["created_at", "2014-09-07 02:22:41.019424"], ["seat_id", 17], ["updated_at", "2014-09-07 02:22:41.019424"], ["whitecard_id", 30]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 36], ["game_id", 38], ["leader_id", 17], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.036058"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:41.036058"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 39], ["user_id", 38]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:41.038823"], ["updated_at", "2014-09-07 02:22:41.038823"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:41.040127"], ["updated_at", "2014-09-07 02:22:41.040127"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.041463"], ["seat_id", 18], ["updated_at", "2014-09-07 02:22:41.041463"], ["whitecard_id", 31]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "rounds" ("blackcard_id", "game_id", "leader_id", "round_num") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["blackcard_id", 37], ["game_id", 39], ["leader_id", 18], ["round_num", 5783]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 17]]
+  [1m[35m (0.2ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "submissions" ("playable_card_id", "round_id") VALUES ($1, $2) RETURNING "id"[0m  [["playable_card_id", 18], ["round_id", 17]]
+  [1m[35m (0.2ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "submissions"  WHERE "submissions"."round_id" = $1[0m  [["round_id", 17]]
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.102813"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:41.102813"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 40], ["user_id", 39]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:41.105594"], ["updated_at", "2014-09-07 02:22:41.105594"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:41.106896"], ["updated_at", "2014-09-07 02:22:41.106896"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.108309"], ["seat_id", 19], ["updated_at", "2014-09-07 02:22:41.108309"], ["whitecard_id", 32]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.3ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.3ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.502915"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:41.502915"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 41], ["user_id", 40]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:41.505715"], ["updated_at", "2014-09-07 02:22:41.505715"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:41.507006"], ["updated_at", "2014-09-07 02:22:41.507006"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.508344"], ["seat_id", 20], ["updated_at", "2014-09-07 02:22:41.508344"], ["whitecard_id", 33]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.1ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.1ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.517072"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:41.517072"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 42], ["user_id", 41]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:41.519782"], ["updated_at", "2014-09-07 02:22:41.519782"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:41.521139"], ["updated_at", "2014-09-07 02:22:41.521139"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.522515"], ["seat_id", 21], ["updated_at", "2014-09-07 02:22:41.522515"], ["whitecard_id", 34]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mGame Load (0.2ms)[0m  SELECT "games".* FROM "games"
+  [1m[36mRound Load (0.1ms)[0m  [1mSELECT "rounds".* FROM "rounds"[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users"
+  [1m[36mBlackcard Load (0.2ms)[0m  [1mSELECT "blackcards".* FROM "blackcards"[0m
+  [1m[35mWhitecard Load (0.2ms)[0m  SELECT "whitecards".* FROM "whitecards"
+  [1m[36mSubmission Load (0.1ms)[0m  [1mSELECT "submissions".* FROM "submissions"[0m
+  [1m[35mPlayableCard Load (0.1ms)[0m  SELECT "playable_cards".* FROM "playable_cards"
+  [1m[36mSeat Load (0.1ms)[0m  [1mSELECT "seats".* FROM "seats"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "games" ("name") VALUES ($1) RETURNING "id"[0m  [["name", "Test Game"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.531367"], ["name", "test dummy"], ["updated_at", "2014-09-07 02:22:41.531367"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "seats" ("game_id", "user_id") VALUES ($1, $2) RETURNING "id"[0m  [["game_id", 43], ["user_id", 42]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "blackcards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test Black Card"], ["created_at", "2014-09-07 02:22:41.534243"], ["updated_at", "2014-09-07 02:22:41.534243"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["content", "Test White Card"], ["created_at", "2014-09-07 02:22:41.535707"], ["updated_at", "2014-09-07 02:22:41.535707"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "playable_cards" ("created_at", "seat_id", "updated_at", "whitecard_id") VALUES ($1, $2, $3, $4) RETURNING "id"  [["created_at", "2014-09-07 02:22:41.537528"], ["seat_id", 22], ["updated_at", "2014-09-07 02:22:41.537528"], ["whitecard_id", 35]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "rounds"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "rounds"[0m
+  [1m[35m (0.2ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "users" ("created_at", "name", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["created_at", "2014-09-07 02:22:41.543763"], ["name", "Brooks"], ["updated_at", "2014-09-07 02:22:41.543763"]]
+  [1m[35m (0.1ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  ROLLBACK
+  [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users"
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users"[0m
+  [1m[35m (0.1ms)[0m  SAVEPOINT active_record_1
+  [1m[36m (0.1ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36mWhitecard Load (0.2ms)[0m  [1mSELECT "whitecards".* FROM "whitecards"[0m
+  [1m[35m (0.1ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  INSERT INTO "whitecards" ("content", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["content", "Test"], ["created_at", "2014-09-07 02:22:41.551440"], ["updated_at", "2014-09-07 02:22:41.551440"]]
+  [1m[36m (0.1ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "whitecards"
+  [1m[36m (0.1ms)[0m  [1mROLLBACK[0m

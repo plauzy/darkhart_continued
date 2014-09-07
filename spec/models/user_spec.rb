@@ -5,11 +5,12 @@ RSpec.describe User, :type => :model do
     User.destroy_all
   end
 
-  it 'Creating a new User adds a User object' do
+  it 'should add a User to the database' do
     expect{User.create(name:'Brooks')}.to change{User.count}.by(1)
   end
 
-  it 'Creating a new User without a name does not add user' do
-    expect{User.create()}.to change{User.count}.by(0)
+  it 'should not add a user to the database' do
+    expect{User.create()}.to_not change{User.count}
   end
+
 end
