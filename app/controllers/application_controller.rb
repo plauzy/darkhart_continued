@@ -32,7 +32,7 @@ class ApplicationController < ActionController::API
       hash["losing_submissions"] = []
       round.submissions.each do |submission| #do we need submission_id?
         hash["losing_submissions"] << {player_name:submission.playable_card.seat.user.name,player_score:submission.playable_card.seat.score,submission_id:submission.id,submission_content:submission.playable_card.whitecard.content} if !submission.winner
-        hash["winning_submissions"] = {player_name:submission.playable_card.seat.user.name,player_score:submission.playable_card.seat.score,submission_id:submission.id,submission_content:submission.playable_card.whitecard.content} if submission.winner
+        hash["winning_submissions" = {player_name:submission.playable_card.seat.user.name,player_score:submission.playable_card.seat.score,submission_id:submission.id,submission_content:submission.playable_card.whitecard.content} if submission.winner
       end
     elsif # round is current and user is leader # assuming the leader is viewing after all cards are submitted
       hash["active"] = true
