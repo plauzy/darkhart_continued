@@ -9,6 +9,7 @@ module TestDataImporter
 
     game = GameSkeleton.new(name = "Test", user_ids, 4).new_game
 
+
     #each user besides blackcard submits card each round for 2 rounds
     2.times do |i|
       round = Round.find_by_round_num(i+1)
@@ -29,6 +30,8 @@ module TestDataImporter
       chosen_submission = submissions.sample
       chosen_submission.winner = true
       chosen_submission.save!
+      game.round_num+=1
+      game.save!
     end
 
     #now seat 3 is blackcard leader, well have seat 1 and 2 submit
