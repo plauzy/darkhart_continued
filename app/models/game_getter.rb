@@ -1,17 +1,18 @@
+require 'pp'
 class GameGetter
   attr_reader :current_round, :game, :seat
 
   def initialize(seat_id, round = 0)
     @seat = Seat.find_by_id(seat_id)
     @game = @seat.game
-    round == 0
+    if round == 0
       @round = Helper.current_round(@game)
     else
-      @round = @game.rounds.where(round_num: round)
+      @round = @game.rounds.where(round_num: round)[0]
     end
 
-    @submissions = @round.submissions.to_a
-    @game_seats = @game.seats.to_a
+    @submissions = @round.submissions
+    @game_seats = @game.seats
     @state = {}
   end
 
@@ -27,7 +28,7 @@ class GameGetter
       build_recap
     end
 
-    return @state
+    pp @state
   end
 
   private
@@ -42,35 +43,37 @@ class GameGetter
     @round.leader_id == @seat.id
   end
 
+  def get_leader
+    Seat.find_by_id(@round.leader_id)
+  end
+
   def waiting_on?
-    leader_seat = seat.find_by_id(@round.leader_id)
-    @game_seats.select do |seat|
-      seat
-
-
-
-    end
-
+    ineligible_seats = @submissions.map { |sub| sub.owner_seat }
+    ineligible_seats << get_leader
+    @game_seats - ineligible_seats
   end
 
 # Header Methods --------------
 
   def build_header
-    @state.round = @round.round_num
-    @state.active = round_active?
-    @state.player_self = player_self
-    @state.leader = leader_blackcard
+    @state["round"] = @round.round_num
+    @state["active"] = round_active?
+    @state["player_self"] = player_self
+    @state["leader"] = leader_blackcard
   end
 
   def player_self
-    { name: @seat.user.name,
+    { name: @seat.name,
       score: @seat.score,
       seat_id: @seat.id,
       cards: playable_cards }
   end
 
   def playable_cards
-    @seat.playable_cards.where(submitted: false).to_a
+    cards = @seat.playable_cards.where(submitted: false).to_a
+    cards.map do |card|
+      { playable_card_id: card.id, content: card.whitecard.content }
+    end
   end
 
   def leader_blackcard
@@ -80,14 +83,14 @@ class GameGetter
 
 # Recap Methods ----------------
 
-  def recap
-    @state.losing_submissions = []
-    @submissions.each |sub|
-      sub_details = { player_name: sub.playable_card.seat.user.name,
-                      player_score: sub.playable_card.seat.score,
-                      submission_content: sub.playable_card.whitecard.content }
-      @state.losing_submissions << sub_details if sub.winner == false
-      @state.winning_submission << sub_details if sub.winner == true
+  def build_recap
+    @state["losing_submissions"] = []
+    @submissions.each do |sub|
+      sub_details = { player_name: sub.owner_name,
+                      player_score: sub.owner_score,
+                      submission_content: sub.card_content }
+      @state["losing_submissions"] << sub_details if sub.winner == false
+      @state["winning_submission"] = sub_details if sub.winner == true
     end
   end
 
@@ -95,17 +98,12 @@ class GameGetter
 
   def build_submissions
     @state.submissions = @submissions.map do |sub|
-      seat_submission = {
-        submitted?: true,
-        player_name: sub.playable_card.seat.user.name,
-        player_score: sub.playable_card.seat.score,
+      { submitted?: true,
+        player_name: sub.owner_name,
+        player_score: sub.owner_score,
         submission_id: sub.id,
-        submission_content: sub.playable_card.whitecard.content
-      }
-    # if @state.submissions.length < @game.seats.count
-    #   @ga
-    # end
-
-
-
+        submission_content: sub.card_content }
+    end
+  end
 end
+
