@@ -1,3 +1,43 @@
+class GameSetter 
+
+  def initialize(seat_id)
+    @seat = Seat.find_by_id(seat_id)
+    @game = @seat.game
+    @current_round = @game.current_round
+  end
+
+  def make_user_submission(playable_card)
+    submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id) unless playable_card.submitted == true
+    playable_card.submitted = true 
+    playable_card.save!
+  end
+
+  def make_rounder_leader_decision(winning_submission)
+    winning_submission.winner = true
+    winning_submission.save!
+    increment_round 
+  end
+
+  def increment_round 
+    @game.current_round+=1
+    @game.save!
+  end
+
+  def deal_new_card_to_seats
+    @game.seats.each do |seat|
+      whitecard = Whitecard.all.sample
+      seat.playable_cards << PlayableCard.create(whitecard_id: whitecard.id)
+    end
+  end
+
+end
+
+
+
+
+
+
+
 class GameSetter
   def initialize(seat_id)
     @seat = Seat.find_by_id(seat_id)
