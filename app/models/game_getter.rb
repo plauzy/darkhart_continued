@@ -53,6 +53,14 @@ class GameGetter
     @game_seats - ineligible_seats
   end
 
+  def need_submission?
+    if leader?
+      @submissions.to_a.length == @seats.to_a.length - 1 ? true : false
+    else
+      waiting_on?.include? @seat
+    end
+  end
+
 # Header Methods --------------
 
   def build_header
@@ -60,6 +68,7 @@ class GameGetter
     @state["active"] = round_active?
     @state["player_self"] = player_self
     @state["leader"] = leader_blackcard
+    @state["need_submission?"] = need_submission?
   end
 
   def player_self
@@ -97,7 +106,7 @@ class GameGetter
 # Leader Methods ---------------
 
   def build_submissions
-    @state.submissions = @submissions.map do |sub|
+    @state["submissions"] = @submissions.map do |sub|
       { submitted?: true,
         player_name: sub.owner_name,
         player_score: sub.owner_score,
