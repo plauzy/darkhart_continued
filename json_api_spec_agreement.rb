@@ -1,7 +1,7 @@
 get '/api/users/:user_id' => 'application#xxx' # List of all games user is in.
 
 # View sends ...
-{ authentication: [user_id] }
+{ authentication: user_id }
 
 # Server responds...
 { active_games: [ { game_id: 1,
@@ -14,21 +14,21 @@ get '/api/users/:user_id' => 'application#xxx' # List of all games user is in.
 post '/api/users/:user_id' => 'application#xxx' # Create a new user
 
 # VIEW CREATES A NEW GAME:
-post '/api/games/:game_id' => 'application#xxx' # Creates new game
+post '/api/games/:game_id' => 'application#new_game' # Creates new game
 
       { authentication: [user_id],
         game_name: "name",
-        players: [player_id: 1] }
+        players: [{player_id: 1}] }
 
       # view rediects and returns current round.
 
 # VIEW REQUESTS CURRENT ROUND DATA OR ROUND SPECIFIC DATA
 
-get '/api/games/:game_id/rounds/current => 'application #Current round data
+get '/api/games/:game_id/rounds/current' => 'application#get_current_round' Current round data
 
         { authentication: [user_id], game_id: 1 }
 
-get '/api/games/:game_id/rounds/:id => 'application#get_round' # Round data
+get '/api/games/:game_id/rounds/:id' => 'application#get_round' # Round data
 
         { authentication: [user_id], game_id: 1, round: 1 }
 
