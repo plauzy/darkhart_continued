@@ -4,20 +4,26 @@ class GameGetter
   def initialize(seat_id, round = 0)
     @seat = Seat.find_by_id(seat_id)
     @game = @seat.game
-    if round == 0
+    round == 0
       @round = Helper.current_round(@game)
     else
       @round = @game.rounds.where(round_num: round)
     end
 
+    @submissions = @round.submissions.to_a
+    @game_seats = @game.seats.to_a
     @state = {}
   end
 
+# God Method -------------------
+
   def game_state
     build_header
-    if round_active?
+    if round_active? && leader?
 
-    elsif !round_active?
+    elsif round_active?
+      build_submissions
+    else
       build_recap
     end
 
@@ -26,10 +32,25 @@ class GameGetter
 
   private
 
-# Conditionals ----------------
+# Conditionals & Helpers ----------------
 
   def round_active?
-    @round.submissions.where(winner: true)[0] ? false : true
+    @submissions.where(winner: true)[0] ? false : true
+  end
+
+  def leader?
+    @round.leader_id == @seat.id
+  end
+
+  def waiting_on?
+    leader_seat = seat.find_by_id(@round.leader_id)
+    @game_seats.select do |seat|
+      seat
+
+
+
+    end
+
   end
 
 # Header Methods --------------
@@ -38,7 +59,7 @@ class GameGetter
     @state.round = @round.round_num
     @state.active = round_active?
     @state.player_self = player_self
-    @state.leader = leader
+    @state.leader = leader_blackcard
   end
 
   def player_self
@@ -52,8 +73,8 @@ class GameGetter
     @seat.playable_cards.where(submitted: false).to_a
   end
 
-  def leader
-    { leader?: @round.leader_id == @seat.id,
+  def leader_blackcard
+    { leader?: leader?,
       blackcard_content: @round.blackcard.content }
   end
 
@@ -61,7 +82,7 @@ class GameGetter
 
   def recap
     @state.losing_submissions = []
-    @round.submissions.each |sub|
+    @submissions.each |sub|
       sub_details = { player_name: sub.playable_card.seat.user.name,
                       player_score: sub.playable_card.seat.score,
                       submission_content: sub.playable_card.whitecard.content }
@@ -69,7 +90,22 @@ class GameGetter
       @state.winning_submission << sub_details if sub.winner == true
     end
   end
+
+# Leader Methods ---------------
+
+  def build_submissions
+    @state.submissions = @submissions.map do |sub|
+      seat_submission = {
+        submitted?: true,
+        player_name: sub.playable_card.seat.user.name,
+        player_score: sub.playable_card.seat.score,
+        submission_id: sub.id,
+        submission_content: sub.playable_card.whitecard.content
+      }
+    # if @state.submissions.length < @game.seats.count
+    #   @ga
+    # end
+
+
+
 end
-
-
-
