@@ -9,4 +9,8 @@ module Helper
     offset = rand(1..(Blackcard.count))
     Blackcard.find_by_id(offset)
   end
+
+  def current_round(game)
+    game.rounds.where(round_num: game.round_num)
+  end
 end
