@@ -1,33 +1,3 @@
-# module TestDataImporter
-#   def self.import
-
-#     4.times do 
-#       FactoryGirl.create(:user)
-#     end
-
-#     game = FactoryGirl.create(:game)
-#     users = User.all[0..3]
-
-#     whitecards = Whitecard.all.to_a
-#     blackcards = Blackcard.all.to_a 
-
-#     #cards dealt to users
-#     4.times do 
-#       seat = FactoryGirl.create(:seat, user: users.pop, game: game )
-#       4.times do 
-#         FactoryGirl.create(:playable_card, whitecard: whitecards.pop, seat: seat)
-#       end
-#     end
-
-#     #round initiated
-#     round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop)
-
-
-#   end
-# end
-
-# TestDataImporter.import
-
 module TestDataImporter
   def self.import
 
@@ -45,7 +15,7 @@ module TestDataImporter
     #cards dealt to users
     4.times do |i|
       seats << FactoryGirl.create(:seat, user: users.pop, game: game )
-      4.times do 
+      5.times do 
         FactoryGirl.create(:playable_card, whitecard: whitecards.pop, seat: seats[i])
       end
     end
@@ -64,11 +34,17 @@ module TestDataImporter
         submissions << FactoryGirl.create(:submission, playable_card: card_to_submit, round: round)
         card_to_submit.submitted = true 
         card_to_submit.save!
+
+        #deal new whitecard
+        FactoryGirl.create(:playable_card, whitecard: whitecards.pop, seat: seat) 
       end
 
       chosen_sub = submissions.sample
       chosen_sub.winner = true
       chosen_sub.save!
+
+      
+
 
       seats.rotate!
     end
