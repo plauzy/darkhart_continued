@@ -30,6 +30,10 @@ module TestDataImporter
       chosen_submission = submissions.sample
       chosen_submission.winner = true
       chosen_submission.save!
+      seat_owner = chosen_submission.owner_seat
+      seat_owner.score+=1
+      seat_owner.save!
+
       game.round_num+=1
       game.save!
     end
