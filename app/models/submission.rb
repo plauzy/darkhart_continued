@@ -17,4 +17,8 @@ class Submission < ActiveRecord::Base
   def owner_score
     self.playable_card.seat.score
   end
+
+  def email
+    self.playable_card.seat.user.email
+  end
 end

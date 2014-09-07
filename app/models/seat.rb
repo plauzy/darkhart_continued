@@ -6,4 +6,8 @@ class Seat < ActiveRecord::Base
   def name
     self.user.name
   end
+
+  def email
+    self.user.email
+  end
 end
