@@ -13,7 +13,6 @@ class GameSetter
     playable_card.submitted = true
     playable_card.save
     check_if_all_cards_submitted
-
   end
 
   def round_leader_choose_winner(winning_submission)
