@@ -8,10 +8,8 @@ class GameGetter
     @game = @seat.game
     if round_num == 0 || (round_num > @game.total_rounds)
       @round = Helper.current_round(@game)[0]
-      p "if -------------------- #{@round.id}"
     else
       @round = @game.rounds.where(round_num: round_num)[0]
-      p "else -------------------- #{@round.id}"
     end
 
     @submissions = @round.submissions
