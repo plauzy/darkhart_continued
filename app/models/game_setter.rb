@@ -1,4 +1,4 @@
-class GameSetter 
+class GameSetter
 
   def initialize(user_id, game_id)
     @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
@@ -10,7 +10,7 @@ class GameSetter
 
   def make_user_submission(playable_card)
     submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id) unless playable_card.submitted == true
-    playable_card.submitted = true 
+    playable_card.submitted = true
     playable_card.save!
   end
 
@@ -19,16 +19,16 @@ class GameSetter
     winning_submission.save!
 
     winning_seat = winning_submission.owner_seat
-    winning_seat.socre+=1
+    winning_seat.score+=1
     winning_seat.save!
 
-    increment_round 
+    increment_round
     deal_new_card_to_seats
   end
 
   private
 
-    def increment_round 
+    def increment_round
       @game.round_num+=1
       @game.save!
     end
