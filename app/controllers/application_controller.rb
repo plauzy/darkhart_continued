@@ -1,11 +1,9 @@
 class ApplicationController < ActionController::API
 
   def game_state
-
-    game = GameGetter.new()
-    p params["user_id"]
-    p params["game_id"]
-    p params["round_id"]
+    round = params["round_num"] || 0
+    game = GameGetter.new(params["game_id"], params["user_id"], round)
+    render :json => game.game_state
   end
 
 end
