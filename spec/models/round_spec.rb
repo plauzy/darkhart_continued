@@ -18,28 +18,28 @@ RSpec.describe Round, :type => :model do
     @playable_card = PlayableCard.create(seat_id: @seat.id,whitecard_id: @whitecard.id)
   end
 
-  it 'adds a round to the databse' do
+  it 'should add a round to the databse' do
     expect{Round.create(game_id: @game.id, leader_id: @seat.id, blackcard_id: @blackcard.id, round_num: 5783)}.to change{Round.count}.by(1)
   end
 
-  it 'accepts a submission' do
+  it 'should accept a submission' do
     round = Round.create(game_id: @game.id, leader_id: @seat.id, blackcard_id: @blackcard.id, round_num: 5783)
     expect{Submission.create(round_id: round.id, playable_card_id:@playable_card.id)}.to change{round.submissions.count}.by(1)
   end
 
-  it 'won\'t create a round without a black card' do
+  it 'should not create a round without a black card' do
     expect{Round.create(game_id: @game.id, leader_id: @seat.id,  round_num: 5783)}.to_not change{Round.count}
   end
 
-  it 'won\'t create a round without a game' do
+  it 'should not create a round without a game' do
     expect{Round.create(leader_id: @seat.id, blackcard_id: @blackcard.id, round_num: 5783)}.to_not change{Round.count}
   end
 
-  it 'won\'t create a round without a leader' do
+  it 'should not create a round without a leader' do
     expect{Round.create(game_id: @game.id, blackcard_id: @blackcard.id, round_num: 5783)}.to_not change{Round.count}
   end
 
-  it 'won\'t create a round without a round number' do
+  it 'should not create a round without a round number' do
     expect{Round.create(game_id: @game.id, leader_id: @seat.id, blackcard_id: @blackcard.id)}.to_not change{Round.count}
   end
 

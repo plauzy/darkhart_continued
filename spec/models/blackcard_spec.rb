@@ -5,8 +5,12 @@ RSpec.describe Blackcard, :type => :model do
     Blackcard.destroy_all
   end
 
-  it 'Creating a new BlackCard adds a BlackCard object' do
+  it 'should add a black card to the database' do
     expect{Blackcard.create(content:'Test')}.to change{Blackcard.count}.by(1)
+  end
+
+  it 'should not add a card to the database without content' do
+    expect{Blackcard.create()}.to_not change{Blackcard.count}
   end
 
 end
