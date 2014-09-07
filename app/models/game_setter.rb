@@ -1,5 +1,5 @@
 class GameSetter
-
+  attr_reader :round_num
 
   def initialize(game_id, user_id, card_id)
     @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
@@ -14,6 +14,10 @@ class GameSetter
       playable_card_submission = PlayableCard.find(card_id)
       make_user_submission(playable_card_submission)
     end
+  end
+
+  def round_num
+    @game.round_num
   end
 
   private
@@ -50,9 +54,11 @@ class GameSetter
 end
 
 
-user = User.first
-game = Game.first
-GameSetter.new(game_id, user_id)
-player3cards=Seat.find(3).playable_cards.where("submitted = false")
+# user = User.first
+# game = Game.first
+# seat = Seat.where(["user_id = ? and game_id = ?", user.id, game.id]).first
+
+# GameSetter.new(game.id, user.id)
+# player3cards=Seat.find(3).playable_cards.where("submitted = false")
 
 

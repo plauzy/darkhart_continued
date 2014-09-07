@@ -49,7 +49,7 @@ class GameGetter
 
   def need_submission?
     if leader?
-      @submissions.to_a.length == @seats.to_a.length - 1 ? true : false
+      @submissions.to_a.length == @game_seats.to_a.length - 1 ? true : false
     else
       waiting_on?.include? @seat
     end
@@ -67,7 +67,7 @@ class GameGetter
   end
 
   def player_self
-    { # user_id: @seat.user_id,
+    { user_id: @seat.user_id,
       seat_id: @seat.id,
       player_name: @seat.name,
       player_score: @seat.score,
@@ -83,7 +83,11 @@ class GameGetter
   end
 
   def leader_blackcard
-    { leader?: leader?,
+    { leader: leader?,
+      leader_name: get_leader.user.name,
+      leader_user_id: get_leader.user_id,
+      leader_seat_id: get_leader.id,
+      leader_email: get_leader.user.email,
       blackcard_content: @round.blackcard.content }
   end
 
@@ -105,7 +109,9 @@ class GameGetter
 
   def build_submissions
     @state["submissions"] = @submissions.map do |sub|
-      { player_name: sub.owner_name,
+      { user_id: sub.owner_user_id,
+        seat_id: sub.owner_seat_id,
+        player_name: sub.owner_name,
         player_score: sub.owner_score,
         player_email: sub.email,
         submission_id: sub.id,
@@ -113,7 +119,9 @@ class GameGetter
     end
     if waiting_on?
       @state["missing_submissions"] = waiting_on?.select { |s| s != @seat }.map do |seat|
-        { player_name: seat.name,
+        { user_id: seat.user_id,
+          seat_id: seat.id,
+          player_name: seat.name,
           player_score: seat.score,
           player_email: seat.email }
       end
