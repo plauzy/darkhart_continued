@@ -53,7 +53,7 @@ module TestDataImporter
 
     4.times do |i|
       leader_id = seats.last.id
-      round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop, round_num: i, leader_id: leader_id)
+      round = FactoryGirl.create(:round, game: game, blackcard: blackcards.pop, round_num: i+1, leader_id: leader_id)
       submissions = []
 
       3.times do |i|
