@@ -15,6 +15,11 @@ RSpec.describe Game, :type => :model do
     expect{Game.create(name:'Test Game')}.to change{Game.count}.by(1)
   end
 
+  it 'should initialize the current round to 1' do
+    game = Game.create(name:'Test Game')
+    expect(game.round_num).to eq(1)
+  end
+
   it 'should not add a game to the database without a name' do
     expect{Game.create()}.to_not change{Game.count}
   end

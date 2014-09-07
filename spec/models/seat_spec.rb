@@ -13,6 +13,11 @@ RSpec.describe Seat, :type => :model do
     expect{Seat.create(user_id:@user.id,game_id:@game.id)}.to change{Seat.count}.by(1)
   end
 
+  it 'should initialize the score to 0' do
+    seat = Seat.create(user_id:@user.id,game_id:@game.id)
+    expect(seat.score).to eq(0)
+  end
+
   it 'should not add a seat to the database without a user' do
     expect{Seat.create(game_id:@game.id)}.to_not change{Seat.count}
   end
