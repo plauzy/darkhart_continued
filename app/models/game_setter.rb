@@ -3,14 +3,13 @@ class GameSetter
   def initialize(user_id, game_id)
     @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
     @game = @seat.game
-    @round_num = @game.current_round
-    @round = Round.where(["round_num = ? and game_id = ?", @game.current_round, @game.id )[0]
+    @round_num = @game.round_num
+    @round = Round.where(["round_num = ? and game_id = ?", @game.current_round, @game.id]).first
     @submissions = @round.submissions
-    @state = {}
   end
 
   def make_user_submission(playable_card)
-    @submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id) unless playable_card.submitted == true
+    submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id) unless playable_card.submitted == true
     playable_card.submitted = true 
     playable_card.save!
   end
@@ -25,22 +24,17 @@ class GameSetter
 
   private
 
-  def increment_round 
-    @game.current_round+=1
-    @game.save!
-  end
-
-  def deal_new_card_to_seats
-    @game.seats.each do |seat|
-      whitecard = Whitecard.all.sample
-      seat.playable_cards << PlayableCard.create(whitecard_id: whitecard.id)
+    def increment_round 
+      @game.round_num+=1
+      @game.save!
     end
-  end
 
-  def round_active?
-    @submissions.where(winner: true)[0] ? false : true
-  end
-
+    def deal_new_card_to_seats
+      @game.seats.each do |seat|
+        whitecard = Whitecard.all.sample
+        seat.playable_cards << PlayableCard.create(whitecard_id: whitecard.id)
+      end
+    end
 end
 
 __END__
