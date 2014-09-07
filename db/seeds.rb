@@ -13,4 +13,3 @@ end
 answers.each do |answer|
   Whitecard.create(content:answer["text"])
 end
-
