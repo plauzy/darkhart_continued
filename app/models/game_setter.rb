@@ -1,6 +1,6 @@
 class GameSetter
 
-  def initialize(user_id, game_id)
+  def initialize(game_id, user_id)
     @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
     @game = @seat.game
     @round_num = @game.round_num
