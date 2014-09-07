@@ -6,6 +6,14 @@ class Submission < ActiveRecord::Base
     self.playable_card.seat
   end
 
+  def owner_seat_id
+    self.playable_card.seat.id
+  end
+
+  def owner_user_id
+    self.playable_card.seat.user_id
+  end
+
   def card_content
     self.playable_card.whitecard.content
   end
