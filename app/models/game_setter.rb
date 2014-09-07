@@ -1,11 +1,12 @@
 class GameSetter
-  attr_reader :round_num
+  attr_reader :recap_round_num
 
   def initialize(game_id, user_id, card_id)
     @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
     @game = @seat.game
     @round = Round.where(["round_num = ? and game_id = ?", @game.round_num, @game.id]).first
     @submissions = @round.submissions
+    @recap_round_num = @round.round_num
 
     if @seat.id == @round.leader_id
       winning_submission = Submission.find(card_id)
@@ -14,10 +15,6 @@ class GameSetter
       playable_card_submission = PlayableCard.find(card_id)
       make_user_submission(playable_card_submission)
     end
-  end
-
-  def round_num
-    @game.round_num
   end
 
   private
