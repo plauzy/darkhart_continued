@@ -1,13 +1,15 @@
 class GameGetter
   attr_reader :current_round, :game, :seat
 
-  def initialize(game_id, user_id, round = 0)
-    @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id]).first
+  def initialize(game_id, user_id, round_num = 0)
+    @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id])[0]
+    # raise "Can't find seat. Invalid game_id and/or user_id" if @seat == nil
+
     @game = @seat.game
-    if round == 0 || (round > @game.total_rounds)
+    if round_num == 0 || (round_num > @game.total_rounds)
       @round = Helper.current_round(@game)[0]
     else
-      @round = @game.rounds.where(round_num: round)[0]
+      @round = @game.rounds.where(round_num: round_num)[0]
     end
 
     @submissions = @round.submissions
@@ -20,7 +22,7 @@ class GameGetter
   def game_state
     build_header
     round_active? ? build_submissions : build_recap
-    pp @state
+    return @state
   end
 
   private
