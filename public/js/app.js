@@ -1,80 +1,35 @@
-$( "#newGameForm" ).submit(function( event ) {
+// Cookie Management
+// Setup cookies on login page.
+$.cookie.json = true;
+$("#cookie-submit").on("click", function(event) {
   event.preventDefault();
-  var $form = $( this ),
-    initiator_id = $form.find( "input[name='initiator_id']" ).val();
-    invite_ids = $form.find( "input[name='invite_ids']" ).val();
-    game_name = $form.find( "input[name='game_name']" ).val();
-    url = "/api/users/" + initiator_id + "/games";
+  var game_ids = $("#cookie-game_ids").val().split(",")
+  for (a in game_ids ) { game_ids[a] = parseInt(game_ids[a], 10); };
+  var cookie = { "user_id": $("#cookie-user_id").val(),
+                 "game_ids": game_ids };
+  console.log(cookie)
+  $.cookie('session', cookie);
+  console.log("Setting cookie for " + $("#cookie-user_id").val());
+})
 
-    var posting = $.post( url, {  "invite_ids": invite_ids,
-                                  "game_name": game_name } );
-  // Put the results in a div
-  posting.done(function( data ) {
-    $("#json").empty().append(JSON.stringify(data, undefined, 2))
-    console.log(data);
-  });
-});
-
-$( "#previousRoundRecap" ).submit(function( event ) {
+$("#cookie-clear").on("click", function(event) {
   event.preventDefault();
-  var $form = $( this ),
-    initiator_id = $form.find( "input[name='initiator_id']" ).val();
-    game_id=  $form.find( "input[name='game_id']" ).val();
-    round_num = $form.find( "input[name='round_num']").val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id + "/rounds/" + round_num;
+  $.removeCookie('session');
+  console.log("Removing cookie.");
+})
 
-    var posting = $.get( url);
-  // Put the results in a div
-  posting.done(function( data ) {
-    $("#json").empty().append(JSON.stringify(data, undefined, 2))
-    console.log(data);
-  });
-});
+// Create game cookie on game page.
 
-$( "#currentGameState" ).submit(function( event ) {
-  event.preventDefault();
-  var $form = $( this ),
-    initiator_id = $form.find( "input[name='initiator_id']" ).val();
-    game_id = $form.find( "input[name='game_id']" ).val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id;
+// $( document ).delegate("#aboutPage", "pagebeforecreate", function() {
 
-    var posting = $.get( url);
-  // Put the results in a div
-  posting.done(function( data ) {
-    $("#json").empty().append(JSON.stringify(data, undefined, 2))
-    console.log(data);
-  });
-});
 
-$( "#makeSubmission" ).submit(function( event ) {
-  event.preventDefault();
-  var $form = $( this ),
-    initiator_id = $form.find( "input[name='initiator_id']" ).val();
-    game_id = $form.find( "input[name='game_id']" ).val();
-    card_id = $form.find( "input[name='card_id']" ).val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id + "/cards/" + card_id;
 
-    var posting = $.get( url);
-  // Put the results in a div
-  posting.done(function( data ) {
-    $("#json").empty().append(JSON.stringify(data, undefined, 2))
-    console.log(data);
-  });
-});
 
-$( "#makeDecision" ).submit(function( event ) {
-  event.preventDefault();
-  var $form = $( this ),
-    initiator_id = $form.find( "input[name='initiator_id']" ).val();
-    game_id = $form.find( "input[name='game_id']" ).val();
-    card_id = $form.find( "input[name='submission_id']" ).val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id + "/cards/" + card_id;
+// $( document ).delegate("#aboutPage", "pageinit", function() {
+//   alert('A page with an id of "aboutPage" was just created by jQuery Mobile!');
+// });
 
-    var posting = $.get( url);
-  // Put the results in a div
-  posting.done(function( data ) {
-    $("#json").empty().append(JSON.stringify(data, undefined, 2))
-    console.log(data);
-  });
-});
 
+// $( document ).delegate("#aboutPage", "pagebeforecreate", function() {
+//   alert('A page with an id of "aboutPage" is about to be created by jQuery Mobile!');
+// });
