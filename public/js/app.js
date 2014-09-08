@@ -30,3 +30,19 @@ $( "#previousRoundRecap" ).submit(function( event ) {
     console.log(data);
   });
 });
+
+$( "#currentGameState" ).submit(function( event ) {
+  event.preventDefault();
+  var $form = $( this ),
+    initiator_id = $form.find( "input[name='initiator_id']" ).val();
+    game_id= $form.find( "input[name='game_id']" ).val();
+    url = "/api/users/" + initiator_id + "/games/" + game_id;
+
+    var posting = $.get( url);
+  // Put the results in a div
+  posting.done(function( data ) {
+    $("#json").empty().append(JSON.stringify(data, undefined, 2))
+    console.log(data);
+  });
+});
+
