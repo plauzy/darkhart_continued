@@ -1,13 +1,15 @@
 class GameGetter
   attr_reader :current_round, :game, :seat
 
-  def initialize(seat_id, round = 0)
-    @seat = Seat.find_by_id(seat_id)
+  def initialize(game_id, user_id, round_num = 0)
+    @seat = Seat.where(["user_id = ? and game_id = ?", user_id, game_id])[0]
+    # raise "Can't find seat. Invalid game_id and/or user_id" if @seat == nil
+
     @game = @seat.game
-    if round == 0 || round > @game.total_rounds
+    if round_num == 0 || (round_num > @game.total_rounds)
       @round = Helper.current_round(@game)[0]
     else
-      @round = @game.rounds.where(round_num: round)[0]
+      @round = @game.rounds.where(round_num: round_num)[0]
     end
 
     @submissions = @round.submissions
@@ -20,7 +22,7 @@ class GameGetter
   def game_state
     build_header
     round_active? ? build_submissions : build_recap
-    pp @state
+    return @state
   end
 
   private
@@ -47,7 +49,7 @@ class GameGetter
 
   def need_submission?
     if leader?
-      @submissions.to_a.length == @seats.to_a.length - 1 ? true : false
+      @submissions.to_a.length == @game_seats.to_a.length - 1 ? true : false
     else
       waiting_on?.include? @seat
     end
@@ -56,6 +58,7 @@ class GameGetter
 # Header Methods --------------
 
   def build_header
+    @state["game_id"] = @game.id
     @state["round"] = @round.round_num
     @state["active"] = round_active?
     @state["player_self"] = player_self
@@ -64,11 +67,12 @@ class GameGetter
   end
 
   def player_self
-    { player_name: @seat.name,
+    { user_id: @seat.user_id,
+      seat_id: @seat.id,
+      player_name: @seat.name,
       player_score: @seat.score,
       player_email: @seat.email,
-      seat_id: @seat.id,
-      player_cards: playable_cards, }
+      player_cards: playable_cards }
   end
 
   def playable_cards
@@ -79,7 +83,11 @@ class GameGetter
   end
 
   def leader_blackcard
-    { leader?: leader?,
+    { leader: leader?,
+      leader_name: get_leader.user.name,
+      leader_user_id: get_leader.user_id,
+      leader_seat_id: get_leader.id,
+      leader_email: get_leader.user.email,
       blackcard_content: @round.blackcard.content }
   end
 
@@ -88,9 +96,12 @@ class GameGetter
   def build_recap
     @state["losing_submissions"] = []
     @submissions.each do |sub|
-      sub_details = { player_name: sub.owner_name,
+      sub_details = { user_id: sub.owner_user_id,
+                      seat_id: sub.owner_seat_id,
+                      player_name: sub.owner_name,
                       player_score: sub.owner_score,
                       player_email: sub.email,
+                      submission_id: sub.id,
                       submission_content: sub.card_content }
       @state["losing_submissions"] << sub_details if sub.winner == false
       @state["winning_submission"] = sub_details if sub.winner == true
@@ -101,7 +112,9 @@ class GameGetter
 
   def build_submissions
     @state["submissions"] = @submissions.map do |sub|
-      { player_name: sub.owner_name,
+      { user_id: sub.owner_user_id,
+        seat_id: sub.owner_seat_id,
+        player_name: sub.owner_name,
         player_score: sub.owner_score,
         player_email: sub.email,
         submission_id: sub.id,
@@ -109,7 +122,9 @@ class GameGetter
     end
     if waiting_on?
       @state["missing_submissions"] = waiting_on?.select { |s| s != @seat }.map do |seat|
-        { player_name: seat.name,
+        { user_id: seat.user_id,
+          seat_id: seat.id,
+          player_name: seat.name,
           player_score: seat.score,
           player_email: seat.email }
       end

@@ -12,7 +12,7 @@ class GameSkeleton
 
   private
 
-  def populate_seats()
+  def populate_seats
     @game_users.each do |user|
       user.seats << Seat.create(game_id: @new_game.id)
       user.save
