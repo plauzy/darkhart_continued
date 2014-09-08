@@ -19,7 +19,7 @@ $( "#previousRoundRecap" ).submit(function( event ) {
   event.preventDefault();
   var $form = $( this ),
     initiator_id = $form.find( "input[name='initiator_id']" ).val();
-    game_id= $form.find( "input[name='game_id']" ).val();
+    game_id=  $form.find( "input[name='game_id']" ).val();
     round_num = $form.find( "input[name='round_num']").val();
     url = "/api/users/" + initiator_id + "/games/" + game_id + "/rounds/" + round_num;
 
@@ -35,8 +35,40 @@ $( "#currentGameState" ).submit(function( event ) {
   event.preventDefault();
   var $form = $( this ),
     initiator_id = $form.find( "input[name='initiator_id']" ).val();
-    game_id= $form.find( "input[name='game_id']" ).val();
+    game_id = $form.find( "input[name='game_id']" ).val();
     url = "/api/users/" + initiator_id + "/games/" + game_id;
+
+    var posting = $.get( url);
+  // Put the results in a div
+  posting.done(function( data ) {
+    $("#json").empty().append(JSON.stringify(data, undefined, 2))
+    console.log(data);
+  });
+});
+
+$( "#makeSubmission" ).submit(function( event ) {
+  event.preventDefault();
+  var $form = $( this ),
+    initiator_id = $form.find( "input[name='initiator_id']" ).val();
+    game_id = $form.find( "input[name='game_id']" ).val();
+    card_id = $form.find( "input[name='card_id']" ).val();
+    url = "/api/users/" + initiator_id + "/games/" + game_id + "/cards/" + card_id;
+
+    var posting = $.get( url);
+  // Put the results in a div
+  posting.done(function( data ) {
+    $("#json").empty().append(JSON.stringify(data, undefined, 2))
+    console.log(data);
+  });
+});
+
+$( "#makeDecision" ).submit(function( event ) {
+  event.preventDefault();
+  var $form = $( this ),
+    initiator_id = $form.find( "input[name='initiator_id']" ).val();
+    game_id = $form.find( "input[name='game_id']" ).val();
+    card_id = $form.find( "input[name='submission_id']" ).val();
+    url = "/api/users/" + initiator_id + "/games/" + game_id + "/cards/" + card_id;
 
     var posting = $.get( url);
   // Put the results in a div
