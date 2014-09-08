@@ -6,12 +6,10 @@ $( "#newGameForm" ).submit(function( event ) {
     game_name = $form.find( "input[name='game_name']" ).val();
     url = "/api/users/" + initiator_id + "/games";
 
-    var posting = $.post( url, {  "initiator_id": initiator_id,
-                                  "invite_ids": invite_ids,
+    var posting = $.post( url, {  "invite_ids": invite_ids,
                                   "game_name": game_name } );
   // Put the results in a div
   posting.done(function( data ) {
-    var content = $( data ).find( "#content" );
-    $( "#json" ).empty().append( content );
+    console.log(data);
   });
 });
