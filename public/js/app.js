@@ -20,7 +20,8 @@ $( "#previousRoundRecap" ).submit(function( event ) {
   var $form = $( this ),
     initiator_id = $form.find( "input[name='initiator_id']" ).val();
     game_id= $form.find( "input[name='game_id']" ).val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id;
+    round_num = $form.find( "input[name='round_num']").val();
+    url = "/api/users/" + initiator_id + "/games/" + game_id + "/rounds/" + round_num;
 
     var posting = $.get( url);
   // Put the results in a div
