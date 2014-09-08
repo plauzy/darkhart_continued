@@ -1,0 +1,17 @@
+html body {
+  width:100%;
+  height:100%;
+}
+
+#control {
+
+  display: inline-block;
+  width:30%;
+  background-color:red;
+}
+
+#json {
+  display: inline-block;
+  width: 69%;
+  background-color: lightgray;
+}
