@@ -31,7 +31,7 @@ class GameSkeleton
     user_array = @new_game.seats.to_a
     for round_num in (1..number_of_rounds)
       new_round = Round.create( game_id: @new_game.id,
-        leader_id: user_array.first.user.id,
+        leader_id: user_array.first.id,
         blackcard_id: Helper.random_blackcard.id,
         round_num: round_num)
       @new_game.rounds << new_round
