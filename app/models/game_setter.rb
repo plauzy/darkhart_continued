@@ -10,19 +10,31 @@ class GameSetter
 
     if @seat.id == @round.leader_id
       winning_submission = Submission.find(card_id)
-      choose_winner(winning_submission)
+      choose_winner_if_valid(winning_submission)
     else
       playable_card_submission = PlayableCard.find(card_id)
-      make_user_submission(playable_card_submission)
+      player_submit_if_valid(playable_card_submission)
     end
   end
 
   private
 
+  def player_submit_if_valid(playable_card)
+    flag = false
+    @submissions.each { |sub| flag = true if sub.owner_seat == @seat }
+    flag ? (raise "Player has already made a submission.") : make_user_submission(playable_card)
+  end
+
   def make_user_submission(playable_card)
-    submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id) unless playable_card.submitted == true
+    submission = Submission.create(playable_card_id: playable_card.id, round_id: @round.id)
     playable_card.submitted = true
     playable_card.save!
+  end
+
+  def choose_winner_if_valid(winning_submission)
+    flag = false
+    @submissions.each { |sub| flag = true if sub.winner == true}
+    flag ? (raise "Round leader has already chosen a winner!") : choose_winner(winning_submission)
   end
 
   def choose_winner(winning_submission)
@@ -49,13 +61,3 @@ class GameSetter
     end
   end
 end
-
-
-# user = User.first
-# game = Game.first
-# seat = Seat.where(["user_id = ? and game_id = ?", user.id, game.id]).first
-
-# GameSetter.new(game.id, user.id)
-# player3cards=Seat.find(3).playable_cards.where("submitted = false")
-
-

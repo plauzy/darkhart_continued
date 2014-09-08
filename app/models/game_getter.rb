@@ -96,9 +96,12 @@ class GameGetter
   def build_recap
     @state["losing_submissions"] = []
     @submissions.each do |sub|
-      sub_details = { player_name: sub.owner_name,
+      sub_details = { user_id: sub.owner_user_id,
+                      seat_id: sub.owner_seat_id,
+                      player_name: sub.owner_name,
                       player_score: sub.owner_score,
                       player_email: sub.email,
+                      submission_id: sub.id,
                       submission_content: sub.card_content }
       @state["losing_submissions"] << sub_details if sub.winner == false
       @state["winning_submission"] = sub_details if sub.winner == true
