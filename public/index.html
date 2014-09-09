@@ -15,10 +15,10 @@
   <div id="home" data-role="page">
     <div data-role="content">
       <a href="#user" class="ui-btn">User</a>
+    </div>
   </div>
-</div>
 
-<!-- user -->
+  <!-- user -->
   <div id="user" data-role="page">
     <div data-role="content">
       <div id="user-management">
@@ -33,7 +33,7 @@
       </div>
 
 
-<!-- If not logged in  -->
+      <!-- If not logged in  -->
 
       <h3>Active Games</h3>
       <a href="#game" class="ui-btn" id="game1">Game Name</a>
@@ -71,20 +71,117 @@
   <div id="game" data-role="page">
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
       <a href="#user" data-icon="back">Back</a>
-      <h1>Game</h1>
+      <h1 class="game-round"></h1>
     </div>
     <div data-role="content">
+      <div class="blackcard-container">
+        <div class="leader-container">
+          <div class="leader-avatar">
+          </div>
+          <div class="leader-info">
+          </div>
+        </div>
+        <div class="blackcard-content">
+        </div>
+      </div>
 
+      <div class="choose-button-container">
+        <a href="#choose" class="ui-btn choose-button">Pick it good.</a>
+      </div>
+      <div class="player-list">
+        <ul data-role="listview" >
+          <li><img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">Name</li>
+          <li><img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">Name</li>
+          <li><img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">Name</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <!-- choose -->
   <div id="choose" data-role="page">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+      <a href="#user" data-icon="back">Back</a>
+      <h1 class="game-round"></h1>
+    </div>
+    <div data-role="content">
+      <div class="blackcard-container">
+        <div class="leader-container">
+          <div class="leader-avatar">
+          </div>
+          <div class="leader-info">
+          </div>
+        </div>
+        <div class="blackcard-content">
+        </div>
+      </div>
+
+      <div class="card-list">
+        <ul data-role="listview" >
+          <li><a href = "">Card 1</a></li>
+          <li><a href = "">Card 2</a></li>
+          <li><a href = "">Card 3</a></li>
+          <li><a href = "">Card 4</a></li>
+        </ul>
+      </div>
+    </div>
+
 
   </div>
 
   <!-- recap -->
   <div id="recap" data-role="page">
+
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+      <a href="#user" data-icon="back">Back</a>
+      <h1 class="game-round"></h1>
+    </div>
+    <div data-role="content">
+      <div class="blackcard-container">
+        <div class="leader-container">
+          <div class="leader-avatar">
+          </div>
+          <div class="leader-info">
+          </div>
+        </div>
+        <div class="blackcard-content">
+        </div>
+      </div>
+
+      <div class="submission-winner-container">
+        <h3>Winning Card</h3>
+        <ul data-role="listview" class="submission-winner-list">
+          <li>
+            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
+            <span class="submission-name">Name</span>
+            <span class="submission-content">Content</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="submission-loser-container">
+        <h3>Losing Cards</h3>
+        <ul data-role="listview" class="submission-loser-list">
+          <li>
+            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
+            <span class="submission-name">Name</span>
+            <span class="submission-content">Content</span>
+          </li>
+
+          <li>
+            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
+            <span class="submission-name">Name</span>
+            <span class="submission-content">Content</span>
+          </li>
+
+            <li>
+            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
+            <span class="submission-name">Name</span>
+            <span class="submission-content">Content</span>
+          </li>
+        </ul>
+      </div>
+
 
   </div>
 

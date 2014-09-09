@@ -1,123 +1,3 @@
-// ------------ GLOBAL -----------
-$.cookie.json = true;
-
-// $(document).bind("mobileinit", function()
-// {
-//     $.mobile.page.prototype.options.domCache = false;
-//     $.mobile.ajaxEnabled = true;
-//     $.mobile.changePage.defaults.reloadPage = true;
-// });
-
-var bindClearCookie = function($el) {
-  $el.on("click", function(event) {
-    console.log("Running bindClearCookie event");
-    $.removeCookie('session');
-    // $("#user").trigger("create");
-    location.reload();
-  });
-};
-
-var bindSetCookie = function($submit, $user_id, $game_ids) {
-  $submit.on("click", function(event) {
-    console.log("Running bindSetCookie event");
-    var game_ids = $game_ids.val().split(",");
-    for (var a in game_ids ) { game_ids[a] = parseInt(game_ids[a], 10); }
-    var cookie = { "user_id": $user_id.val(),
-                   "game_ids": game_ids };
-    $.cookie('session', cookie);
-    // $("#user").trigger("create");
-    setTimeout(
-      function(){
-        location.reload();
-      },100
-    );
-  });
-};
-
-// Partials
-
-// var html_logout = $("<a href='#user' class='ui-btn user_logout'>Logout</a>");
-
-// var html_login = "<a href='#create_account' class='ui-btn'>Create Account</a>" +
-//                 "<a href='#login' class='ui-btn'>Login</a>";
-
-// success:function(result){
-//     $("#tab7 form").after(html);
-//     $('#add-notes-form textarea').attr('value','');
-// }
-
-
-// -------------- HOME -----------------
-// Home partials
-
-
-
-
-// Home on load
-$( document ).delegate("#user", "pageinit", function() {
-  console.log("INIT RUNNING!")
-  $('#user').trigger('create')
-  cookie = $.cookie('session');
-  bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
-  bindClearCookie( $("#cookie-clear") );
-  bindClearCookie( $(".user-logout") );
-  if (cookie) {
-    console.log("Detected cookie.")
-    $(".login").hide();
-    $(".create-account").hide();
-    $(".user-logout").show();
-
-  }
-  else {
-    console.log("No cookie tected.")
-    $(".login").show();
-    $(".create-account").show();
-    $(".user-logout").hide();
-  }
-});
-
-//SETUP games for users
-
-// }
-
-var GameState = function(user_id, game_ids) {
-  this.user_id = user_id
-  this.game_ids = game_ids
-  this.games = [];
-  // this.getGames();
-};
-
-GameState.prototype = {
-    // getGames: function() {
-    //     $.ajax({
-    //       type: "GET",
-    //       url: "api/users/" + this.user_id + "/games/" + value,
-    //       data: "whatever"})
-    //     .done( function(data) {
-    //
-    //     })
-
-
-    //   }.bind(this))
-    // }
-}
-
-new GameState(1,[1])
-
-// function drawGames(game_objects) {
-
-
-// }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -150,10 +30,11 @@ var User = function(object) {
 }
 
 var Game = function(object) {
-  this.game_id = object.game_id
-  this.round = new Round(object)
-  this.active = object.active
-}
+  this.game_id = object.game_id;
+  this.round = new Round(object);
+  this.active = object.active;
+  this.game_name = object.game_name;
+};
 
 var Round = function(object) {
   this.round_num = object.round;
@@ -161,7 +42,7 @@ var Round = function(object) {
   this.missing_submissions = object.missing_submissions;
   this.winning_submission = object.winning_submission;
   this.losing_submissions = object.losing_submissions;
-}
+};
 
 var Leader = function(object) {
   this.name = object.leader_name
@@ -169,7 +50,7 @@ var Leader = function(object) {
   this.email = object.leader_email
   this.seat_id = object.leader_seat_id
   this.blackcard = new Blackcard(object)
-}
+};
 
 var Blackcard = function(object) {
   this.content = object.blackcard_content
@@ -264,4 +145,95 @@ Controller.prototype = {
     $("#makeSubmission").on("submit", this.makeSubmission.bind(this))
   }
 }
+
+
+
+// ------------ GLOBAL -----------
+$.cookie.json = true;
+
+
+
+var bindClearCookie = function($el) {
+  $el.on("click", function(event) {
+    console.log("Running bindClearCookie event");
+    $.removeCookie('session');
+    // $("#user").trigger("create");
+    location.reload();
+  });
+};
+
+var bindSetCookie = function($submit, $user_id, $game_ids) {
+  $submit.on("click", function(event) {
+    console.log("Running bindSetCookie event");
+    var game_ids = $game_ids.val().split(",");
+    for (var a in game_ids ) { game_ids[a] = parseInt(game_ids[a], 10); }
+    var cookie = { "user_id": $user_id.val(),
+                   "game_ids": game_ids };
+    $.cookie('session', cookie);
+    // $("#user").trigger("create");
+    setTimeout(
+      function(){
+        location.reload();
+      },100
+    );
+  });
+};
+
+// --------------------------------------
+// --------- PAGE INITIALIZERS ----------
+// --------------------------------------
+
+// HOME
+
+
+// USER
+$( document ).delegate("#user", "pageinit", function() {
+  console.log("INIT RUNNING!")
+  $('#user').trigger('create')
+  cookie = $.cookie('session');
+  bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
+  bindClearCookie( $("#cookie-clear") );
+  bindClearCookie( $(".user-logout") );
+  if (cookie) {
+    console.log("Detected cookie.")
+    $(".login").hide();
+    $(".create-account").hide();
+    $(".user-logout").show();
+
+  }
+  else {
+    console.log("No cookie tected.")
+    $(".login").show();
+    $(".create-account").show();
+    $(".user-logout").hide();
+  }
+});
+
+// GAME
+$( document ).delegate("#game", "pageinit", function() {
+  $(".game-round").text("game.game_name");
+  $(".leader-info").text("leader.name + has the black card.");
+  $(".blackcard-content").text("blackard content");
+});
+
+// CHOOSE
+$( document ).delegate("#choose", "pageinit", function() {
+  $(".game-round").text("game.game_name");
+  $(".leader-info").text("leader.name + has the black card.");
+  $(".blackcard-content").text("blackard content");
+});
+
+// RECAP
+
+$( document ).delegate("#recap", "pageinit", function() {
+  $(".game-round").text("game.game_name");
+  $(".leader-info").text("leader.name + has the black card.");
+  $(".blackcard-content").text("blackard content");
+});
+
+
+
+
+
+
 
