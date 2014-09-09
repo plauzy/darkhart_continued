@@ -68,7 +68,6 @@ Controller.prototype = {
 
   delegateGame: function() {
     $.mobile.changePage("#game");
-    console.log("made it")
     $(".game-round").text(this.game.game_id);
     $(".leader-info").text(this.leader.name + " has the black card");
     $(".blackcard-content").text(this.leader.blackcard.content);
@@ -78,26 +77,52 @@ Controller.prototype = {
 
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
-    console.log("made it");
     $(".game-round").text(this.game.game_id);
     $(".leader-info").text(this.leader.name + " has the black card");
     $(".blackcard-content").text(this.leader.blackcard.content);
     var playable_cards = this.user.playable_cards
     var card_div = $('.card-list ul')
     for (var i = 0; i < playable_cards.length; i++) {
-      debugger
       var aTag = "<a href = '/api/users/" + $.cookie('session').user_id + "/games/" + this.game.game_id + "/cards/" + playable_cards[i].id + "'>";
       var element = "<li>" + aTag + playable_cards[i].content + "</a></li>";
       card_div.append(element);
     }
   },
 
+  delegateRecap: function() {
+    $.mobile.changePage("#recap");
+    $(".game-round").text(this.game.game_id);
+    $(".leader-info").text(this.leader.name + " has the black card");
+    $(".blackcard-content").text(this.leader.blackcard.content);
+
+    //needs to create element
+    var winning_div = $(".submission-winner-container ul");
+    var winning_submission = this.game.round.winning_submission.submission_content
+    winning_div.append(winning_submission)
+
+    //needs to properly create element
+    var losing_div = $(".submission-loser-container ul");
+    losing_submissions = this.game.round.losing_submissions
+    for (var i = 0; i < losing_submissions.length; i ++) {
+      losing_div.append(losing_submissions[i].submission_content)
+    }
+
+
+
+  },
+
+// $( document ).delegate("#recap", "pageinit", function() {
+//   $(".game-round").text("game.game_name");
+//   $(".leader-info").text("leader.name + has the black card.");
+//   $(".blackcard-content").text("blackard content");
+// });
+
 
   parseAjaxResponse: function(data) {
     this.user = new User(data.player_self)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
-    this.delegateSubmission();
+    this.delegateRecap();
   },
 
   createGame: function(event) {
@@ -267,11 +292,6 @@ $( document ).delegate("#user", "pageinit", function() {
 
 // RECAP
 
-$( document ).delegate("#recap", "pageinit", function() {
-  $(".game-round").text("game.game_name");
-  $(".leader-info").text("leader.name + has the black card.");
-  $(".blackcard-content").text("blackard content");
-});
 
 
 
