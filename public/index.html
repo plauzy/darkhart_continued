@@ -47,7 +47,7 @@
 
       <h3>Active Games</h3>
       <div id='active-games-group' data-role='controlgroup'>
-        <a href='#game' class='ui-btn active-game'>Game Name</a>
+        <a href='#game-overview' class='ui-btn active-game'>Game Name</a>
       </div>
 
       <h3>Finished Games</h3>
@@ -78,6 +78,32 @@
 
   <!-- create account -->
   <div id='create-account' data-role='page'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
+      <h1 class='create-account-header'>Create Account</h1>
+    </div>
+
+    <div data-role='content' class='content'>
+
+      <h3>Get in on the nasty.</h3>
+      <form action="#" method="post">
+        <label for='user-name'>Name</label>
+        <input type='text' name='user-name' id='user-name' value=''/>
+
+        <label for='user-phone'>Phone Number</label>
+        <input type='number' name='user-phone' id='user-phone' value=''/>
+
+        <label for='user-email'>Email Address</label>
+        <input type='number' name='user-phone-number' id='user-phone-number' value=''/>
+
+        <br>
+        <input type="submit" class='ui-btn user-create-button' value="I dare you.">
+        </div>
+      </form>
+    </div>
+  </div>
+
+
 
   </div>
 
@@ -179,18 +205,20 @@
   <div id='game-overview' data-role='page' data-add-back-btn='true'>
     <div data-role='header' data-position='fixed' data-tap-toggle='false'>
       <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
-      <h1 class='game-overview-header'>Game name</h1>
+      <h1 class='game-header'>Game name</h1>
     </div>
 
     <div data-role='content'>
 
       <div class='play-round-btn-container'>
-        <a href='#choose' class='ui-btn play-round-btn'>Play current round!</a>
+        <a href='#game' class='ui-btn play-round-btn'>Round <span class="game-round">4</span> is open!</a>
       </div>
 
       <div class='prev-rounds-list'>
-        <ul data-role='listview' class='listview blackcard-list '>
-          <li>
+        <ul data-role='listview' class='listview blackcard-list'>
+          <li data-icon="false">
+          <a href="#recap" class="game-round-link">
+            <h4>Round <span class="game-round">1</span></h4>
             <div class='round-recap-container'>
               <div class='leader-container'>
                 <div class='avatar-container'>
@@ -198,8 +226,7 @@
                 </div>
 
                 <div class='leader-data'>
-                  <span class='leader-round'>Round 1</span><br>
-                  <span class='leader-name'>Jason</span>
+                  <span class='leader-name'>Jason</span><br>
                   <span class='leader-status'>had the black card.</span>
                 </div>
               </div>
@@ -208,6 +235,7 @@
                 <span class='leader-blackcard-content'>Nulla vitae elit libero, a pharetra augue. Lorem ipsum dolor sit amet.</span>
               </div>
             </div>
+            </a>
           </li>
         </ul>
       </div>
@@ -218,7 +246,7 @@
   <div id='choose' data-role='page'>
     <div data-role='header' data-position='fixed' data-tap-toggle='false'>
       <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
-      <h1 class='choose-header'></h1>
+      <h1 class='game-header'></h1>
     </div>
 
     <div class='blackcard-container blackcard'>
@@ -256,7 +284,7 @@
   <div id='recap' data-role='page'>
     <div data-role='header' data-position='fixed' data-tap-toggle='false'>
       <a href='#user' data-icon='back'>Back</a>
-      <h1 class='recap-header'></h1>
+      <h1 class='game-header'></h1>
     </div>
 
     <div class='blackcard-container blackcard'>

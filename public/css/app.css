@@ -1,5 +1,6 @@
 body {
   font-weight: bold!important;
+  text-shadow:0 0 0!important;
 }
 
 .blackcard-container {
@@ -8,6 +9,20 @@ body {
   height: 10em;
   background-color: black;
   z-index: 1;
+}
+
+.leader-container {
+  display: inline-block;
+  white-space: normal;
+  background-color: black;
+}
+
+.ui-controlgroup-horizontal .ui-controlgroup-controls {
+    width: 100%!important;
+  }
+
+.full-width-btn-group a {
+  width: 38.5%;
 }
 
 .content-push-home {
@@ -45,6 +60,10 @@ body {
   height: 3em;
 }
 
+/*.leader-avatar {
+  padding: 1em;
+}*/
+
 .leader-name-container {
   padding: 0 .5em;
   font-size: .8em;
@@ -55,7 +74,8 @@ body {
 }
 
 .blackcard-content {
-  padding-top: .5em;
+  padding-right:1em;
+  overflow: hidden;
   font-size: 1.5em;
 }
 
@@ -67,7 +87,11 @@ body {
   background-color: black!important;
   border: 0px;
   color: black;
-  text-shadow: 0 0 0;
+  text-decoration: none;
+}
+
+.ui-btn {
+  text-shadow: 0 0 0!important;
 }
 
 .listview .avatar {
@@ -90,15 +114,45 @@ li {
   display: inline-block;
 }
 
-.player-data {
-  padding: .3em .5em;
+.player-data, .leader-data {
+  padding: .6em .5em;
   vertical-align: top;
   display: inline-block;
+}
+
+.leader-data {
+  font-size: .8em;
 }
 
 .card-container {
   white-space: normal;
 }
 
-.card-content {
+.round-recap-container {
+  padding: 5%;
+  color: white;
+  white-space: normal;
+  background-color: black;
+}
+
+
+.player-data {
+  white-space: normal;
+  padding-right: 3em;
+}
+
+.leader-blackcard {
+  padding-top: 1em;
+}
+
+.player-card-content {
+  font-size: .8em;
+}
+
+
+
+* {
+ text-shadow: none;
+ box-shadow: none;
+ -webkit-box-shadow: none;
 }

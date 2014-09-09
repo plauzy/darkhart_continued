@@ -88,24 +88,27 @@ View.prototype = {
     missing_submissions = game.round.missing_submissions;
     submissions = game.round.submissions;
 
-    var listItem = $('.player-list ul li:first').clone();
-    $('.player-list ul li:first').remove();
+    // var listItem = $('.player-list ul li:first').clone();
+    // $('.player-list ul li:first').remove();
 
-    this.drawMissingSubmissions(listItem, missing_submissions);
-    this.drawGivenSubmissions(listItem, submissions);   
+    this.drawMissingSubmissions(missing_submissions);
+    this.drawGivenSubmissions(submissions);   
   },
 
-  drawMissingSubmissions: function(listItem, missing_submissions) {
+  drawMissingSubmissions: function(missing_submissions) {
+    var listItem = $('.player-list ul li:first').clone();
+    $('.player-list ul li:first').remove();
     for (var i = 0; i < missing_submissions.length; i++) {
       $('.player-list ul').append(listItem);
       listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
       listItem.find('.player-status').text(" has not submitted a white card.")
-      listItem.find('.player-score').text(missing_submissions[i].player_score)
+      listItem.find('.player-score').text(missing_submissions[i].player_score);
       var listItem = $('.player-list ul li:first').clone();
     };
   },
 
-  drawGivenSubmissions: function(listItem, submissions) {
+  drawGivenSubmissions: function(submissions) {
+    var listItem = $('.player-list ul li:first').clone();
     for (var i = 0; i < submissions.length; i++) {
       $('.player-list ul').append(listItem);
       listItem.find('.player-data .player-name').text(submissions[i].player_name)
@@ -165,7 +168,10 @@ Controller.prototype = {
 
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
-    this.view.drawHeader(this.game, this.leader)
+    console.log("made it to delegate submission");
+    debugger
+    this.view.drawHeader(this.game, this.leader);
+
     this.view.drawPlayableCards(this.game, this.user);
   },
 
@@ -179,7 +185,6 @@ Controller.prototype = {
     this.user = new User(data)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
-    this.delegateRecap();
   },
 
   createGame: function(event) {
@@ -217,6 +222,7 @@ Controller.prototype = {
   },
 
   getCurrentGameState: function(event) {
+    event.preventDefault();
     var form = $(event.target);
     initiator_id = $.cookie('session').user_id
     game_id = $.cookie('session').game_ids[0]
@@ -224,15 +230,19 @@ Controller.prototype = {
     var posting = $.get( url);
     posting.done(function( data ) {
       console.log(data);
-      this.parseAjaxResponse(data)
+      this.parseAjaxResponse(data);
+      this.delegateGame();
+      console.log("current game state fetched");
+
     }.bind(this));
   },
 
   makeSubmission: function(event) {
     event.preventDefault();
+    debugger
     var form = $(event.target);
-    initiator_id = form.find( "input[name='initiator_id']" ).val();
-    game_id = form.find( "input[name='game_id']" ).val();
+    initiator_id = $.cookie('session').user_id
+    game_id = $.cookie('session').game_ids[0]
     card_id = form.find( "input[name='card_id']" ).val();
     url = "/api/users/" + initiator_id + "/games/" + game_id + "/cards/" + card_id;
     var posting = $.get(url);
@@ -245,10 +255,14 @@ Controller.prototype = {
   },
 
   bindEvents: function() {
-    $("#newGameForm").on("submit", this.createGame.bind(this))
-    $("#previousRoundRecap").on("submit", this.getPreviousRoundRecap.bind(this))
-    $("#active-games-group a").on('click', this.getCurrentGameState.bind(this))
-    $("#makeSubmission").on("submit", this.makeSubmission.bind(this))
+    $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
+    $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
+
+
+    // $("#newGameForm").on("submit", this.createGame.bind(this))
+    // $("#previousRoundRecap").on("submit", this.getPreviousRoundRecap.bind(this))
+    // $("#active-games-group a").on('click', this.getCurrentGameState.bind(this))
+    // $("#makeSubmission").on("submit", this.makeSubmission.bind(this))
   }
 }
 
