@@ -2,259 +2,322 @@
 <html>
 <head>
   <title>______ Against ______</title>
-  <meta charset="UTF-8" />
-  <link href="lib/jquery.mobile-1.4.3/jquery.mobile-1.4.3.min.css" rel="stylesheet" type="text/css" />
+  <meta charset='UTF-8' />
+  <link href='lib/jquery.mobile-1.4.3/jquery.mobile-1.4.3.min.css' rel='stylesheet' type='text/css' />
 
-  <link href="lib/jquery.mobile-1.4.3/theme/black.css" rel="stylesheet" type="text/css" />
-  <link href="lib/jquery.mobile-1.4.3/theme/jquery.mobile.icons.min.css" rel="stylesheet" type="text/css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/app.css" />
+  <link href='lib/jquery.mobile-1.4.3/theme/black.css' rel='stylesheet' type='text/css' />
+  <link href='lib/jquery.mobile-1.4.3/theme/jquery.mobile.icons.min.css' rel='stylesheet' type='text/css' />
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' href='css/app.css' />
 </head>
 <body>
 
 
   <!-- home -->
-  <div id="home" data-role="page">
-    <div data-role="content">
-      <a href="#user" class="ui-btn">User</a>
+  <div id='home' data-role='page'>
+    <div data-role='content'>
+      <a href='#user' class='ui-btn'>User</a>
     </div>
   </div>
 
   <!-- user -->
-  <div id="user" data-role="page">
+  <div id='user' data-role='page'>
 
-    <div class="blackcard-container">
-      <div class="header-title">
+    <div class='blackcard-container'>
+      <div class='header-title'>
         <p>Jackasses</p>
         <p>Against</p>
         <p>Hamburgers</p>
       </div>
     </div>
-    <div data-role="content" class="content-push-home">
-      <div id="user-management">
-        <div id="no-cookie">
-          <a href='#create_account' class='ui-btn create-account'>Create Account</a>
-          <a href='#login' class='ui-btn login'>Login</a>
+    <div data-role='content' class='content-push-home'>
+      <div id='user-management'>
+        <div id='no-cookie' data-role='controlgroup' data-type='horizontal' class='full-width-btn-group'>
+          <a href='#create-account' class='ui-btn create-account two-btn-group'>New User</a>
+          <a href='#login' class='ui-btn login two-btn-group'>Login</a>
         </div>
-        <div id="cookie">
-          <a href='#user' class='ui-btn user-logout'>Logout</a>
+        <div id='cookie' data-role='controlgroup' data-type='horizontal' class='full-width-btn-group'>
+          <a href='#create-game' class='ui-btn create-game two-btn-group'>New Game</a>
+          <a href='#user' class='ui-btn user-logout two-btn-group'>Logout</a>
         </div>
-
       </div>
 
 
       <!-- If not logged in  -->
 
       <h3>Active Games</h3>
-      <a href="#game" class="ui-btn" id="game1">Game Name</a>
-      <a href="#game" class="ui-btn">Game Name</a>
+      <div id='active-games-group' data-role='controlgroup'>
+        <a href='#game' class='ui-btn active-game'>Game Name</a>
+      </div>
+
+      <h3>Finished Games</h3>
+      <div id='inactive-games-group' data-role='controlgroup'>
+        <a href='#game' class='ui-btn inactive-game'>Game Name</a>
+      </div>
     </div>
   </div>
 
   <!-- login -->
-  <div id="login" data-role="page" data-add-back-btn="true">
-    <div data-role="header" data-position="fixed" data-tap-toggle="false">
-      <a href="#" data-rel="back" data-icon="arrow-l">Back</a>
-      <h1>Login</h1>
+  <div id='login' data-role='page' data-add-back-btn='true'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
+      <h1 class='login-header'>Login</h1>
     </div>
-    <div data-role="content">
+    <div data-role='content'>
       <h3>Create Cookie</h3>
-      <form id="cookie-widget">
+      <form id='cookie-widget'>
         <label>User ID</label>
-        <input type="text" id="cookie-user-id"/>
+        <input type='text' id='cookie-user-id'/>
         <label>Game IDs</label>
-        <input type="text" id="cookie-game-ids" placeholder="Separated by commas."/>
-        <a href="#user" class="ui-btn" id="cookie-submit">Create Cookie</a>
-        <a href="#user" class="ui-btn" id="cookie-clear">Remove Cookie</a>
+        <input type='text' id='cookie-game-ids' placeholder='Separated by commas.'/>
+        <a href='#user' class='ui-btn' id='cookie-submit'>Create Cookie</a>
+        <a href='#user' class='ui-btn' id='cookie-clear'>Remove Cookie</a>
       </form>
     </div>
   </div>
 
   <!-- create account -->
-  <div id="create_account" data-role="page">
+  <div id='create-account' data-role='page'>
 
   </div>
 
+  <!-- invite friends -->
+
+  <div id='invite-friends' data-role='page'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
+      <h1 class='invite-friends-header'>Invite Friends</h1>
+    </div>
+
+    <div data-role='content' class='content'>
+    <h3>Send your friend a text message to get 'em in the mix.</h3>
+    <label for='invite-field'>Phone Number</label>
+    <input type='number' name='invite-number' id='basic' value=''/>
+    <div class='invite-friend-btn-container'>
+        <a href='#create-game' class='ui-btn invite-friend-btn'>Invite</a>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- create game -->
+  <div id='create-game' data-role='page'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
+      <h1 class='create-game-header'>Create Game</h1>
+    </div>
+
+    <div data-role='content' class='content'>
+      <div class='invite-friends-container'>
+        <a href='#invite-friends' class='ui-btn choose-button'>Invite Friends to Play</a>
+      </div>
+
+      <h3>Start a New Game</h3>
+      <div class='friend-check-container'>
+        <label class="friend-check-name">Name of friend<input type="checkbox" class="friend-check"> </label>
+
+      </div>
+      <div class='create-game-btn-container'>
+        <a href='#game' class='ui-btn create-game-btn'>Create Game</a>
+      </div>
+    </div>
+  </div>
+
+
+
   <!-- game -->
-  <div id="game" data-role="page" data-add-back-btn="true">
-    <div data-role="header" data-position="fixed" data-tap-toggle="false">
-      <a href="#" data-rel="back" data-icon="arrow-l">Back</a>
-      <h1 class="game-round"></h1>
+  <div id='game' data-role='page' data-add-back-btn='true'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
+      <h1 class='game-header'></h1>
     </div>
 
-    <div class="blackcard-container blackcard">
-      <div class="leader-container">
-        <div class="leader-avatar-container">
-          <img class="leader avatar" src="http://c179631.r31.cf0.rackcdn.com/blogger_images/john-ross-avatar.jpg">
+    <div class='blackcard-container blackcard'>
+      <div class='leader-container'>
+        <div class='leader-avatar-container'>
+          <img class='leader avatar' src='http://c179631.r31.cf0.rackcdn.com/blogger_images/john-ross-avatar.jpg'>
         </div>
-        <div class="leader-name-container">
-          <span class="leader-name">Jason</span>
-          <span class><br>has the black card.</span>
+        <div class='leader-name-container'>
+          <span class='leader-name'>Jason</span>
+          <span><br>has the black card.</span>
         </div>
       </div>
-      <div class="blackcard-content">
+      <div class='blackcard-content'>
       </div>
     </div>
 
-    <div data-role="content" class="content-push">
-      <div data-role="header" data-position="fixed" data-tap-toggle="false">
-        <a href="#" data-rel="back" data-icon="arrow-l">Back</a>
-        <h1 class = "header-content">Choose</h1>
+    <div data-role='content' class='content-push'>
+
+      <div class='choose-button-container'>
+        <a href='#choose' class='ui-btn choose-button'>Pick it good.</a>
       </div>
 
-      <div class="choose-button-container">
-        <a href="#choose" class="ui-btn choose-button">Pick it good.</a>
-      </div>
-      <div class="player-list">
-        <ul data-role="listview" class="listview">
-
+      <div class='player-list'>
+        <ul data-role='listview' class='listview'>
           <li>
-            <div class="player-container">
-              <div class="avatar-container">
-                <img class="avatar" src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
+            <div class='player-container'>
+              <div class='avatar-container'>
+                <img class='avatar' src = 'http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg'>
               </div>
 
-              <div class="player-data">
-                <span class="player-name">Jason</span>
-                <span class="player-status">is in!</span><br>
-                <span class="player-score">3</span>
+              <div class='player-data'>
+                <span class='player-name'>Jason</span>
+                <span class='player-status'>is in!</span><br>
+                <span class='player-score'>3</span>
               </div>
             </div>
           </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-       <!--    <li>
-            <div class="player-container">
-              <div class="avatar-container">
-                <img class="avatar" src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
+  <!-- game overview -->
+  <div id='game-overview' data-role='page' data-add-back-btn='true'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
+      <h1 class='game-overview-header'>Game name</h1>
+    </div>
+
+    <div data-role='content'>
+
+      <div class='play-round-btn-container'>
+        <a href='#choose' class='ui-btn play-round-btn'>Play current round!</a>
+      </div>
+
+      <div class='prev-rounds-list'>
+        <ul data-role='listview' class='listview blackcard-list '>
+          <li>
+            <div class='round-recap-container'>
+              <div class='leader-container'>
+                <div class='avatar-container'>
+                  <img class='avatar leader-avatar' src = 'http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg'>
+                </div>
+
+                <div class='leader-data'>
+                  <span class='leader-round'>Round 1</span><br>
+                  <span class='leader-name'>Jason</span>
+                  <span class='leader-status'>had the black card.</span>
+                </div>
               </div>
 
-              <div class="player-data">
-                <span class="player-name">Jason</span>
-                <span class="player-status">is in!</span><br>
-                <span class="player-score">3</span>
+              <div class="leader-blackcard">
+                <span class='leader-blackcard-content'>Nulla vitae elit libero, a pharetra augue. Lorem ipsum dolor sit amet.</span>
               </div>
             </div>
           </li>
-
-          <li>
-            <div class="player-container">
-              <div class="avatar-container">
-                <img class="avatar" src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
-              </div>
-
-              <div class="player-data">
-                <span class="player-name">Jason</span>
-                <span class="player-status">is in!</span><br>
-                <span class="player-score">3</span>
-              </div>
-            </div>
-          </li> -->
-
         </ul>
       </div>
     </div>
   </div>
 
   <!-- choose -->
-  <div id="choose" data-role="page">
-    <div data-role="header" data-position="fixed" data-tap-toggle="false">
-      <a href="#" data-rel="back" data-icon="arrow-l">Back</a>
-      <h1 class="game-round"></h1>
+  <div id='choose' data-role='page'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
+      <h1 class='choose-header'></h1>
     </div>
 
-    <div class="blackcard-container blackcard">
-      <div class="leader-container">
-        <div class="leader-avatar-container">
-          <img class="leader avatar" src="http://c179631.r31.cf0.rackcdn.com/blogger_images/john-ross-avatar.jpg">
+    <div class='blackcard-container blackcard'>
+      <div class='leader-container'>
+        <div class='leader-avatar-container'>
+          <img class='leader avatar' src='http://c179631.r31.cf0.rackcdn.com/blogger_images/john-ross-avatar.jpg'>
         </div>
-        <div class="leader-name-container">
-          <span class="leader-name">Jason</span>
+        <div class='leader-name-container'>
+          <span class='leader-name'>Jason</span>
           <span><br>has the black card.</span>
         </div>
       </div>
-      <div class="blackcard-content">
+      <div class='blackcard-content'>
       </div>
     </div>
 
-    <div data-role="content" class="content-push">
-      <h3>Pick your card, chump.</h3>
-        <ul data-role="listview" class="listview card-list">
-          <li>
-            <a href="#" class="card-link">
-              <div class="card-container">
+    <div data-role='content' class='content-push'>
+      <h2 class='choose-text'>Pick your card, chump.</h2>
+      <ul data-role='listview' class='listview card-list'>
+        <li>
+          <a href='#' class='card-link'>
+            <div class='card-container'>
 
-                <span class="card-content">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Fusce dapibus.
-                </span>
+              <span class='card-content'>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Fusce dapibus.
+              </span>
 
-              </div>
-            </a>
-          </li>
-        </ul>
+            </div>
+          </a>
+        </li>
+      </ul>
     </div>
-
-
   </div>
 
   <!-- recap -->
-  <div id="recap" data-role="page">
-
-    <div data-role="header" data-position="fixed" data-tap-toggle="false">
-      <a href="#user" data-icon="back">Back</a>
-      <h1 class="game-round"></h1>
+  <div id='recap' data-role='page'>
+    <div data-role='header' data-position='fixed' data-tap-toggle='false'>
+      <a href='#user' data-icon='back'>Back</a>
+      <h1 class='recap-header'></h1>
     </div>
-    <div data-role="content">
-      <div class="blackcard-container">
-        <div class="leader-container">
-          <div class="leader-avatar">
-          </div>
-          <div class="leader-info">
-          </div>
+
+    <div class='blackcard-container blackcard'>
+      <div class='leader-container'>
+        <div class='leader-avatar-container'>
+          <img class='leader avatar' src='http://c179631.r31.cf0.rackcdn.com/blogger_images/john-ross-avatar.jpg'>
         </div>
-        <div class="blackcard-content">
+        <div class='leader-name-container'>
+          <span class='leader-name'>Jason</span>
+          <span><br>has the black card.</span>
         </div>
       </div>
+      <div class='blackcard-content'>
+      </div>
+    </div>
 
-      <div class="submission-winner-container">
-        <h3>Winning Card</h3>
-        <ul data-role="listview" class="submission-winner-list">
+    <div data-role='content' class="content-push">
+      <h2>Winning Card</h2>
+      <div class='submission-winner-container'>
+        <ul data-role='listview' class='submission-winner-list'>
           <li>
-            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
-            <span class="submission-name">Name</span>
-            <span class="submission-content">Content</span>
+            <div class='player-container'>
+              <div class='avatar-container'>
+                <img class='avatar' src = 'http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg'>
+              </div>
+
+              <div class='player-data'>
+                <span class='player-name'>Jason</span><br>
+                <span class='player-card-content'>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <br>
+
+      <h2>Losing Cards</h2>
+      <div class='submission-loser-container'>
+        <ul data-role='listview' class='submission-loser-list'>
+          <li>
+            <div class='player-container'>
+              <div class='avatar-container'>
+                <img class='avatar' src = 'http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg'>
+              </div>
+
+              <div class='player-data'>
+                <span class='player-name'>Jason</span><br>
+                <span class='player-card-content'>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</span>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
 
-      <div class="submission-loser-container">
-        <h3>Losing Cards</h3>
-        <ul data-role="listview" class="submission-loser-list">
-          <li>
-            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
-            <span class="submission-name">Name</span>
-            <span class="submission-content">Content</span>
-          </li>
-
-          <li>
-            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
-            <span class="submission-name">Name</span>
-            <span class="submission-content">Content</span>
-          </li>
-
-          <li>
-            <img src = "http://melinabeachturtlehatchery.files.wordpress.com/2010/07/turtle4.jpg">
-            <span class="submission-name">Name</span>
-            <span class="submission-content">Content</span>
-          </li>
-        </ul>
-      </div>
-
 
     </div>
 
-    <script src="lib/jquery-2.1.1.min.js" type="text/javascript"></script>
-    <script src="lib/jquery.mobile-1.4.3/jquery.mobile-1.4.3.min.js" type="text/javascript"></script>
-    <script src="lib/carhartl-jquery-cookie-92b7715/jquery.cookie.js" type="text/javascript"></script>
-    <script src="js/app.js" type="text/javascript"></script>
+    <script src='lib/jquery-2.1.1.min.js' type='text/javascript'></script>
+    <script src='lib/jquery.mobile-1.4.3/jquery.mobile-1.4.3.min.js' type='text/javascript'></script>
+    <script src='lib/carhartl-jquery-cookie-92b7715/jquery.cookie.js' type='text/javascript'></script>
+    <script src='js/app.js' type='text/javascript'></script>
 
     <script>
       $(function() {

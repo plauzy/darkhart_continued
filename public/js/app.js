@@ -79,7 +79,7 @@ var View = function() {
 View.prototype = {
 
   drawHeader: function(game, leader) {
-    $('.game-header').text(game.game_id);
+    $('.game-header').text("NAME HERE - Round " + game.round.round_num);
     $('.leader-container .leader-name').text(leader.name);
     $(".blackcard-content").text(leader.blackcard.content); 
   },
@@ -127,12 +127,30 @@ View.prototype = {
       cardElement.find('.card-content').text(playable_cards[i].content)
       var cardElement = $('#choose .card-list li:first').clone();
     }
+  },
 
+  drawRecap: function(game) {
+    game.round.winning_submission = "MEOW"
+    game.round.winning_submission.card_content = "tits"
+
+    //Draw winning submission
+    var submissionDiv = $('.submission-winner-container ul li:first')
+    submissionDiv.find(".player-name").text("Winner to go Here")
+    submissionDiv.find(".player-card-content").text("Winning Content to go here")
+
+    //Draw losing submissions
+    game.round.losing_submissions = [1,2,3]
+    var losingDiv = $(".submission-loser-container ul li:first").clone();
+    $(".submission-loser-container ul li:first").remove();
+    losingSubmissions = game.round.losing_submissions
+    for (var i = 0; i < losingSubmissions.length; i ++) {
+      losingDiv.find(".player-name").text("Meow")
+      losingDiv.find(".player-card-content").text("titties......")
+      $(".submission-loser-container ul").append(losingDiv)
+      var losingDiv = $(".submission-loser-container ul li:first").clone();
+    }
   }
 }
-
-
-
 
 Controller.prototype = {
 
@@ -154,27 +172,14 @@ Controller.prototype = {
   delegateRecap: function() {
     $.mobile.changePage("#recap");
     this.view.drawHeader(this.game, this.leader);
-    
-    // $(".game-round").text(this.game.game_id);
-    // $(".leader-info").text(this.leader.name + " has the black card");
-    // $(".blackcard-content").text(this.leader.blackcard.content);
-
-    //needs to create element
-    var winning_div = $(".submission-winner-container ul");
-    var winning_submission = this.game.round.winning_submission.submission_content
-    winning_div.append(winning_submission)
-    var losing_div = $(".submission-loser-container ul");
-    losing_submissions = this.game.round.losing_submissions
-    for (var i = 0; i < losing_submissions.length; i ++) {
-      losing_div.append(losing_submissions[i].submission_content)
-    }
+    this.view.drawRecap(this.game)
   },
 
   parseAjaxResponse: function(data) {
     this.user = new User(data)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
-    this.delegateSubmission();
+    this.delegateRecap();
   },
 
   createGame: function(event) {
@@ -242,13 +247,12 @@ Controller.prototype = {
   bindEvents: function() {
     $("#newGameForm").on("submit", this.createGame.bind(this))
     $("#previousRoundRecap").on("submit", this.getPreviousRoundRecap.bind(this))
-    $("#game1").on("click", this.getCurrentGameState.bind(this))
+    $("#active-games-group a").on('click', this.getCurrentGameState.bind(this))
     $("#makeSubmission").on("submit", this.makeSubmission.bind(this))
   }
 }
 
 
- 
 // ------------ GLOBAL -----------
 $.cookie.json = true;
 
