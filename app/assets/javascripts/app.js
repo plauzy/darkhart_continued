@@ -6,11 +6,11 @@ $(function() {
       invite_ids = $form.find( "input[name='invite_ids']" ).val();
       game_name = $form.find( "input[name='game_name']" ).val();
       url = "/api/games/";
-
-      debugger
-      var posting = $.post( url, {  "initiator_id": initiator_id,
+      var posting = $.post( url, {  "user_id": initiator_id,
                                     "invite_ids": invite_ids,
                                     "game_name": game_name } );
+      console.log(posting);
+
     // Put the results in a div
     posting.done(function( data ) {
       $("#json").empty().append(JSON.stringify(data, undefined, 2))
@@ -24,8 +24,9 @@ $(function() {
       initiator_id = $form.find( "input[name='initiator_id']" ).val();
       game_id=  $form.find( "input[name='game_id']" ).val();
       round_num = $form.find( "input[name='round_num']").val();
+      console.log(round_num)
       url = "/api/games/" + game_id + "/rounds/" + round_num;
-      var posting = $.get(url, { "initiator_id": initiator_id });
+      var posting = $.get(url, { "user_id": initiator_id });
 
     // Put the results in a div
     posting.done(function( data ) {
@@ -41,7 +42,7 @@ $(function() {
       game_id = $form.find( "input[name='game_id']" ).val();
       url = "/api/games/" + game_id;
 
-      var posting = $.get(url, { "initiator_id": initiator_id });
+      var posting = $.get(url, { "user_id": initiator_id });
     // Put the results in a div
     posting.done(function( data ) {
       $("#json").empty().append(JSON.stringify(data, undefined, 2))
@@ -57,7 +58,7 @@ $(function() {
       card_id = $form.find( "input[name='card_id']" ).val();
       url = "/api/games/" + game_id + "/cards/" + card_id;
 
-      var posting = $.get(url, { "initiator_id": initiator_id });
+      var posting = $.get(url, { "user_id": initiator_id });
     // Put the results in a div
     posting.done(function( data ) {
       $("#json").empty().append(JSON.stringify(data, undefined, 2))

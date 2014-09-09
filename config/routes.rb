@@ -1,15 +1,22 @@
 Rails.application.routes.draw do
 
-  namespace :api do
-    resources :games do
-      resources :users do
-        resources :cards, only: :show
-      end
-    end
-  end
+  # new game form
+  post 'api/games' => 'api/games#new_game'
+  # previous round recap
+  get "/api/games/:game_id/rounds/:round_num" => 'api/games#game_state'
+  # current game state
+  get "/api/games/:game_id" => 'api/games#game_state'
+  # makesubmission
+  get "/api/games/:game_id/cards/:card_id" => 'api/games#submit_card'
+  # make decision
+  post "/api/games/:game_id/round/:round_id" => 'api/games#submit_card'
 
   get '/tool' => "devtool#index"
   root 'devtool#index'
+
+end
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -64,4 +71,3 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-end
