@@ -87,10 +87,6 @@ View.prototype = {
   drawPlayerList: function(game) {
     missing_submissions = game.round.missing_submissions;
     submissions = game.round.submissions;
-
-    // var listItem = $('.player-list ul li:first').clone();
-    // $('.player-list ul li:first').remove();
-
     this.drawMissingSubmissions(missing_submissions);
     this.drawGivenSubmissions(submissions);   
   },
@@ -239,7 +235,6 @@ Controller.prototype = {
 
   makeSubmission: function(event) {
     event.preventDefault();
-    debugger
     var form = $(event.target);
     initiator_id = $.cookie('session').user_id
     game_id = $.cookie('session').game_ids[0]
