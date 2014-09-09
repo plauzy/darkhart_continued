@@ -12,7 +12,8 @@ var bindClearCookie = function($el) {
   $el.on("click", function(event) {
     console.log("Running bindClearCookie event");
     $.removeCookie('session');
-    $("#user").trigger("create");
+    // $("#user").trigger("create");
+    location.reload();
   });
 };
 
@@ -24,7 +25,12 @@ var bindSetCookie = function($submit, $user_id, $game_ids) {
     var cookie = { "user_id": $user_id.val(),
                    "game_ids": game_ids };
     $.cookie('session', cookie);
-    $("#user").trigger("create");
+    // $("#user").trigger("create");
+    setTimeout(
+      function(){
+        location.reload();
+      },100
+    );
   });
 };
 
