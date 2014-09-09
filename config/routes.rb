@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
+
+  namespace :api do
+    resources :games do
+      resources :users do
+        resources :cards, only: :show
+      end
+    end
+  end
+
   get '/tool' => "devtool#index"
   root 'devtool#index'
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
