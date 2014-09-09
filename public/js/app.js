@@ -52,7 +52,8 @@ var Blackcard = function(object) {
 
 //CONTROLLER
 $(document).on("ready page:load", function() {
-  var controller = new Controller;
+  var view = new View;
+  var controller = new Controller(view);
 });
 
 
@@ -61,8 +62,9 @@ $(document).on("ready page:load", function() {
 // });
 
 
-var Controller = function() {
+var Controller = function(view) {
   this.bindEvents();
+  this.view = view;
   this.user;
   this.game;
   this.leader;
@@ -70,17 +72,69 @@ var Controller = function() {
 
 
 
-var View = functtion() {
+var View = function() {
   
 }
 
-// View.prototype = {
-//   drawHeader: function() {
-//     $('.game-header').text(this.game.game_id);
-//     $('.leader-container .leader-name').text(this.leader.name);
-//     $(".blackcard-content").text(this.leader.blackcard.content); 
-//   }
-// }
+View.prototype = {
+
+  drawHeader: function(game, leader) {
+    $('.game-header').text(game.game_id);
+    $('.leader-container .leader-name').text(leader.name);
+    $(".blackcard-content").text(leader.blackcard.content); 
+  },
+
+  drawPlayerList: function(game) {
+    missing_submissions = game.round.missing_submissions;
+    submissions = game.round.submissions;
+
+    var listItem = $('.player-list ul li:first').clone();
+    $('.player-list ul li:first').remove();
+
+    this.drawMissingSubmissions(listItem, missing_submissions);
+    this.drawGivenSubmissions(listItem, submissions);
+
+    // for (var i = 0; i < missing_submissions.length; i++) {
+    //   $('.player-list ul').append(listItem);
+    //   listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
+    //   listItem.find('.player-status').text(" has not submitted a white card.")
+    //   listItem.find('.player-score').text(missing_submissions[i].player_score)
+    //   var listItem = $('.player-list ul li:first').clone();
+    // };
+
+    // for (var i = 0; i < submissions.length; i++) {
+    //   $('.player-list ul').append(listItem);
+    //   listItem.find('.player-data .player-name').text(submissions[i].player_name)
+    //   listItem.find('.player-status').text(" is in!")
+    //   listItem.find('.player-score').text(submissions[i].player_score)
+    //   var listItem = $('.player-list ul li:first').clone();
+    // };    
+  },
+
+  drawMissingSubmissions: function(listItem, missing_submissions) {
+    for (var i = 0; i < missing_submissions.length; i++) {
+      $('.player-list ul').append(listItem);
+      listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
+      listItem.find('.player-status').text(" has not submitted a white card.")
+      listItem.find('.player-score').text(missing_submissions[i].player_score)
+      var listItem = $('.player-list ul li:first').clone();
+    };
+  },
+
+  drawGivenSubmissions: function(listItem, submissions) {
+    for (var i = 0; i < submissions.length; i++) {
+      $('.player-list ul').append(listItem);
+      listItem.find('.player-data .player-name').text(submissions[i].player_name)
+      listItem.find('.player-status').text(" is in!")
+      listItem.find('.player-score').text(submissions[i].player_score)
+      var listItem = $('.player-list ul li:first').clone();
+    };  
+  },
+
+  otherFunction: function(){
+
+  }
+}
 
 
 
@@ -89,15 +143,13 @@ Controller.prototype = {
 
   delegateGame: function() {
     $.mobile.changePage("#game");
-    
-    $('.game-header').text(this.game.game_id);
-    $('.leader-container .leader-name').text(this.leader.name);
-    $(".blackcard-content").text(this.leader.blackcard.content);
-    
+    this.view.drawHeader(this.game, this.leader)
+
     if (!this.user.need_submission) {
       $('.choose-button-container').hide()
     }
-    this.buildOtherPlayerStatuses();
+    this.view.drawPlayerList(this.game);
+    // this.buildOtherPlayerStatuses();
   },
 
   buildOtherPlayerStatuses: function() {
@@ -125,9 +177,10 @@ Controller.prototype = {
 
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
-    $('.game-header').text(this.game.game_id);
-    $('.leader-container .leader-name').text(this.leader.name);
-    $(".blackcard-content").text(this.leader.blackcard.content);
+    this.view.drawHeader(this.game, this.leader)
+    // $('.game-header').text(this.game.game_id);
+    // $('.leader-container .leader-name').text(this.leader.name);
+    // $(".blackcard-content").text(this.leader.blackcard.content);
 
     var cardElement = $('#choose .card-list li:first').clone();
     $('#choose .card-list li:first').remove();
