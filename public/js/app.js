@@ -1,13 +1,18 @@
 // ------------ GLOBAL -----------
 $.cookie.json = true;
 
+// $(document).bind("mobileinit", function()
+// {
+//     $.mobile.page.prototype.options.domCache = false;
+//     $.mobile.ajaxEnabled = true;
+//     $.mobile.changePage.defaults.reloadPage = true;
+// });
+
 var bindClearCookie = function($el) {
   $el.on("click", function(event) {
-    event.preventDefault();
     console.log("Running bindClearCookie event");
     $.removeCookie('session');
-    $.mobile.changePage('#home', { reloadPage: true });
-
+    $("#user").trigger("create");
   });
 };
 
@@ -19,12 +24,13 @@ var bindSetCookie = function($submit, $user_id, $game_ids) {
     var cookie = { "user_id": $user_id.val(),
                    "game_ids": game_ids };
     $.cookie('session', cookie);
+    $("#user").trigger("create");
   });
 };
 
 // Partials
 
-// var html_logout = $("<a href='#home' class='ui-btn user_logout'>Logout</a>");
+// var html_logout = $("<a href='#user' class='ui-btn user_logout'>Logout</a>");
 
 // var html_login = "<a href='#create_account' class='ui-btn'>Create Account</a>" +
 //                 "<a href='#login' class='ui-btn'>Login</a>";
@@ -42,22 +48,24 @@ var bindSetCookie = function($submit, $user_id, $game_ids) {
 
 
 // Home on load
-$( document ).delegate("#home", "pageinit", function() {
+$( document ).delegate("#user", "pageinit", function() {
   console.log("INIT RUNNING!")
-  $('#home').trigger('create')
+  $('#user').trigger('create')
   cookie = $.cookie('session');
   bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
   bindClearCookie( $("#cookie-clear") );
   bindClearCookie( $(".user-logout") );
   if (cookie) {
     console.log("Detected cookie.")
-    $("#cookie").show();
-    $("#no-cookie").hide();
+    $(".login").hide();
+    $(".create-account").hide();
+    $(".user-logout").show();
   }
   else {
     console.log("No cookie detected.")
-    $("#no-cookie").show();
-    $("#cookie").hide();
+    $(".login").show();
+    $(".create-account").show();
+    $(".user-logout").hide();
   }
 });
 
