@@ -70,37 +70,56 @@ Controller.prototype = {
   delegateGame: function() {
     $.mobile.changePage("#game");
     $('.game-header').text(this.game.game_id);
-    $('.leader-container .leader-name').text(this.leader.name + " has the black card");
+    $('.leader-container .leader-name').text(this.leader.name);
     $(".blackcard-content").text(this.leader.blackcard.content);
     
     if (!this.user.need_submission) {
       $('.choose-button-container').hide()
     }
     this.buildOtherPlayerStatuses();
-    
   },
 
   buildOtherPlayerStatuses: function() {
     missing_submissions = this.game.round.missing_submissions;
     submissions = this.game.round.submissions;
+    var listItem = $('.player-list ul li:first').clone();
+    $('.player-list ul li:first').remove();
+
     for (var i = 0; i < missing_submissions.length; i++) {
-      $('.player-data .player-name').text(missing_submissions[i].player_name)
-      
-    }
-    debugger
+      $('.player-list ul').append(listItem);
+      listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
+      listItem.find('.player-status').text(" has not submitted a white card.")
+      listItem.find('.player-score').text(missing_submissions[i].player_score)
+      var listItem = $('.player-list ul li:first').clone();
+    };
+
+    for (var i = 0; i < submissions.length; i++) {
+      $('.player-list ul').append(listItem);
+      listItem.find('.player-data .player-name').text(submissions[i].player_name)
+      listItem.find('.player-status').text(" is in!")
+      listItem.find('.player-score').text(submissions[i].player_score)
+      var listItem = $('.player-list ul li:first').clone();
+    }    
   },
 
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
-    $(".game-round").text(this.game.game_id);
-    $(".leader-info").text(this.leader.name + " has the black card");
+    $('.game-header').text(this.game.game_id);
+    $('.leader-container .leader-name').text(this.leader.name);
     $(".blackcard-content").text(this.leader.blackcard.content);
+
+    var cardElement = $('#choose .card-list li:first').clone();
+    $('#choose .card-list li:first').remove();
+
     var playable_cards = this.user.playable_cards
-    var card_div = $('.card-list ul')
     for (var i = 0; i < playable_cards.length; i++) {
-      var aTag = "<a href = '/api/users/" + $.cookie('session').user_id + "/games/" + this.game.game_id + "/cards/" + playable_cards[i].id + "'>";
-      var element = "<li>" + aTag + playable_cards[i].content + "</a></li>";
-      card_div.append(element);
+      $('#choose .card-list').append(cardElement)
+      var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + this.game.game_id + "/cards/" + playable_cards[i].id;
+  
+      cardElement.find('a').attr('href', cardSubmitLink )
+      cardElement.find('.card-content').text(playable_cards[i].content)
+      var cardElement = $('#choose .card-list li:first').clone();
+
     }
   },
 
@@ -114,23 +133,18 @@ Controller.prototype = {
     var winning_div = $(".submission-winner-container ul");
     var winning_submission = this.game.round.winning_submission.submission_content
     winning_div.append(winning_submission)
-
-    //needs to properly create element
     var losing_div = $(".submission-loser-container ul");
     losing_submissions = this.game.round.losing_submissions
     for (var i = 0; i < losing_submissions.length; i ++) {
       losing_div.append(losing_submissions[i].submission_content)
     }
-
-
-
   },
 
   parseAjaxResponse: function(data) {
     this.user = new User(data)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
-    this.delegateGame();
+    this.delegateRecap();
   },
 
   createGame: function(event) {
