@@ -1,5 +1,8 @@
 // http://jqmtricks.wordpress.com/2014/03/26/jquery-mobile-page-events/
 
+
+
+
 //MODELS
 var PlayableCard = function(object) {
   this.id = object.playable_card_id;
@@ -65,10 +68,28 @@ var Controller = function() {
   this.leader;
 };
 
+
+
+var View = functtion() {
+  
+}
+
+// View.prototype = {
+//   drawHeader: function() {
+//     $('.game-header').text(this.game.game_id);
+//     $('.leader-container .leader-name').text(this.leader.name);
+//     $(".blackcard-content").text(this.leader.blackcard.content); 
+//   }
+// }
+
+
+
+
 Controller.prototype = {
 
   delegateGame: function() {
     $.mobile.changePage("#game");
+    
     $('.game-header').text(this.game.game_id);
     $('.leader-container .leader-name').text(this.leader.name);
     $(".blackcard-content").text(this.leader.blackcard.content);
@@ -144,7 +165,7 @@ Controller.prototype = {
     this.user = new User(data)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
-    this.delegateRecap();
+    this.delegateGame();
   },
 
   createGame: function(event) {
@@ -218,7 +239,7 @@ Controller.prototype = {
 }
 
 
-
+ 
 // ------------ GLOBAL -----------
 $.cookie.json = true;
 
@@ -281,36 +302,4 @@ $( document ).delegate("#user", "pageinit", function() {
     $(".user-logout").hide();
   }
 });
-
-// GAME
-// var delegateGame = function(game) {
-//   $( document ).delegate("#game", "pageinit", function(data) {
-//     console.log("SHOULD HAVE ACCESS TO GLOBALS")
-//     debugger
-//     $(".game-round").text("game.game_name");
-//     $(".leader-info").text(leader.name + " has the black card");
-//     $(".leader-info").text("leader.name + has the black card.");
-//     $(".blackcard-content").text("blackard content");
-//   });
-// }
-
-
-// $( document ).on("beforepageshow", "#game", function() {
-//   console.log("SHOULD HAVE ACCESS TO GLOBALS")
-//   debugger
-//   $(".game-round").text("game.game_name");
-//   $(".leader-info").text(leader.name + " has the black card");
-//   $(".leader-info").text("leader.name + has the black card.");
-//   $(".blackcard-content").text("blackard content");
-// });
-
-
-// CHOOSE
-// $( document ).delegate("#choose", "pageinit", function() {
-//   $(".game-round").text("game.game_name");
-//   $(".leader-info").text("leader.name + has the black card.");
-//   $(".blackcard-content").text("blackard content");
-// });
-
-// RECAP
 
