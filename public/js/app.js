@@ -1,7 +1,7 @@
-// http://jqmtricks.wordpress.com/2014/03/26/jquery-mobile-page-events/
-
-
-
+$(document).on("ready page:load", function() {
+  var view = new View;
+  var controller = new Controller(view);
+});
 
 //MODELS
 var PlayableCard = function(object) {
@@ -50,28 +50,7 @@ var Blackcard = function(object) {
   this.content = object.blackcard_content
 }
 
-//CONTROLLER
-$(document).on("ready page:load", function() {
-  var view = new View;
-  var controller = new Controller(view);
-});
-
-
-// $(document).on( "beforepageshow", "#user", function() {
-//   var controller = new Controller;
-// });
-
-
-var Controller = function(view) {
-  this.bindEvents();
-  this.view = view;
-  this.user;
-  this.game;
-  this.leader;
-};
-
-
-
+//VIEW
 var View = function() {
   
 }
@@ -150,6 +129,15 @@ View.prototype = {
     }
   }
 }
+
+//CONTROLLER
+var Controller = function(view) {
+  this.bindEvents();
+  this.view = view;
+  this.user;
+  this.game;
+  this.leader;
+};
 
 Controller.prototype = {
 
@@ -253,7 +241,7 @@ Controller.prototype = {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
 
-
+    //Saving for refactoring later
     // $("#newGameForm").on("submit", this.createGame.bind(this))
     // $("#previousRoundRecap").on("submit", this.getPreviousRoundRecap.bind(this))
     // $("#active-games-group a").on('click', this.getCurrentGameState.bind(this))
