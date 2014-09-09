@@ -15,7 +15,7 @@
 }
 
 .header-title {
-  padding: 3% 5% 0 5%;
+  padding: 3% 6% 0 6%;
   color: white;
   font-size: 2.2em;
   line-height: 1.3em;
@@ -27,7 +27,7 @@
 }
 
 .blackcard {
-  padding: 5%;
+  padding: 6%;
   color: white;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .listview {
-  padding-top: 2.1em;
+  padding-top: 1.7em;
 }
 
 .ui-header .ui-btn {
@@ -67,6 +67,30 @@
 }
 
 .listview .avatar {
-  margin: 5%;
+  margin: 6% 0;
 }
+
+li {
+  border-color:lightgray!important;
+}
+
+.ui-btn {
+  border-color: black!important;
+}
+
+.player-container {
+/*    background-color: red;
+*/}
+
+.avatar-container {
+  display: inline-block;
+}
+
+.player-data {
+  padding-left: .5em;
+  vertical-align: top;
+  display: inline-block;
+}
+
+
 
