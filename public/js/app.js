@@ -1,3 +1,5 @@
+// http://jqmtricks.wordpress.com/2014/03/26/jquery-mobile-page-events/
+
 //MODELS
 var PlayableCard = function(object) {
   this.id = object.id;
@@ -47,7 +49,8 @@ var Blackcard = function(object) {
 //CONTROLLER
 
 
-$(document).ready(function() {
+$(document).on("pageinit", function() {
+
   var controller = new Controller;
 });
 
@@ -63,14 +66,31 @@ var Controller = function() {
 
 Controller.prototype = {
 
-  parseAjaxResponse: function(data) {
-    debugger
-    // user = new User(data.player_self)
-    // game = new Game(data)
-    // leader = new Leader(data.leader)
-    console.log("global variables instantiated")
+  delegateGame: function(leader) {
+  $.mobile.changePage("#game");
 
-    // $.mobile.changePage("#game");
+   alert(leader.name)
+
+    // $( document ).delegate("#game", "pagecreate", function(e, data) {
+    //   console.log("SHOULD HAVE ACCESS TO GLOBALS")
+    //   console.log(leader.name)
+    //   debugger
+      $(".game-round").text(leader.name);
+    //   $(".leader-info").text(leader.name + " has the black card");
+    //   $(".leader-info").text("leader.name + has the black card.");
+    //   $(".blackcard-content").text("blackard content");
+    // });
+  },
+
+  parseAjaxResponse: function(data) {
+
+    user = new User(data.player_self)
+    game = new Game(data)
+    leader = new Leader(data.leader)
+    console.log("global variables instantiated")
+    this.delegateGame(leader);
+
+
   },
 
   createGame: function(event) {
@@ -184,6 +204,8 @@ var bindSetCookie = function($submit, $user_id, $game_ids) {
 
 
 // USER
+
+
 $( document ).delegate("#user", "pageinit", function() {
   console.log("INIT RUNNING!")
   $('#user').trigger('create')
@@ -207,14 +229,17 @@ $( document ).delegate("#user", "pageinit", function() {
 });
 
 // GAME
-$( document ).delegate("#game", "pageinit", function() {
-  console.log("SHOULD HAVE ACCESS TO GLOBALS")
-  debugger
-  $(".game-round").text("game.game_name");
-  $(".leader-info").text(leader.name + " has the black card");
-  $(".leader-info").text("leader.name + has the black card.");
-  $(".blackcard-content").text("blackard content");
-});
+// var delegateGame = function(game) {
+//   $( document ).delegate("#game", "pageinit", function(data) {
+//     console.log("SHOULD HAVE ACCESS TO GLOBALS")
+//     debugger
+//     $(".game-round").text("game.game_name");
+//     $(".leader-info").text(leader.name + " has the black card");
+//     $(".leader-info").text("leader.name + has the black card.");
+//     $(".blackcard-content").text("blackard content");
+//   });
+// }
+
 
 // $( document ).on("beforepageshow", "#game", function() {
 //   console.log("SHOULD HAVE ACCESS TO GLOBALS")
