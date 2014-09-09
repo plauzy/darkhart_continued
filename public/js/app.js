@@ -2,7 +2,7 @@
 
 //MODELS
 var PlayableCard = function(object) {
-  this.id = object.id;
+  this.id = object.playable_card_id;
   this.content = object.content;
 }
 
@@ -15,7 +15,7 @@ var User = function(object) {
   this.playable_cards = []
   for( var i = 0; i < object.player_cards.length; i++) {
     playable_card = new PlayableCard(object.player_cards[i])
-    this.playable_cards.push(playable_card)
+    this.playable_cards.push(playable_card);
   };
 }
 
@@ -35,11 +35,11 @@ var Round = function(object) {
 };
 
 var Leader = function(object) {
-  this.name = object.leader_name
-  this.user_id = object.leader_user_id
-  this.email = object.leader_email
-  this.seat_id = object.leader_seat_id
-  this.blackcard = new Blackcard(object)
+  this.name = object.leader_name;
+  this.user_id = object.leader_user_id;
+  this.email = object.leader_email;
+  this.seat_id = object.leader_seat_id;
+  this.blackcard = new Blackcard(object);
 };
 
 var Blackcard = function(object) {
@@ -47,10 +47,7 @@ var Blackcard = function(object) {
 }
 
 //CONTROLLER
-
-
 $(document).on("ready page:load", function() {
-
   var controller = new Controller;
 });
 
@@ -75,16 +72,8 @@ Controller.prototype = {
     $(".game-round").text(this.game.game_id);
     $(".leader-info").text(this.leader.name + " has the black card");
     $(".blackcard-content").text(this.leader.blackcard.content);
-    // debugger
 
-    // $( document ).delegate("#game", "pagecreate", function(e, data) {
-    //   console.log("SHOULD HAVE ACCESS TO GLOBALS")
-    //   console.log(leader.name)
-    //   debugger
-    //   $(".leader-info").text(leader.name + " has the black card");
-    //   $(".leader-info").text("leader.name + has the black card.");
-    //   $(".blackcard-content").text("blackard content");
-    // });
+    //JS to show other users and their status...
   },
 
   delegateSubmission: function() {
@@ -96,11 +85,11 @@ Controller.prototype = {
     var playable_cards = this.user.playable_cards
     var card_div = $('.card-list ul')
     for (var i = 0; i < playable_cards.length; i++) {
-      var url = "<a href = /api/" +
-      var element = "<li>" + playable_cards[i].content + "</li>";
+      debugger
+      var aTag = "<a href = '/api/users/" + $.cookie('session').user_id + "/games/" + this.game.game_id + "/cards/" + playable_cards[i].id + "'>";
+      var element = "<li>" + aTag + playable_cards[i].content + "</a></li>";
       card_div.append(element);
     }
-
   },
 
 
