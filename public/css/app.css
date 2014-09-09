@@ -1,0 +1,72 @@
+.blackcard-container {
+  position: fixed;
+  width: 100%;
+  height: 10em;
+  background-color: black;
+  z-index: 1;
+}
+
+.content-push-home {
+  margin-top: 10em;
+}
+
+.content-push {
+  margin-top: 12em;
+}
+
+.header-title {
+  padding: 3% 5% 0 5%;
+  color: white;
+  font-size: 2.2em;
+  line-height: 1.3em;
+}
+
+.header-title p {
+  margin: 0;
+  padding: 0;
+}
+
+.blackcard {
+  padding: 5%;
+  color: white;
+}
+
+.leader-avatar-container {
+  display: inline-block;
+}
+
+.avatar {
+  border-radius: 50%!important;
+  width: 3em;
+  height: 3em;
+}
+
+.leader-name-container {
+  padding: 0 .5em;
+  font-size: .8em;
+  padding-top: .4em;
+  vertical-align: top;
+  height: 3em;
+  display: inline-block;
+}
+
+.blackcard-content {
+  padding-top: .5em;
+  font-size: 1.5em;
+}
+
+.listview {
+  padding-top: 2.1em;
+}
+
+.ui-header .ui-btn {
+  background-color: black!important;
+  border: 0px;
+  color: black;
+  text-shadow: 0 0 0;
+}
+
+.listview .avatar {
+  margin: 5%;
+}
+

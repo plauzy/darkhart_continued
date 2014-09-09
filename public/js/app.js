@@ -6,7 +6,7 @@
 
 
 
-
+$.mobile.page.prototype.options.backBtnTheme = "a";
 
 
 
@@ -213,7 +213,7 @@ $( document ).delegate("#user", "pageinit", function() {
 $( document ).delegate("#game", "pageinit", function() {
   $(".game-round").text("game.game_name");
   $(".leader-info").text("leader.name + has the black card.");
-  $(".blackcard-content").text("blackard content");
+  $(".blackcard-content").text("Integer posuere erat a ante venenatis dapibus posuere velit aliquet.");
 });
 
 // CHOOSE
