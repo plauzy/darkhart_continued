@@ -63,7 +63,7 @@ class GameGetter
     @state["active"] = round_active?
     @state["player_self"] = player_self
     @state["leader"] = leader_blackcard
-    @state["need_submission?"] = need_submission?
+    @state["need_submission"] = need_submission?
   end
 
   def player_self

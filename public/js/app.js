@@ -7,14 +7,15 @@ var PlayableCard = function(object) {
 }
 
 var User = function(object) {
-  this.user_id = object.user_id;
-  this.seat_id = object.seat_id;
-  this.name = object.player_name;
-  this.score = object.player_score;
-  this.email = object.player_email;
+  this.need_submission = object.need_submission;
+  this.user_id = object.player_self.user_id;
+  this.seat_id = object.player_self.seat_id;
+  this.name = object.player_self.player_name;
+  this.score = object.player_self.player_score;
+  this.email = object.player_self.player_email;
   this.playable_cards = []
-  for( var i = 0; i < object.player_cards.length; i++) {
-    playable_card = new PlayableCard(object.player_cards[i])
+  for( var i = 0; i < object.player_self.player_cards.length; i++) {
+    playable_card = new PlayableCard(object.player_self.player_cards[i])
     this.playable_cards.push(playable_card);
   };
 }
@@ -71,8 +72,22 @@ Controller.prototype = {
     $('.game-header').text(this.game.game_id);
     $('.leader-container .leader-name').text(this.leader.name + " has the black card");
     $(".blackcard-content").text(this.leader.blackcard.content);
-    if ()
-    $('.choose-button-container').hide()
+    
+    if (!this.user.need_submission) {
+      $('.choose-button-container').hide()
+    }
+    this.buildOtherPlayerStatuses();
+    
+  },
+
+  buildOtherPlayerStatuses: function() {
+    missing_submissions = this.game.round.missing_submissions;
+    submissions = this.game.round.submissions;
+    for (var i = 0; i < missing_submissions.length; i++) {
+      $('.player-data .player-name').text(missing_submissions[i].player_name)
+      
+    }
+    debugger
   },
 
   delegateSubmission: function() {
@@ -112,7 +127,7 @@ Controller.prototype = {
   },
 
   parseAjaxResponse: function(data) {
-    this.user = new User(data.player_self)
+    this.user = new User(data)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
     this.delegateGame();
