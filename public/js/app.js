@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 //MODELS
 var PlayableCard = function(object) {
   this.id = object.id;
@@ -60,8 +48,13 @@ var Blackcard = function(object) {
 
 
 $(document).ready(function() {
-  var controller = new Controller
+  var controller = new Controller;
 });
+
+
+// $(document).on( "beforepageshow", "#user", function() {
+//   var controller = new Controller;
+// });
 
 
 var Controller = function() {
@@ -71,9 +64,13 @@ var Controller = function() {
 Controller.prototype = {
 
   parseAjaxResponse: function(data) {
-    user = new User(data.player_self)
-    game = new Game(data)
-    leader = new Leader(data.leader)
+    debugger
+    // user = new User(data.player_self)
+    // game = new Game(data)
+    // leader = new Leader(data.leader)
+    console.log("global variables instantiated")
+
+    // $.mobile.changePage("#game");
   },
 
   createGame: function(event) {
@@ -211,10 +208,23 @@ $( document ).delegate("#user", "pageinit", function() {
 
 // GAME
 $( document ).delegate("#game", "pageinit", function() {
+  console.log("SHOULD HAVE ACCESS TO GLOBALS")
+  debugger
   $(".game-round").text("game.game_name");
+  $(".leader-info").text(leader.name + " has the black card");
   $(".leader-info").text("leader.name + has the black card.");
   $(".blackcard-content").text("blackard content");
 });
+
+// $( document ).on("beforepageshow", "#game", function() {
+//   console.log("SHOULD HAVE ACCESS TO GLOBALS")
+//   debugger
+//   $(".game-round").text("game.game_name");
+//   $(".leader-info").text(leader.name + " has the black card");
+//   $(".leader-info").text("leader.name + has the black card.");
+//   $(".blackcard-content").text("blackard content");
+// });
+
 
 // CHOOSE
 $( document ).delegate("#choose", "pageinit", function() {
