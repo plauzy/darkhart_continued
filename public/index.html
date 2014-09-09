@@ -14,9 +14,18 @@
   <!-- home -->
   <div id="home" data-role="page">
     <div data-role="content">
+      <div id="user-management">
+        <div id="no-cookie">
+          <a href='#create_account' class='ui-btn'>Create Account</a>
+          <a href='#login' class='ui-btn'>Login</a>
+        </div>
+        <div id="cookie">
+          <a href='#home' class='ui-btn user-logout'>Logout</a>
+        </div>
+
+      </div>
       <!-- If not logged in  -->
-      <a href="#create_account" class="ui-btn">Create Account</a>
-      <a href="#login" class="ui-btn">Login</a>
+
       <h3>Active Games</h3>
       <a href="#game" class="ui-btn">Game Name</a>
       <a href="#game" class="ui-btn">Game Name</a>
@@ -31,13 +40,13 @@
     </div>
     <div data-role="content">
       <h3>Create Cookie</h3>
-      <form data-ajax="false" id="cookie-widget">
+      <form id="cookie-widget">
         <label>User ID</label>
-        <input type="text" id="cookie-user_id"/>
+        <input type="text" id="cookie-user-id"/>
         <label>Game IDs</label>
-        <input type="text" name="name" id="cookie-game_ids" placeholder="Separated by commas."/>
-        <button class="ui-btn" id="cookie-submit">Create Cookie</button>
-        <button class="ui-btn" id="cookie-clear">Remove Cookie</button>
+        <input type="text" id="cookie-game-ids" placeholder="Separated by commas."/>
+        <a href="#home" class="ui-btn" id="cookie-submit">Create Cookie</a>
+        <a href="#home" class="ui-btn" id="cookie-clear">Remove Cookie</a>
       </form>
     </div>
   </div>
