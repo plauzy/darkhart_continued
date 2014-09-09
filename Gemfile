@@ -7,6 +7,7 @@ gem 'pg'
 gem 'puma'
 gem 'factory_girl_rails'
 gem 'faker'
+gem 'bcrypt'
 
 group :development, :test do
   gem 'rspec-rails'
