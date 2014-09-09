@@ -111,18 +111,11 @@ Controller.prototype = {
 
   },
 
-// $( document ).delegate("#recap", "pageinit", function() {
-//   $(".game-round").text("game.game_name");
-//   $(".leader-info").text("leader.name + has the black card.");
-//   $(".blackcard-content").text("blackard content");
-// });
-
-
   parseAjaxResponse: function(data) {
     this.user = new User(data.player_self)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
-    this.delegateRecap();
+    this.delegateGame();
   },
 
   createGame: function(event) {
@@ -291,11 +284,4 @@ $( document ).delegate("#user", "pageinit", function() {
 // });
 
 // RECAP
-
-
-
-
-
-
-
 
