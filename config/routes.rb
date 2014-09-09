@@ -7,4 +7,6 @@ Rails.application.routes.draw do
   get 'api/users/:user_id/games/:game_id/rounds/:round' => 'application#game_state'
 
   get 'api/users/:user_id/games/:game_id/cards/:card_id' => 'application#submit_card' # GET FOR TESTING ONLY
+
+  post 'api/users/signin' => 'users#signin'
 end
