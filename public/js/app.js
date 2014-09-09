@@ -49,7 +49,7 @@ var Blackcard = function(object) {
 //CONTROLLER
 
 
-$(document).on("pageinit", function() {
+$(document).on("ready page:load", function() {
 
   var controller = new Controller;
 });
@@ -62,35 +62,53 @@ $(document).on("pageinit", function() {
 
 var Controller = function() {
   this.bindEvents();
+  this.user;
+  this.game;
+  this.leader;
 };
 
 Controller.prototype = {
 
-  delegateGame: function(leader) {
-  $.mobile.changePage("#game");
-
-   alert(leader.name)
+  delegateGame: function() {
+    $.mobile.changePage("#game");
+    console.log("made it")
+    $(".game-round").text(this.game.game_id);
+    $(".leader-info").text(this.leader.name + " has the black card");
+    $(".blackcard-content").text(this.leader.blackcard.content);
+    // debugger
 
     // $( document ).delegate("#game", "pagecreate", function(e, data) {
     //   console.log("SHOULD HAVE ACCESS TO GLOBALS")
     //   console.log(leader.name)
     //   debugger
-      $(".game-round").text(leader.name);
     //   $(".leader-info").text(leader.name + " has the black card");
     //   $(".leader-info").text("leader.name + has the black card.");
     //   $(".blackcard-content").text("blackard content");
     // });
   },
 
+  delegateSubmission: function() {
+    $.mobile.changePage("#choose");
+    console.log("made it");
+    $(".game-round").text(this.game.game_id);
+    $(".leader-info").text(this.leader.name + " has the black card");
+    $(".blackcard-content").text(this.leader.blackcard.content);
+    var playable_cards = this.user.playable_cards
+    var card_div = $('.card-list ul')
+    for (var i = 0; i < playable_cards.length; i++) {
+      var url = "<a href = /api/" +
+      var element = "<li>" + playable_cards[i].content + "</li>";
+      card_div.append(element);
+    }
+
+  },
+
+
   parseAjaxResponse: function(data) {
-
-    user = new User(data.player_self)
-    game = new Game(data)
-    leader = new Leader(data.leader)
-    console.log("global variables instantiated")
-    this.delegateGame(leader);
-
-
+    this.user = new User(data.player_self)
+    this.game = new Game(data)
+    this.leader = new Leader(data.leader)
+    this.delegateSubmission();
   },
 
   createGame: function(event) {
@@ -252,11 +270,11 @@ $( document ).delegate("#user", "pageinit", function() {
 
 
 // CHOOSE
-$( document ).delegate("#choose", "pageinit", function() {
-  $(".game-round").text("game.game_name");
-  $(".leader-info").text("leader.name + has the black card.");
-  $(".blackcard-content").text("blackard content");
-});
+// $( document ).delegate("#choose", "pageinit", function() {
+//   $(".game-round").text("game.game_name");
+//   $(".leader-info").text("leader.name + has the black card.");
+//   $(".blackcard-content").text("blackard content");
+// });
 
 // RECAP
 
