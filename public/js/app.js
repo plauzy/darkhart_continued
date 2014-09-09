@@ -68,11 +68,11 @@ Controller.prototype = {
 
   delegateGame: function() {
     $.mobile.changePage("#game");
-    $(".game-round").text(this.game.game_id);
-    $(".leader-info").text(this.leader.name + " has the black card");
+    $('.game-header').text(this.game.game_id);
+    $('.leader-container .leader-name').text(this.leader.name + " has the black card");
     $(".blackcard-content").text(this.leader.blackcard.content);
-
-    //JS to show other users and their status...
+    if ()
+    $('.choose-button-container').hide()
   },
 
   delegateSubmission: function() {
