@@ -92,23 +92,7 @@ View.prototype = {
     $('.player-list ul li:first').remove();
 
     this.drawMissingSubmissions(listItem, missing_submissions);
-    this.drawGivenSubmissions(listItem, submissions);
-
-    // for (var i = 0; i < missing_submissions.length; i++) {
-    //   $('.player-list ul').append(listItem);
-    //   listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
-    //   listItem.find('.player-status').text(" has not submitted a white card.")
-    //   listItem.find('.player-score').text(missing_submissions[i].player_score)
-    //   var listItem = $('.player-list ul li:first').clone();
-    // };
-
-    // for (var i = 0; i < submissions.length; i++) {
-    //   $('.player-list ul').append(listItem);
-    //   listItem.find('.player-data .player-name').text(submissions[i].player_name)
-    //   listItem.find('.player-status').text(" is in!")
-    //   listItem.find('.player-score').text(submissions[i].player_score)
-    //   var listItem = $('.player-list ul li:first').clone();
-    // };    
+    this.drawGivenSubmissions(listItem, submissions);   
   },
 
   drawMissingSubmissions: function(listItem, missing_submissions) {
@@ -131,7 +115,18 @@ View.prototype = {
     };  
   },
 
-  otherFunction: function(){
+  drawPlayableCards: function(game, user){
+    var cardElement = $('#choose .card-list li:first').clone();
+    $('#choose .card-list li:first').remove();
+
+    var playable_cards = user.playable_cards
+    for (var i = 0; i < playable_cards.length; i++) {
+      $('#choose .card-list').append(cardElement)
+      var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + game.game_id + "/cards/" + playable_cards[i].id;
+      cardElement.find('a').attr('href', cardSubmitLink )
+      cardElement.find('.card-content').text(playable_cards[i].content)
+      var cardElement = $('#choose .card-list li:first').clone();
+    }
 
   }
 }
@@ -143,65 +138,26 @@ Controller.prototype = {
 
   delegateGame: function() {
     $.mobile.changePage("#game");
-    this.view.drawHeader(this.game, this.leader)
-
+    this.view.drawHeader(this.game, this.leader);
     if (!this.user.need_submission) {
       $('.choose-button-container').hide()
     }
     this.view.drawPlayerList(this.game);
-    // this.buildOtherPlayerStatuses();
-  },
-
-  buildOtherPlayerStatuses: function() {
-    missing_submissions = this.game.round.missing_submissions;
-    submissions = this.game.round.submissions;
-    var listItem = $('.player-list ul li:first').clone();
-    $('.player-list ul li:first').remove();
-
-    for (var i = 0; i < missing_submissions.length; i++) {
-      $('.player-list ul').append(listItem);
-      listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
-      listItem.find('.player-status').text(" has not submitted a white card.")
-      listItem.find('.player-score').text(missing_submissions[i].player_score)
-      var listItem = $('.player-list ul li:first').clone();
-    };
-
-    for (var i = 0; i < submissions.length; i++) {
-      $('.player-list ul').append(listItem);
-      listItem.find('.player-data .player-name').text(submissions[i].player_name)
-      listItem.find('.player-status').text(" is in!")
-      listItem.find('.player-score').text(submissions[i].player_score)
-      var listItem = $('.player-list ul li:first').clone();
-    }    
   },
 
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
     this.view.drawHeader(this.game, this.leader)
-    // $('.game-header').text(this.game.game_id);
-    // $('.leader-container .leader-name').text(this.leader.name);
-    // $(".blackcard-content").text(this.leader.blackcard.content);
-
-    var cardElement = $('#choose .card-list li:first').clone();
-    $('#choose .card-list li:first').remove();
-
-    var playable_cards = this.user.playable_cards
-    for (var i = 0; i < playable_cards.length; i++) {
-      $('#choose .card-list').append(cardElement)
-      var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + this.game.game_id + "/cards/" + playable_cards[i].id;
-  
-      cardElement.find('a').attr('href', cardSubmitLink )
-      cardElement.find('.card-content').text(playable_cards[i].content)
-      var cardElement = $('#choose .card-list li:first').clone();
-
-    }
+    this.view.drawPlayableCards(this.game, this.user);
   },
 
   delegateRecap: function() {
     $.mobile.changePage("#recap");
-    $(".game-round").text(this.game.game_id);
-    $(".leader-info").text(this.leader.name + " has the black card");
-    $(".blackcard-content").text(this.leader.blackcard.content);
+    this.view.drawHeader(this.game, this.leader);
+    
+    // $(".game-round").text(this.game.game_id);
+    // $(".leader-info").text(this.leader.name + " has the black card");
+    // $(".blackcard-content").text(this.leader.blackcard.content);
 
     //needs to create element
     var winning_div = $(".submission-winner-container ul");
@@ -218,7 +174,7 @@ Controller.prototype = {
     this.user = new User(data)
     this.game = new Game(data)
     this.leader = new Leader(data.leader)
-    this.delegateGame();
+    this.delegateSubmission();
   },
 
   createGame: function(event) {
