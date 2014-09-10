@@ -82,16 +82,16 @@ var View = function() {
 
 View.prototype = {
 
-  drawHeader: function(game, leader) {
+  drawHeader: function(game) {
     $('.game-header').text(game.game_name + " - Round " + game.round.round_num);
+    // $('.leader-container .leader-name').text(leader.name);
+    // $(".blackcard-content").text(leader.blackcard.content);
+  },
+
+  drawLeaderContainer: function(leader) {
     $('.leader-container .leader-name').text(leader.name);
     $(".blackcard-content").text(leader.blackcard.content);
   },
-
-  // drawLeaderContainer: function(leader) {
-  //   $('.leader-container .leader-name').text(leader.name);
-  //   $(".blackcard-content").text(leader.blackcard.content);
-  // },
 
   drawPlayerList: function(game) {
     missing_submissions = game.round.missing_submissions;
@@ -218,7 +218,9 @@ Controller.prototype = {
 
   delegateGame: function() {
     $.mobile.changePage("#game");
-    this.view.drawHeader(this.game, this.leader);
+    // this.view.drawHeader(this.game, this.leader);
+    this.view.drawHeader(this.game);
+    this.view.drawLeaderContainer(this.leader);
     if (!this.user.need_submission) {
       $('.choose-button-container').hide()
     }
@@ -228,7 +230,8 @@ Controller.prototype = {
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
     console.log("made it to delegate submission");
-    this.view.drawHeader(this.game, this.leader);
+    this.view.drawHeader(this.game);
+    this.view.drawLeaderContainer(this.leader);
     if (this.user.user_id == this.leader.user_id) {
       this.view.drawSubmissionCards(this.game);
     }
@@ -239,12 +242,15 @@ Controller.prototype = {
 
   delegateRecap: function() {
     $.mobile.changePage("#recap");
-    this.view.drawHeader(this.game, this.leader);
+    this.view.drawHeader(this.game);
+    this.view.drawLeaderContainer(this.leader);
     this.view.drawRecap(this.game);
   },
 
   delegateGameOverview: function(event) {
     $.mobile.changePage("#game-overview");
+    // this.view.drawHeader(this.game);
+    //small issue with game name!
     this.view.drawGameOverview(this.gameRecapList.gameRecaps)
   },
 
