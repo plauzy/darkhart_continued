@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   get "/api/games/:game_id" => 'api/games#game_state'
   # makesubmission
-  get "/api/games/:game_id/cards/:card_id" => 'api/games#submit_card'
+  post "/api/games/:game_id/cards/:card_id" => 'api/games#submit_card'
   # make decision
   post "/api/games/:game_id/round/:round_id" => 'api/games#submit_card'
 

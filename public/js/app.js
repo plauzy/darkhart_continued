@@ -320,7 +320,10 @@ Controller.prototype = {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
 
-    $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this))
+    $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
+
+    $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
+
     // $('#active-games-group').on('click', 'a', this.getPreviousRoundRecaps)
 
     //Saving for refactoring later
