@@ -59,6 +59,7 @@ class GameGetter
 
   def build_header
     @state["game_id"] = @game.id
+    @state["game_name"] = @game.name
     @state["round"] = @round.round_num
     @state["active"] = round_active?
     @state["player_self"] = player_self
@@ -131,5 +132,3 @@ class GameGetter
     end
   end
 end
-
-
