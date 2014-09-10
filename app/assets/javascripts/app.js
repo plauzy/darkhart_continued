@@ -1,4 +1,20 @@
+
+
 $(function() {
+  $( "#usersListForm" ).submit(function( event ) {
+      // $( "#usersListForm" ).submit(function( event ) {
+    event.preventDefault();
+    var $form = $( this ),
+      initiator_id = $form.find( "input[name='initiator_id']" ).val();
+      url = "/api/users/";
+
+      var posting = $.get(url, { "user_id": initiator_id });
+    // Put the results in a div
+    posting.done(function( data ) {
+      $("#json").empty().append(JSON.stringify(data, undefined, 2));
+    });
+  });
+
   $( "#newGameForm" ).submit(function( event ) {
     event.preventDefault();
     var $form = $( this ),
