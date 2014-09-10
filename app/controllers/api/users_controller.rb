@@ -1,7 +1,8 @@
-class UsersController < ApplicationController
+class Api::UsersController < ApplicationController
 
   def index
-    @users = User.all
+    users = UserGetter.new(params["user_id"])
+    render json: > users.list
   end
 
   def show
