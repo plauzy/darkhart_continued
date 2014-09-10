@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   # make decision
   post "/api/games/:game_id/round/:round_id" => 'api/games#submit_card'
 
+  # user authentication
+  post "/api/users/signin" => 'api/users#signin'
+  # new user creation
+  post "/api/users/new" => 'api/users#create'
+  # user game list
   get "/api/users/:user_id" => 'api/games#inventory'
 
   get '/tool' => "devtool#index"
@@ -28,5 +33,4 @@ Rails.application.routes.draw do
 
   # get 'api/users/:user_id/games/:game_id/cards/:card_id' => 'application#submit_card' # GET FOR TESTING ONLY
 
-  # post 'api/users/signin' => 'users#signin'
 end

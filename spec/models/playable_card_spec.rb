@@ -7,7 +7,7 @@ RSpec.describe PlayableCard, :type => :model do
     Seat.delete_all
     Game.delete_all
     Whitecard.delete_all
-    @user = User.create(name:"Test User")
+    @user = User.create(name:"Test User",password:"password")
     @game = Game.create(name:"Test Game")
     @seat = Seat.create(user_id:@user.id,game_id:@game.id)
     @whitecard = Whitecard.create(content:"Test white card")

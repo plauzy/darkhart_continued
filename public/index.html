@@ -17,6 +17,11 @@
   <div id='home' data-role='page'>
     <div data-role='content'>
       <a href='#user' class='ui-btn'>User</a>
+<!--     <form id="testform" action="">
+      Username: <input type="text" name="user_id">
+      Password: <input type="password" name="password">
+      <input type="submit" value="Submit">
+    </form> -->
     </div>
   </div>
 
@@ -68,6 +73,8 @@
       <form id='cookie-widget'>
         <label>User ID</label>
         <input type='text' id='cookie-user-id'/>
+        <label>Password</label>
+        <input type='password' id='cookie-user-password'/>
         <label>Game IDs</label>
         <input type='text' id='cookie-game-ids' placeholder='Separated by commas.'/>
         <a href='#user' class='ui-btn' id='cookie-submit'>Create Cookie</a>
@@ -90,14 +97,17 @@
         <label for='user-name'>Name</label>
         <input type='text' name='user-name' id='user-name' value=''/>
 
+        <label for='user-password'>Password</label>
+        <input type='password' name='user-password' id='user-password' value=''/>
+
         <label for='user-phone'>Phone Number</label>
         <input type='number' name='user-phone' id='user-phone' value=''/>
 
         <label for='user-email'>Email Address</label>
-        <input type='number' name='user-phone-number' id='user-phone-number' value=''/>
+        <input type='text' name='user-email' id='user-email' value=''/>
 
         <br>
-        <input type="submit" class='ui-btn user-create-button' value="I dare you.">
+        <input type="submit" class='ui-btn user-create-button' id='user-create-button' value="I dare you.">
         </div>
       </form>
     </div>
@@ -159,6 +169,7 @@
     <div data-role='header' data-position='fixed' data-tap-toggle='false'>
       <a href='#' data-rel='back' data-icon='arrow-l'>Back</a>
       <h1 class='game-header'></h1>
+      <a href='' data-icon='refresh' data-iconpos='right' id='game-refresh'>Refresh</a>
     </div>
 
     <div class='blackcard-container blackcard'>
