@@ -23,4 +23,9 @@ class Api::GamesController < ApplicationController
     inventory = GameInventory.new(params["user_id"])
     render :json => inventory.list
   end
+
+  def game_recap
+    recap = GameRecap.new(params["user_id"])
+    render :json => recap.recap
+  end
 end
