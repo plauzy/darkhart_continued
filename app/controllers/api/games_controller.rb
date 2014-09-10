@@ -1,9 +1,6 @@
 class Api::GamesController < ApplicationController
   def new_game
     user_ids = [params[:user_id]]
-    p params
-    p ("*" * 50)
-    p user_ids
     params[:invite_ids].split(",").each { |id| user_ids << id }
     new_game = GameSkeleton.new(params[:game_name], user_ids, (params[:num_rounds] || 10)).new_game
     game = GameGetter.new(new_game.id, params[:user_id])
