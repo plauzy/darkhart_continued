@@ -16,7 +16,9 @@ class GameRecap < GameGetter
     @submissions = round.submissions
     @winner = @submissions.where(winner: true)[0]
 
-    rd_recap = { round_num: round.round_num,
+    rd_recap = {
+      game_name: @game.name,
+      round_num: round.round_num,
       active: round_active?,
       leader_id: round.leader_id,
       leader_name: get_leader.user.name,
