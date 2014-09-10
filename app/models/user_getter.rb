@@ -4,7 +4,7 @@ class UserGetter
   end
 
   def list
-    if @user_id
+    if User.find_by_id(@user_id)
       users = User.all.select { |u| u != User.find(@user_id) }
     else
       users = User.all
