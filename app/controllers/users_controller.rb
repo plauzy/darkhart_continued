@@ -12,6 +12,15 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def signin
+    user = User.find(params[:user_id])
+    if user && user.authenticate(params[:password])
+      render json: {token:user.remember_token}
+    else
+      render :status => 401
+    end
+  end
+
   def create
    @user = User.new(user_params)
     if @user.save
@@ -26,7 +35,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     respond_to do |format|
-      if @user.password == params[:user][:password] && @user.update_attributes(user_params) 
+      if @user.password == params[:user][:password] && @user.update_attributes(user_params)
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render json: @user, notice: 'User updated.' }
       else
@@ -36,10 +45,10 @@ class UsersController < ApplicationController
     end
   end
 
-  private 
+  private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password)                           
+      params.require(:user).permit(:name, :email, :password)
     end
 
 end

@@ -13,6 +13,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'puma'
 gem 'factory_girl_rails'
 gem 'faker'
+gem 'bcrypt'
 
 group :development, :test do
   gem 'rspec-rails'

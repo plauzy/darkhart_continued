@@ -52,7 +52,7 @@ var Blackcard = function(object) {
 
 //VIEW
 var View = function() {
-  
+
 }
 
 View.prototype = {
@@ -60,14 +60,14 @@ View.prototype = {
   drawHeader: function(game, leader) {
     $('.game-header').text("NAME HERE - Round " + game.round.round_num);
     $('.leader-container .leader-name').text(leader.name);
-    $(".blackcard-content").text(leader.blackcard.content); 
+    $(".blackcard-content").text(leader.blackcard.content);
   },
 
   drawPlayerList: function(game) {
     missing_submissions = game.round.missing_submissions;
     submissions = game.round.submissions;
     this.drawMissingSubmissions(missing_submissions);
-    this.drawGivenSubmissions(submissions);   
+    this.drawGivenSubmissions(submissions);
   },
 
   drawMissingSubmissions: function(missing_submissions) {
@@ -90,7 +90,7 @@ View.prototype = {
       listItem.find('.player-status').text(" is in!")
       listItem.find('.player-score').text(submissions[i].player_score)
       var listItem = $('.player-list ul li:first').clone();
-    };  
+    };
   },
 
   drawPlayableCards: function(game, user){
@@ -253,13 +253,10 @@ Controller.prototype = {
 // ------------ GLOBAL -----------
 $.cookie.json = true;
 
-
-
 var bindClearCookie = function($el) {
   $el.on("click", function(event) {
     console.log("Running bindClearCookie event");
     $.removeCookie('session');
-    // $("#user").trigger("create");
     location.reload();
   });
 };
@@ -272,7 +269,6 @@ var bindSetCookie = function($submit, $user_id, $game_ids) {
     var cookie = { "user_id": $user_id.val(),
                    "game_ids": game_ids };
     $.cookie('session', cookie);
-    // $("#user").trigger("create");
     setTimeout(
       function(){
         location.reload();
@@ -289,7 +285,6 @@ var bindSetCookie = function($submit, $user_id, $game_ids) {
 
 
 // USER
-
 
 $( document ).delegate("#user", "pageinit", function() {
   console.log("INIT RUNNING!")
@@ -312,4 +307,3 @@ $( document ).delegate("#user", "pageinit", function() {
     $(".user-logout").hide();
   }
 });
-
