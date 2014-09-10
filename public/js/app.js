@@ -224,6 +224,9 @@ Controller.prototype = {
     if (this.user.need_submission === false) {
       $('.choose-button-container').hide()
     }
+    else {
+      $('.choose-button-container').hide().show()
+    }
     this.view.drawPlayerList(this.game);
   },
 
