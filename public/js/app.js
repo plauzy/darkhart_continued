@@ -221,7 +221,8 @@ Controller.prototype = {
     // this.view.drawHeader(this.game, this.leader);
     this.view.drawHeader(this.game);
     this.view.drawLeaderContainer(this.leader);
-    if (!this.user.need_submission) {
+    debugger
+    if (this.user.need_submission === false) {
       $('.choose-button-container').hide()
     }
     this.view.drawPlayerList(this.game);
