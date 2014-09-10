@@ -1,8 +1,23 @@
 <div class="container">
   <div class="row">
     <div id="left" class="col-md-4">
+
+
+    <h3>Users List</h3>
+    <h4>GET api/users</h4>
+    <h5>data: user_id (optional)</h5>
+    <form id ="usersListForm" role = "form">
+      <div class ="form-group">
+        <input class="form-control" type="text" name="initiator_id" placeholder="User ID (if included, excludes user from list)">
+      </div>
+      <button type="submit" value="User List" class="btn btn-default">User List</button>
+      </form>
+
+      <br><br>
+
       <h3>New Game Widget</h3>
-      <h2>POST api/games</h2>
+      <h4>POST api/games</h4>
+      <h5>data: user_id, invite_ids, game_name</h5>
       <form id="newGameForm" role="form">
         <div class ="form-group">
           <input class="form-control" type="text" name="game_name" placeholder="Game name...">
@@ -19,39 +34,24 @@
         <button type="submit" value="Create Game" class="btn btn-default">
           Create Game</button>
         </form>
-
         <br><br>
-        <h3>Round Recap</h3>
 
-        <form id = "previousRoundRecap" role = "form">
-          <div class ="form-group">
-            <input class="form-control" type="text" name="game_id" placeholder="Game id...">
-          </div>
-
-          <div class ="form-group">
-            <input class="form-control" type="text" name="initiator_id" placeholder="Your User ID">
-          </div>
-          <div class ="form-group">
-            <input class="form-control" type="text" name="round_num" placeholder="Round #">
-          </div>
-          <button type="submit" value="Find Previous Round Recap" class="btn btn-default">
-            Get Round Recap</button>
-          </form>
-          <br><br>
 
           <h3>Game Inventory</h3>
+          <h4>GET api/users/:user_id</h4>
+          <h5>data: user_id</h5>
           <form id = "gameInventory" role = "form">
             <div class ="form-group">
               <input class="form-control" type="text" name="initiator_id" placeholder="Your User ID">
             </div>
             <button type="submit" value="gameinventory" class="btn btn-default">
-              Get Game Inventory</button>
+              Game Inventory</button>
             </form>
 
-
-
             <br><br>
-            <h3>Get Current Gamestate</h3>
+            <h3>Current Gamestate (for a user)</h3>
+            <h4>GET api/games/:game_id</h4>
+            <h5>data: user_id</h5>
             <form id = "currentGameState" role = "form">
               <div class ="form-group">
                 <input class="form-control" type="text" name="game_id" placeholder="Game id...">
@@ -61,12 +61,35 @@
                 <input class="form-control" type="text" name="initiator_id" placeholder="Your User ID">
               </div>
               <button type="submit" value="gamestate" class="btn btn-default">
-                Get Current Gamestate</button>
+                Gamestate for User</button>
               </form>
 
               <br><br>
+              <h3>Round Recap</h3>
+              <h4>GET api/games/:game_id/rounds/:round_num</h4>
+              <h5>data: user_id</h5>
+              <form id = "previousRoundRecap" role = "form">
+                <div class ="form-group">
+                  <input class="form-control" type="text" name="game_id" placeholder="Game id...">
+                </div>
 
-            <h3>Get Game Recap</h3>
+                <div class ="form-group">
+                  <input class="form-control" type="text" name="initiator_id" placeholder="Your User ID">
+                </div>
+                <div class ="form-group">
+                  <input class="form-control" type="text" name="round_num" placeholder="Round #">
+                </div>
+                <button type="submit" value="Find Previous Round Recap" class="btn btn-default">
+                  Round Recap</button>
+                </form>
+              <br><br>
+
+
+
+
+            <h3>Game Recap</h3>
+            <h4>GET api/games/:game_id/recap</h4>
+            <h5>data: user_id, game_id</h5>
             <form id = "gameRecap" role = "form">
               <div class ="form-group">
                 <input class="form-control" type="text" name="game_id" placeholder="Game ID">
@@ -77,12 +100,14 @@
               </div>
 
               <button type="submit" value="gamerecap" class="btn btn-default">
-                Get Game Recap</button>
+                Game Recap</button>
               </form>
 
               <br><br>
 
-              <h3>Make Submission</h3>
+              <h3>Submit Card</h3>
+              <h4>POST api/games/:game_id/cards/:card_id</h4>
+              <h5>data: user_id</h5>
               <form id = "makeSubmission" role = "form">
                 <div class ="form-group">
                   <input class="form-control" type="text" name="game_id" placeholder="Game id...">
@@ -95,7 +120,7 @@
                   <input class="form-control" type="text" name="card_id" placeholder="Card Id to submit...">
                 </div>
                 <button type="submit" value="gamestate" class="btn btn-default">
-                  Choose White Card</button>
+                  Submit Card</button>
                 </form>
                 <br><br>
 

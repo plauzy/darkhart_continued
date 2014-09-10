@@ -1,3 +1,5 @@
+//http://demos.jquerymobile.com/1.0/docs/pages/page-scripting.html
+
 $(document).on("ready page:load", function() {
   var view = new View;
   var controller = new Controller(view);
@@ -16,7 +18,7 @@ var User = function(object) {
   this.name = object.player_self.player_name;
   this.score = object.player_self.player_score;
   this.email = object.player_self.player_email;
-  this.playable_cards = []
+  this.playable_cards = [];
   for( var i = 0; i < object.player_self.player_cards.length; i++) {
     playable_card = new PlayableCard(object.player_self.player_cards[i])
     this.playable_cards.push(playable_card);
@@ -26,11 +28,11 @@ var User = function(object) {
 var Game = function(object) {
   this.game_id = object.game_id;
   this.round = new Round(object);
-  this.active = object.active;
   this.game_name = object.game_name;
 };
 
 var Round = function(object) {
+  this.active = object.active;
   this.round_num = object.round;
   this.submissions = object.submissions;
   this.missing_submissions = object.missing_submissions;
@@ -50,6 +52,27 @@ var Blackcard = function(object) {
   this.content = object.blackcard_content
 }
 
+var GameRecap = function(object) {
+  this.active = object.active;
+  this.blackcard_content = object.blackcard_content;
+  this.leader_email = object.leader_email;
+  this.leader_id = object.leader_id;
+  this.leader_name = object.leader_name;
+  this.round_num = object.round_num;
+  this.winner_email = object.winner_email;
+  this.winner_id = object.winner_id;
+  this.winner_name = object.winner_name;
+  this.winner_whitecard = object.winner_whitecard;
+}
+
+var GameRecapList = function(jsonResponse) {
+  this.gameRecaps = [];
+  for (var i = jsonResponse.length; i > 0; i--) {
+    gameRecap = new GameRecap(jsonResponse[i-1])
+    this.gameRecaps.push(gameRecap)
+  };
+}
+
 //VIEW
 var View = function() {
 
@@ -58,7 +81,7 @@ var View = function() {
 View.prototype = {
 
   drawHeader: function(game, leader) {
-    $('.game-header').text("NAME HERE - Round " + game.round.round_num);
+    $('.game-header').text(game.game_name + " - Round " + game.round.round_num);
     $('.leader-container .leader-name').text(leader.name);
     $(".blackcard-content").text(leader.blackcard.content);
   },
@@ -66,31 +89,36 @@ View.prototype = {
   drawPlayerList: function(game) {
     missing_submissions = game.round.missing_submissions;
     submissions = game.round.submissions;
-    this.drawMissingSubmissions(missing_submissions);
-    this.drawGivenSubmissions(submissions);
+    var listItem = $('.player-list ul li:first').clone();
+    var listItemCopy = $('.player-list ul li:first').clone();
+    $('.player-list ul li').remove();
+    this.drawMissingSubmissions(listItem, missing_submissions);
+    this.drawGivenSubmissions(listItemCopy, submissions);
   },
 
-  drawMissingSubmissions: function(missing_submissions) {
-    var listItem = $('.player-list ul li:first').clone();
-    $('.player-list ul li:first').remove();
-    for (var i = 0; i < missing_submissions.length; i++) {
-      $('.player-list ul').append(listItem);
-      listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
-      listItem.find('.player-status').text(" has not submitted a white card.")
-      listItem.find('.player-score').text(missing_submissions[i].player_score);
-      var listItem = $('.player-list ul li:first').clone();
-    };
+  drawMissingSubmissions: function(listItem, missing_submissions) {
+
+    if (missing_submissions.length > 0) {
+      for (var i = 0; i < missing_submissions.length; i++) {
+        $('.player-list ul').append(listItem);
+        listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
+        listItem.find('.player-status').text(" has not submitted a white card.")
+        listItem.find('.player-score').text(missing_submissions[i].player_score);
+        var listItem = $('.player-list ul li:first').clone();
+      };
+    }
   },
 
-  drawGivenSubmissions: function(submissions) {
-    var listItem = $('.player-list ul li:first').clone();
-    for (var i = 0; i < submissions.length; i++) {
-      $('.player-list ul').append(listItem);
-      listItem.find('.player-data .player-name').text(submissions[i].player_name)
-      listItem.find('.player-status').text(" is in!")
-      listItem.find('.player-score').text(submissions[i].player_score)
-      var listItem = $('.player-list ul li:first').clone();
-    };
+  drawGivenSubmissions: function(listItem, submissions) {
+    if (submissions.length > 0) {
+      for (var i = 0; i < submissions.length; i++) {
+        $('.player-list ul').append(listItem);
+        listItem.find('.player-data .player-name').text(submissions[i].player_name)
+        listItem.find('.player-status').text(" is in!")
+        listItem.find('.player-score').text(submissions[i].player_score)
+        var listItem = $('.player-list ul li:first').clone();
+      };
+    }
   },
 
   drawPlayableCards: function(game, user){
@@ -107,28 +135,48 @@ View.prototype = {
     }
   },
 
+  drawSubmissionCards: function(game) {
+    var cardElement = $('#choose .card-list li:first').clone();
+    $('#choose .card-list li:first').remove();
+
+    var submissionCards = game.round.submissions
+    for (var i = 0; i < submissionCards.length; i++) {
+      $('#choose .card-list').append(cardElement)
+      var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
+      cardElement.find('a').attr('href', cardSubmitLink )
+      cardElement.find('.card-content').text(submissionCards[i].submission_content)
+      var cardElement = $('#choose .card-list li:first').clone();
+    }
+  },
+
   drawRecap: function(game) {
-    game.round.winning_submission = "MEOW"
-    game.round.winning_submission.card_content = "tits"
+    this.drawWinningSubmission(game);
+    this.drawLosingSubmissions(game);
+  },
 
-    //Draw winning submission
-    var submissionDiv = $('.submission-winner-container ul li:first')
-    submissionDiv.find(".player-name").text("Winner to go Here")
-    submissionDiv.find(".player-card-content").text("Winning Content to go here")
+  drawWinningSubmission: function(game) {
+    var submissionDiv = $('.submission-winner-container ul li:first');
+    submissionDiv.find(".player-name").text(game.round.winning_submission.player_name);
+    submissionDiv.find(".player-card-content").text(game.round.winning_submission.submission_content);
+  },
 
-    //Draw losing submissions
-    game.round.losing_submissions = [1,2,3]
+  drawLosingSubmissions: function(game) {
     var losingDiv = $(".submission-loser-container ul li:first").clone();
     $(".submission-loser-container ul li:first").remove();
-    losingSubmissions = game.round.losing_submissions
+    var losingSubmissions = game.round.losing_submissions
     for (var i = 0; i < losingSubmissions.length; i ++) {
-      losingDiv.find(".player-name").text("Meow")
-      losingDiv.find(".player-card-content").text("titties......")
+      losingDiv.find(".player-name").text(losingSubmissions[i].player_name)
+      losingDiv.find(".player-card-content").text(losingSubmissions[i].submission_content)
       $(".submission-loser-container ul").append(losingDiv)
       var losingDiv = $(".submission-loser-container ul li:first").clone();
     }
+  },
+
+  drawPreviousRecaps: function(game, user, leader) {
+
   }
 }
+
 
 //CONTROLLER
 var Controller = function(view) {
@@ -153,16 +201,24 @@ Controller.prototype = {
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
     console.log("made it to delegate submission");
-    debugger
     this.view.drawHeader(this.game, this.leader);
-
-    this.view.drawPlayableCards(this.game, this.user);
+    if (this.user.user_id == this.leader.user_id) {
+      this.view.drawSubmissionCards(this.game);
+    }
+    else {
+      this.view.drawPlayableCards(this.game, this.user);
+    };
   },
 
   delegateRecap: function() {
     $.mobile.changePage("#recap");
     this.view.drawHeader(this.game, this.leader);
-    this.view.drawRecap(this.game)
+    this.view.drawRecap(this.game);
+  },
+
+  delegateGameOverview: function(event) {
+    $.mobile.changePage("#recap");
+    this.view.drawPreviousRecaps(this.game, this.user, this.leader)
   },
 
   parseAjaxResponse: function(data) {
@@ -188,30 +244,44 @@ Controller.prototype = {
     }.bind(this));
   },
 
-  getPreviousRoundRecap: function(event) {
+ getPreviousRoundRecaps: function(event) {
     event.preventDefault();
-    var form = $(event.target);
-    initiator_id = form.find( "input[name='initiator_id']" ).val();
-    game_id=  form.find( "input[name='game_id']" ).val();
-    round_num = form.find( "input[name='round_num']").val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id + "/rounds/" + round_num;
+    var initiator_id = $.cookie('session').user_id
+    var game_id = $.cookie('session').game_ids[0]
+    var url = "/api/games/" + game_id + "/recap";
 
-    var posting = $.get(url);
+    var posting = $.get(url, { "user_id": initiator_id });
     posting.done(function( data ) {
-      $("#json").empty().append(JSON.stringify(data, undefined, 2))
-      console.log(data);
-      this.parseAjaxResponse(data)
+      var gameRecapList = new GameRecapList(data)
+
     }.bind(this));
 
   },
+
+  // getPreviousRoundRecap: function(event) {
+  //   event.preventDefault();
+  //   var form = $(event.target);
+  //   initiator_id = form.find( "input[name='initiator_id']" ).val();
+  //   game_id=  form.find( "input[name='game_id']" ).val();
+  //   round_num = form.find( "input[name='round_num']").val();
+  //   url = "/api/users/" + initiator_id + "/games/" + game_id + "/rounds/" + round_num;
+
+  //   var posting = $.get(url);
+  //   posting.done(function( data ) {
+  //     $("#json").empty().append(JSON.stringify(data, undefined, 2))
+  //     console.log(data);
+  //     this.parseAjaxResponse(data)
+  //   }.bind(this));
+
+  // },
 
   getCurrentGameState: function(event) {
     event.preventDefault();
     var form = $(event.target);
     initiator_id = $.cookie('session').user_id
     game_id = $.cookie('session').game_ids[0]
-    url = "/api/users/" + initiator_id + "/games/" + game_id;
-    var posting = $.get( url);
+    url = "/api/games/" + game_id;
+    var posting = $.get(url, { "user_id": initiator_id } );
     posting.done(function( data ) {
       console.log(data);
       this.parseAjaxResponse(data);
@@ -223,23 +293,35 @@ Controller.prototype = {
 
   makeSubmission: function(event) {
     event.preventDefault();
-    var form = $(event.target);
-    initiator_id = $.cookie('session').user_id
-    game_id = $.cookie('session').game_ids[0]
-    card_id = form.find( "input[name='card_id']" ).val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id + "/cards/" + card_id;
-    var posting = $.get(url);
+    var htmlLink = $(event.target).attr('href')
+    var array = htmlLink.split("/");
+    var card_id = parseInt(array[array.length-1])
+    var initiator_id = $.cookie('session').user_id
+    var game_id = $.cookie('session').game_ids[0];
+    url = "/api/games/" + game_id + "/cards/" + card_id;
 
+    var posting = $.post(url,  { "user_id": initiator_id });
     posting.done(function( data ) {
-      $("#json").empty().append(JSON.stringify(data, undefined, 2))
-      console.log(data);
-      this.parseAjaxResponse(data)
+      this.parseAjaxResponse(data);
+
+      console.log(data)
+      if ( this.game.round.active ) {
+        this.delegateGame();
+      }
+      else {
+        this.delegateRecap();
+      }
+
+
     }.bind(this));
   },
 
   bindEvents: function() {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
+
+    $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this))
+    // $('#active-games-group').on('click', 'a', this.getPreviousRoundRecaps)
 
     //Saving for refactoring later
     // $("#newGameForm").on("submit", this.createGame.bind(this))
@@ -328,7 +410,6 @@ var bindSetCookie = function($submit, $user_id, $user_password, $game_ids) {
 
 
 // USER
-
 $( document ).delegate("#create-account", "pageinit", function() {
   bindCreateUser( $("#user-create-button"),$("#user-name"),$("#user-password"),$("#user-phone"),$("#user-email") );
 });
@@ -345,7 +426,6 @@ $( document ).delegate("#user", "pageinit", function() {
     $(".login").hide();
     $(".create-account").hide();
     $(".user-logout").show();
-
   }
   else {
     console.log("No cookie tected.")
