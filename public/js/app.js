@@ -22,7 +22,6 @@ var User = function(object) {
 
   for( var i = 0; i < object.player_self.player_cards.length; i++) {
     playable_card = new PlayableCard(object.player_self.player_cards[i])
-    debugger
     this.playable_cards.push(playable_card);
   };
 }
@@ -65,6 +64,7 @@ var GameRecap = function(object) {
   this.winner_id = object.winner_id;
   this.winner_name = object.winner_name;
   this.winner_whitecard = object.winner_whitecard;
+  this.game_name = object.game_name
 }
 
 var GameRecapList = function(jsonResponse) {
@@ -221,7 +221,6 @@ Controller.prototype = {
     // this.view.drawHeader(this.game, this.leader);
     this.view.drawHeader(this.game);
     this.view.drawLeaderContainer(this.leader);
-    debugger
     if (this.user.need_submission === false) {
       $('.choose-button-container').hide()
     }
@@ -248,10 +247,10 @@ Controller.prototype = {
     this.view.drawRecap(this.game);
   },
 
-  delegateGameOverview: function(event) {
+  delegateGameOverview: function() {
     $.mobile.changePage("#game-overview");
-    // this.view.drawHeader(this.game);
-    //small issue with game name!
+    // this.view.drawHeader(this.gameRecapList.gameRecaps[0]);
+
     this.view.drawGameOverview(this.gameRecapList.gameRecaps)
   },
 
@@ -304,9 +303,8 @@ Controller.prototype = {
     posting.done(function( data ) {
       $("#json").empty().append(JSON.stringify(data, undefined, 2))
       console.log(data);
-      this.parseAjaxResponse(data)
+      this.parseAjaxResponse(data);
     }.bind(this));
-
   },
 
   getCurrentGameState: function(event) {
