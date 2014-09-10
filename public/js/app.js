@@ -426,11 +426,13 @@ $( document ).delegate("#user", "pageinit", function() {
     $(".login").hide();
     $(".create-account").hide();
     $(".user-logout").show();
+    $(".create-game").show();
   }
   else {
     console.log("No cookie tected.")
     $(".login").show();
     $(".create-account").show();
     $(".user-logout").hide();
+    $(".create-game").hide();
   }
 });
