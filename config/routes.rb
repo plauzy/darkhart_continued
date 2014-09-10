@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  #return all users
+  get 'api/users' => 'api/users#index'
+
   # new game form
   post 'api/games' => 'api/games#new_game'
   # previous round recap
