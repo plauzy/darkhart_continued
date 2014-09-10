@@ -20,11 +20,14 @@ class GameRecap < GameGetter
       active: round_active?,
       leader_id: round.leader_id,
       leader_name: get_leader.user.name,
+      leader_email: get_leader.user.email,
       blackcard_content: round.blackcard.content
     }
+
     if @winner
-      rd_recap[:winner_id] = @winner.owner_user_id,
-      rd_recap[:winner_name] = @winner.owner_name ,
+      rd_recap[:winner_id] = @winner.owner_user_id
+      rd_recap[:winner_email] = @winner.owner_email
+      rd_recap[:winner_name] = @winner.owner_name
       rd_recap[:winner_whitecard] = @winner.card_content
     end
 

@@ -21,6 +21,7 @@ class GameInventory
         current_round: round.round_num,
         need_submission: need_submission?(game, submissions, seat, round),
         leader_name: leader.name,
+        leader_email: leader.email,
         blackcard_content: Blackcard.find(round.blackcard_id).content }
     end
 
