@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     if user && user.authenticate(params[:password])
       render json: {token:user.remember_token}
     else
-      render :status => 401
+      render json: {message:"Authentication failed"}, status: 401
     end
   end
 

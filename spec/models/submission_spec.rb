@@ -10,7 +10,7 @@ RSpec.describe Submission, :type => :model do
     Whitecard.delete_all
     Blackcard.delete_all
     Submission.delete_all
-    @user = User.create(name:"Test User")
+    @user = User.create(name:"Test User",password:"password")
     @game = Game.create(name:"Test Game")
     @seat = Seat.create(user_id:@user.id,game_id:@game.id)
     @whitecard = Whitecard.create(content:"Test White Card")

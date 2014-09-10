@@ -6,7 +6,7 @@ RSpec.describe User, :type => :model do
   end
 
   it 'should add a User to the database' do
-    expect{User.create(name:'Brooks')}.to change{User.count}.by(1)
+    expect{User.create(name:'Brooks',password:"password")}.to change{User.count}.by(1)
   end
 
   it 'should not add a user to the database' do

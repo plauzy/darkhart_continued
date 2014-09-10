@@ -261,19 +261,32 @@ var bindClearCookie = function($el) {
   });
 };
 
-var bindSetCookie = function($submit, $user_id, $game_ids) {
+var bindSetCookie = function($submit, $user_id, $user_password, $game_ids) {
   $submit.on("click", function(event) {
     console.log("Running bindSetCookie event");
+    var user_id = $user_id.val();
+    var user_password = $user_password.val();
     var game_ids = $game_ids.val().split(",");
     for (var a in game_ids ) { game_ids[a] = parseInt(game_ids[a], 10); }
-    var cookie = { "user_id": $user_id.val(),
-                   "game_ids": game_ids };
-    $.cookie('session', cookie);
-    setTimeout(
-      function(){
-        location.reload();
-      },100
-    );
+    $.ajax({
+      type: "POST",
+      url: '/api/users/signin',
+      data: {user_id:user_id,password:user_password}
+    })
+    .done(function(response){
+      var cookie = { "user_id": user_id,
+                     "game_ids": game_ids,
+                     "token": response.token };
+      $.cookie('session', cookie);
+      setTimeout(
+        function(){
+          location.reload();
+        },100
+      );
+    })
+    .fail(function(jqXHR,response){
+      alert("Signin failed");
+    })
   });
 };
 
@@ -290,7 +303,7 @@ $( document ).delegate("#user", "pageinit", function() {
   console.log("INIT RUNNING!")
   $('#user').trigger('create')
   cookie = $.cookie('session');
-  bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
+  bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-user-password"),$("#cookie-game-ids") );
   bindClearCookie( $("#cookie-clear") );
   bindClearCookie( $(".user-logout") );
   if (cookie) {

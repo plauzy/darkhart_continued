@@ -11,7 +11,7 @@ RSpec.describe Round, :type => :model do
     PlayableCard.destroy_all
     Seat.destroy_all
     @game = Game.create(name: "Test Game")
-    @user = User.create(name: "test dummy")
+    @user = User.create(name: "test dummy",password:"password")
     @seat = Seat.create(user_id:@user.id, game_id: @game.id)
     @blackcard = Blackcard.create(content:"Test Black Card")
     @whitecard = Whitecard.create(content:"Test White Card")

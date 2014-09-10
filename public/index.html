@@ -17,6 +17,11 @@
   <div id='home' data-role='page'>
     <div data-role='content'>
       <a href='#user' class='ui-btn'>User</a>
+<!--     <form id="testform" action="">
+      Username: <input type="text" name="user_id">
+      Password: <input type="password" name="password">
+      <input type="submit" value="Submit">
+    </form> -->
     </div>
   </div>
 
@@ -68,6 +73,8 @@
       <form id='cookie-widget'>
         <label>User ID</label>
         <input type='text' id='cookie-user-id'/>
+        <label>Password</label>
+        <input type='password' id='cookie-user-password'/>
         <label>Game IDs</label>
         <input type='text' id='cookie-game-ids' placeholder='Separated by commas.'/>
         <a href='#user' class='ui-btn' id='cookie-submit'>Create Cookie</a>
@@ -89,6 +96,9 @@
       <form action="#" method="post">
         <label for='user-name'>Name</label>
         <input type='text' name='user-name' id='user-name' value=''/>
+
+        <label for='user-password'>Password</label>
+        <input type='password' name='user-password' id='user-password' value=''/>
 
         <label for='user-phone'>Phone Number</label>
         <input type='number' name='user-phone' id='user-phone' value=''/>
