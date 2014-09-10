@@ -15,20 +15,22 @@ class UsersController < ApplicationController
   def signin
     user = User.find(params[:user_id])
     if user && user.authenticate(params[:password])
-      render json: {token:user.remember_token}
+      render json: {token:user.remember_token,user_id:user.id}
     else
       render json: {message:"Authentication failed"}, status: 401
     end
   end
 
   def create
-   @user = User.new(user_params)
-    if @user.save
-      flash[:success] = "Welcome to Dark Heart!"
+   user = User.new(name:params[:name],password:params[:password],email:params[:email])
+    if user.save
+      render json: {token:user.remember_token}
+      # flash[:success] = "Welcome to Dark Heart!"
       # session[:user_id] = @user.id
       # redirect_to @user
     else
-      render 'new'
+      render json: {message:"Account creation failed"}, status: 401
+      # render 'new'
     end
   end
 

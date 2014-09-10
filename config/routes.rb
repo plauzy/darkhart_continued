@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   # user authentication
   post "/api/users/signin" => 'users#signin'
   # new user creation
-  post "/api/users/new" => ''
+  post "/api/users/new" => 'users#create'
 
   get '/tool' => "devtool#index"
   root 'devtool#index'

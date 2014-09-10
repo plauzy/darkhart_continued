@@ -253,6 +253,36 @@ Controller.prototype = {
 // ------------ GLOBAL -----------
 $.cookie.json = true;
 
+var bindCreateUser = function($submit, $user_name, $user_password, $user_phone, $user_email) {
+  $submit.on("click", function(event) {
+    var user_name = $user_name.val();
+    var user_password = $user_password.val();
+    var user_phone = $user_phone.val();
+    var user_email = $user_email.val();
+    event.preventDefault();
+    console.log("Running User Creation");
+    $.ajax({
+      type: "POST",
+      url: '/api/users/new',
+      data: {name:user_name,password:user_password,email:user_email,phone:user_phone}
+    })
+    .done(function(response){
+      var cookie = { "user_id": response.user_id,
+                     "token": response.token };
+      $.cookie('session', cookie);
+      setTimeout(
+        function(){
+          $.mobile.changePage("#user");
+          location.reload();
+        },100
+      );
+    })
+    .fail(function(jqXHR,response){
+      alert("Account creation failed");
+    })
+  });
+}
+
 var bindClearCookie = function($el) {
   $el.on("click", function(event) {
     console.log("Running bindClearCookie event");
@@ -298,6 +328,10 @@ var bindSetCookie = function($submit, $user_id, $user_password, $game_ids) {
 
 
 // USER
+
+$( document ).delegate("#create-account", "pageinit", function() {
+  bindCreateUser( $("#user-create-button"),$("#user-name"),$("#user-password"),$("#user-phone"),$("#user-email") );
+});
 
 $( document ).delegate("#user", "pageinit", function() {
   console.log("INIT RUNNING!")
