@@ -25,7 +25,7 @@ class Api::GamesController < ApplicationController
   end
 
   def game_recap
-    recap = GameRecap.new(params["user_id"])
+    recap = GameRecap.new(params["user_id"], params["game_id"])
     render :json => recap.recap
   end
 end
