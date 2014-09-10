@@ -2,7 +2,7 @@ class Api::UsersController < ApplicationController
 
   def index
     users = UserGetter.new(params["user_id"])
-    render json: > users.list
+    render :json => users.list
   end
 
   def show
