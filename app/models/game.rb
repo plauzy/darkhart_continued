@@ -8,4 +8,9 @@ class Game < ActiveRecord::Base
   def total_rounds
     self.rounds.length
   end
+
+  def active?
+    # Checks if the last round in the game contains a winning submission.
+    self.rounds.where(round_num: self.rounds.length)[0].submissions.where(winner: true)[0] ? false : true
+  end
 end
