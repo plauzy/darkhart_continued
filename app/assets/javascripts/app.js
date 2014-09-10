@@ -46,6 +46,37 @@ $(function() {
     // Put the results in a div
     posting.done(function( data ) {
       $("#json").empty().append(JSON.stringify(data, undefined, 2))
+
+    });
+  });
+
+  $( "#gameRecap" ).submit(function( event ) {
+    event.preventDefault();
+    var $form = $( this ),
+      initiator_id = $form.find( "input[name='initiator_id']" ).val();
+      game_id = $form.find( "input[name='game_id']" ).val();
+      url = "/api/games/" + game_id + "/recap";
+
+      var posting = $.get(url, { "user_id": initiator_id, "game_id": game_id });
+    // Put the results in a div
+    posting.done(function( data ) {
+      $("#json").empty().append(JSON.stringify(data, undefined, 2))
+
+    });
+  });
+
+
+  $( "#gameInventory" ).submit(function( event ) {
+    event.preventDefault();
+    var $form = $( this ),
+      initiator_id = $form.find( "input[name='initiator_id']" ).val();
+      url = "/api/users/" + initiator_id;
+
+      var posting = $.get(url, { "user_id": initiator_id });
+      console.log(initiator_id)
+    // Put the results in a div
+    posting.done(function( data ) {
+      $("#json").empty().append(JSON.stringify(data, undefined, 2))
       console.log(data);
     });
   });
