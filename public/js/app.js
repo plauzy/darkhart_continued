@@ -356,7 +356,6 @@ Controller.prototype = {
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
 
     $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
-    $('#')
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
 
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
