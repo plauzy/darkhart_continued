@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # make decision
   post "/api/games/:game_id/round/:round_id" => 'api/games#submit_card'
 
+  get "/api/users/:user_id" => 'api/games#inventory'
 
   get '/tool' => "devtool#index"
   root 'devtool#index'

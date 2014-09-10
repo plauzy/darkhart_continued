@@ -15,7 +15,7 @@ class GameInventory
       round = Helper.current_round(game)[0]
       submissions = round.submissions
       seat = Seat.where(["user_id = ? and game_id = ?", @user.id, game.id])[0]
-      leader = User.find(round.leader_id)
+      leader = Seat.find(round.leader_id)
       { game_id: game.id,
         active: game.active?,
         current_round: round.round_num,

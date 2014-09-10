@@ -18,4 +18,9 @@ class Api::GamesController < ApplicationController
     game = GameGetter.new(params["game_id"], params["user_id"], update.recap_round_num)
     render :json => game.game_state
   end
+
+  def inventory
+    inventory = GameInventory.new(params["user_id"])
+    render :json => inventory.list
+  end
 end
