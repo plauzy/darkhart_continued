@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
+  #return all users
+  get 'api/users' => 'api/users#index'
+
   # new game form
   post 'api/games' => 'api/games#new_game'
   # previous round recap
   get "/api/games/:game_id/rounds/:round_num" => 'api/games#game_state'
   # current game state
+  get "/api/games/:game_id/recap" => 'api/games#game_recap'
+
   get "/api/games/:game_id" => 'api/games#game_state'
   # makesubmission
   get "/api/games/:game_id/cards/:card_id" => 'api/games#submit_card'
@@ -11,9 +16,11 @@ Rails.application.routes.draw do
   post "/api/games/:game_id/round/:round_id" => 'api/games#submit_card'
 
   # user authentication
-  post "/api/users/signin" => 'users#signin'
+  post "/api/users/signin" => 'api/users#signin'
   # new user creation
-  post "/api/users/new" => 'users#create'
+  post "/api/users/new" => 'api/users#create'
+  # user game list
+  get "/api/users/:user_id" => 'api/games#inventory'
 
   get '/tool' => "devtool#index"
   root 'devtool#index'
