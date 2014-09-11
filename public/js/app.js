@@ -150,8 +150,8 @@ View.prototype = {
     for (var i = 0; i < submissionCards.length; i++) {
       $('#choose .card-list').append(cardElement)
 
-      var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
-      cardElement.find('a').attr('href', cardSubmitLink )
+      // var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
+      cardElement.find('a').attr('href', submissionCards[i].submission_id )
       cardElement.find('.card-content').text(submissionCards[i].submission_content)
       var cardElement = $('#choose .card-list li:first').clone();
     }
@@ -170,7 +170,7 @@ View.prototype = {
 
   drawLosingSubmissions: function(game) {
     var losingDiv = $(".submission-loser-container ul li:first").clone();
-    $(".submission-loser-container ul li:first").remove();
+    $(".submission-loser-container ul").empty();
     var losingSubmissions = game.round.losing_submissions
     for (var i = 0; i < losingSubmissions.length; i ++) {
       losingDiv.find(".player-name").text(losingSubmissions[i].player_name)
@@ -184,7 +184,7 @@ View.prototype = {
     console.log(gameRecaps)
     listElement = $('#game-overview .prev-rounds-list ul')
     listItem = $('#game-overview .prev-rounds-list ul li').clone();
-    $('#game-overview .prev-rounds-list ul li').empty();
+    $('#game-overview .prev-rounds-list ul').empty();
     for (var i = 0; i < gameRecaps.length; i++) {
       if (gameRecaps[i].active === true) {
         this.drawOpenRoundHeader(gameRecaps[i])
@@ -299,10 +299,10 @@ Controller.prototype = {
   getPreviousRoundRecap: function(event) {
     event.preventDefault();
     var round_num = null;
-    // if (!$(event.target.parents).hasClass("prev-rounds-list")) {
+    if (!$(event.target.parents).hasClass("prev-rounds-list")) {
       var el = $(event.target).parents('.game-round-link')[0];
       round_num = parseInt($(el).attr('href'));
-    // }
+    }
     console.log('made it')
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0]
@@ -336,10 +336,10 @@ Controller.prototype = {
   makeSubmission: function(event) {
     event.preventDefault();
     var cardId = null;
-    // if (!$(event.target.parents).hasClass("list-view")) {
+    if (!$(event.target.parents).hasClass("list-view")) {
       el = $(event.target).parents('.card-link')[0];
       cardId = parseInt($(el).attr('href'));
-    // }
+    }
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0];
     url = "/api/games/" + game_id + "/cards/" + cardId;
