@@ -523,6 +523,8 @@ Controller.prototype = {
     $("#user").on('pagebeforecreate', function() {
       that.accountManager();
       that.getUserGames(); });
+
+    $("#game a[attr='back']")
   }
 }
 
