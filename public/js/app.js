@@ -273,13 +273,12 @@ View.prototype = {
 //CONTROLLER
 var Controller = function(view) {
   this.bindEvents();
+  this.bindPageCreates();
   this.view = view;
   this.user = null;
   this.game = null;
   this.leader = null;
   this.userGamesList = null;
-  this.userCookie = null;
-  this.gameCookie = null;
   this.gameRecapList = null;
 };
 
@@ -379,8 +378,7 @@ Controller.prototype = {
     }.bind(this));
   },
 
-  getGameOverview: function(event) {
-    event.preventDefault();
+  getGameOverview: function() {
     var url = "/api/games/" + gameId() + "/recap";
     var posting = $.get(url, { "user_id": userId() });
     posting.done(function( data ) {
@@ -456,14 +454,16 @@ Controller.prototype = {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this));
     // $("#user .active-game").on('click', this.getGameOverview.bind(this) )
-    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
-
-
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
     $('#user-login').on('click', this.loginUser.bind(this)) //this.getUserGames.bind(this)
     // $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
+  },
+
+  bindPageCreates: function() {
+    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
+
   }
 }
 
