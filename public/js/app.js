@@ -98,7 +98,7 @@ View.prototype = {
     submissions = game.round.submissions;
     var listItem = $('.player-list ul li:first').clone();
     var listItemCopy = $('.player-list ul li:first').clone();
-    $('.player-list ul li').remove();
+    $('.player-list ul').empty();
     this.drawMissingSubmissions(listItem, missing_submissions);
     this.drawGivenSubmissions(listItemCopy, submissions);
   },
@@ -144,7 +144,7 @@ View.prototype = {
 
   drawSubmissionCards: function(game) {
     var cardElement = $('#choose .card-list li:first').clone();
-    $('#choose .card-list li:first').remove();
+    $('#choose .card-list').empty();
 
     var submissionCards = game.round.submissions
     for (var i = 0; i < submissionCards.length; i++) {
@@ -285,6 +285,7 @@ Controller.prototype = {
 
   getGameOverview: function(event) {
     event.preventDefault();
+    debugger
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0]
     var url = "/api/games/" + game_id + "/recap";
@@ -339,6 +340,9 @@ Controller.prototype = {
     if (!$(event.target.parents).hasClass("list-view")) {
       el = $(event.target).parents('.card-link')[0];
       cardId = parseInt($(el).attr('href'));
+    }
+    else {
+      debugger
     }
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0];
