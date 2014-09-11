@@ -314,9 +314,11 @@ Controller.prototype = {
     this.view.drawLeaderContainer(this.leader);
     if (this.user.need_submission === false) {
       $('.choose-button-container').hide()
+      $('.game-submitted').show();
     }
     else {
-      $('.choose-button-container').hide().show()
+      $('.choose-button-container').show()
+      $('.game-submitted').hide();
     }
     this.view.drawPlayerList(this.game);
   },
