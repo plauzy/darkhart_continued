@@ -148,6 +148,7 @@ View.prototype = {
 
   drawHeader: function(game) {
     $('.game-header').text(game.game_name + " - Round " + game.round.round_num);
+    $('.game-header').attr('data-attr', game.round.round_num)
     // $('.leader-container .leader-name').text(leader.name);
     // $(".blackcard-content").text(leader.blackcard.content);
   },
@@ -191,6 +192,7 @@ View.prototype = {
       };
     }
   },
+
 
   drawPlayableCards: function(game, user){
     var cardElement = $('#choose .card-list li:first').clone();
@@ -390,9 +392,14 @@ Controller.prototype = {
     event.preventDefault();
     var round_num = null;
     if (!$(event.target.parents).hasClass("prev-rounds-list")) {
+
       var el = $(event.target).parents('.game-round-link')[0];
       round_num = parseInt($(el).attr('href'));
     }
+    // else if ( $(event.target).attr('id') === "recap" ){
+    //   round_num = parseInt($('.game-header').attr('data-attr'));
+    //   debugger
+    // }
     url = "/api/games/" + gameId() + "/rounds/" + round_num;
 
     var posting = $.get(url, { "user_id": userId() });
@@ -464,7 +471,7 @@ Controller.prototype = {
     $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
     $("#game").on('pagebeforecreate', this.getCurrentGameState.bind(this))
     // $("#recap").on('pagebeforecreate', this.getPreviousRoundRecap.bind(this))
-
+    // $("#choose").on('pagebeforecreate', this.delegateSubmission.bind(this))
   }
 }
 
