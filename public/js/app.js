@@ -196,7 +196,7 @@ View.prototype = {
 
   drawPlayableCards: function(game, user){
     var cardElement = $('#choose .card-list li:first').clone();
-    $('#choose .card-list li:first').remove();
+    $('#choose .card-list').empty();
 
     var playable_cards = user.playable_cards
     for (var i = 0; i < playable_cards.length; i++) {
@@ -392,22 +392,17 @@ Controller.prototype = {
     event.preventDefault();
     var round_num = null;
     if (!$(event.target.parents).hasClass("prev-rounds-list")) {
-
       var el = $(event.target).parents('.game-round-link')[0];
       round_num = parseInt($(el).attr('href'));
-    }
-    // else if ( $(event.target).attr('id') === "recap" ){
-    //   round_num = parseInt($('.game-header').attr('data-attr'));
-    //   debugger
-    // }
+    };
     url = "/api/games/" + gameId() + "/rounds/" + round_num;
-
     var posting = $.get(url, { "user_id": userId() });
     posting.done(function( data ) {
+      
       console.log(data);
       this.parseAjaxResponse(data);
-
       this.delegateRecap();
+      console.log("right place")
     }.bind(this));
   },
 
@@ -429,9 +424,6 @@ Controller.prototype = {
     if (!$(event.target.parents).hasClass("list-view")) {
       el = $(event.target).parents('.card-link')[0];
       cardId = parseInt($(el).attr('href'));
-    }
-    else {
-      debugger
     }
     url = "/api/games/" + gameId() + "/cards/" + cardId;
     var posting = $.post(url, { "user_id": userId() });
@@ -456,6 +448,35 @@ Controller.prototype = {
     }.bind(this));
   },
 
+  choosePageRefresh: function() {
+    url = "/api/games/" + gameId();
+    var posting = $.get(url, { "user_id": userId() } );
+    posting.done(function( data ) {
+      console.log(data);
+      this.parseAjaxResponse(data);
+      this.delegateSubmission();
+    }.bind(this));
+  },
+
+  recapPageRefresh: function(event) {
+    // debugger
+    var round_num = null;
+    if (!$(event.target.parents).hasClass("prev-rounds-list")) {
+
+      var el = $(event.target).parents('.game-round-link')[0];
+      round_num = parseInt($(el).attr('href'));
+    }
+    url = "/api/games/" + gameId() + "/rounds/" + round_num;
+
+    var posting = $.get(url, { "user_id": userId() });
+    posting.done(function( data ) {
+      console.log(data);
+      this.parseAjaxResponse(data);
+
+      this.delegateRecap();
+    }.bind(this));
+  },
+
   bindEvents: function() {
     // $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this));
@@ -463,15 +484,15 @@ Controller.prototype = {
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
-    $('#user-login').on('click', this.loginUser.bind(this)) //this.getUserGames.bind(this)
+    $('#user-login').on('click', this.loginUser.bind(this)); //this.getUserGames.bind(this)
     // $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
   },
 
   bindPageCreates: function() {
-    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
-    $("#game").on('pagebeforecreate', this.getCurrentGameState.bind(this))
+    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this));
+    $("#game").on('pagebeforecreate', this.getCurrentGameState.bind(this));
     // $("#recap").on('pagebeforecreate', this.getPreviousRoundRecap.bind(this))
-    // $("#choose").on('pagebeforecreate', this.delegateSubmission.bind(this))
+    $("#choose").on('pagebeforecreate', this.choosePageRefresh.bind(this));
   }
 }
 
