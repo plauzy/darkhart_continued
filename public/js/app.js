@@ -167,8 +167,6 @@ View.prototype = {
   drawHeader: function(game) {
     $('.game-header').text(game.game_name + " - Round " + game.round.round_num);
     $('.game-header').attr('data-attr', game.round.round_num)
-    // $('.leader-container .leader-name').text(leader.name);
-    // $(".blackcard-content").text(leader.blackcard.content);
   },
 
   drawLeaderContainer: function(leader) {
@@ -222,7 +220,6 @@ View.prototype = {
     var playable_cards = user.playable_cards
     for (var i = 0; i < playable_cards.length; i++) {
       $('#choose .card-list').append(cardElement)
-      // var cardSubmitLink = "/api/users/" + userId + "/games/" + game.game_id + "/cards/" + playable_cards[i].id;
       cardElement.find('a').attr('href', playable_cards[i].id)
       cardElement.find('.card-content').text(playable_cards[i].content)
       var cardElement = $('#choose .card-list li:first').clone();
@@ -236,9 +233,6 @@ View.prototype = {
     var submissionCards = game.round.submissions
     for (var i = 0; i < submissionCards.length; i++) {
       $('#choose .card-list').append(cardElement)
-
-
-      // var cardSubmitLink = "/api/users/" + userId + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
       cardElement.find('a').attr('href', submissionCards[i].submission_id )
       cardElement.find('.card-content').text(submissionCards[i].submission_content)
       var cardElement = $('#choose .card-list li:first').clone();
@@ -252,7 +246,6 @@ View.prototype = {
 
   drawWinningSubmission: function(game) {
     var submissionDiv = $('.submission-winner-container ul li:first');
-    console.log("drawWinningSubmission")
     submissionDiv.find(".player-name").text(game.round.winning_submission.player_name);
     submissionDiv.find(".avatar-container .avatar").attr("src", gravatar(game.round.winning_submission.player_email))
     submissionDiv.find(".player-card-content").text(game.round.winning_submission.submission_content);
@@ -272,7 +265,6 @@ View.prototype = {
   },
 
   drawGameOverview: function(gameRecaps) {
-    console.log(gameRecaps)
     listElement = $('#game-overview .prev-rounds-list ul')
     listItem = $('#game-overview .prev-rounds-list ul li').clone();
     $('#game-overview .prev-rounds-list ul').empty();
@@ -345,14 +337,12 @@ Controller.prototype = {
     this.view.drawPlayerList(this.game);
   },
   delegateUserGames: function() {
-    console.log("delegateUserGames")
     $.mobile.changePage("#user");
     this.view.drawUserGames(this.userGamesList);
   },
 
   delegateSubmission: function() {
     $.mobile.changePage("#choose");
-    console.log("made it to delegate submission");
     this.view.drawHeader(this.game);
     this.view.drawLeaderContainer(this.leader);
     if (this.user.user_id == this.leader.user_id) {
@@ -372,8 +362,6 @@ Controller.prototype = {
 
   delegateGameOverview: function() {
     $.mobile.changePage("#game-overview");
-    // this.view.drawHeader(this.gameRecapList.gameRecaps[0]);
-
     this.view.drawGameOverview(this.gameRecapList.gameRecaps)
   },
 
@@ -421,12 +409,10 @@ Controller.prototype = {
     invite_ids = form.find( "input[name='invite_ids']" ).val();
     game_name = form.find( "input[name='game_name']" ).val();
     url = "/api/users/" + initiator_id + "/games";
-
     var posting = $.post( url, { "invite_ids": invite_ids,
                                   "game_name": game_name } );
     posting.done(function( data ) {
       $("#json").empty().append(JSON.stringify(data, undefined, 2))
-      console.log(data);
       this.parseAjaxResponse(data)
     }.bind(this));
   },
@@ -449,24 +435,18 @@ Controller.prototype = {
     };
     url = "/api/games/" + gameId() + "/rounds/" + round_num;
     var posting = $.get(url, { "user_id": userId() });
-    posting.done(function( data ) {
-      
-      console.log(data);
+    posting.done(function( data ) {    
       this.parseAjaxResponse(data);
       this.delegateRecap();
-      console.log("right place")
     }.bind(this));
   },
 
   getCurrentGameState: function() {
-    // event.preventDefault();
     url = "/api/games/" + gameId();
     var posting = $.get(url, { "user_id": userId() } );
     posting.done(function( data ) {
-      console.log(data);
       this.parseAjaxResponse(data);
       this.delegateGame();
-      console.log("current game state fetched");
     }.bind(this));
   },
 
@@ -474,24 +454,13 @@ Controller.prototype = {
     event.preventDefault();
     var cardId = null;
     if (!$(event.target).parents().hasClass("list-view")) {
-      // var el = $(event.target).parents('.card-link')[0];
-      // cardId = parseInt($(el).attr('href'));
-
       var el = $(event.target).parents('li').find('a').attr('href')
       cardId = parseInt(el);
     }
-    // else if ( $(event.target).hasClass("card-link") ){
-    //   cardId = parseInt( $(event.target).attr('href') )
-
-    // }
-    console.log(event.target)
-    debugger
-    console.log(cardId)
     url = "/api/games/" + gameId() + "/cards/" + cardId;
     var posting = $.post(url, { "user_id": userId() });
     posting.done(function( data ) {
       this.parseAjaxResponse(data);
-      console.log(data)
       if ( this.game.round.active ) {
         this.delegateGame();
       }
@@ -516,7 +485,6 @@ Controller.prototype = {
     url = "/api/games/" + gameId();
     var posting = $.get(url, { "user_id": userId() } );
     posting.done(function( data ) {
-      console.log(data);
       this.parseAjaxResponse(data);
       this.delegateSubmission();
     }.bind(this));
@@ -534,9 +502,7 @@ Controller.prototype = {
 
     var posting = $.get(url, { "user_id": userId() });
     posting.done(function( data ) {
-      console.log(data);
       this.parseAjaxResponse(data);
-
       this.delegateRecap();
     }.bind(this));
   },
@@ -572,7 +538,6 @@ var bindCreateUser = function($submit, $user_name, $user_password, $user_phone, 
     var user_phone = $user_phone.val();
     var user_email = $user_email.val();
     event.preventDefault();
-    console.log("Running User Creation");
     $.ajax({
       type: "POST",
       url: '/api/users/new',
