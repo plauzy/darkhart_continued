@@ -26,16 +26,23 @@ $(document).on("ready page:load", function() {
 
 //MODELS
 
-var Cookie = function(user_id, token) {
+var UserCookie = function(user_id, token) {
   this.user_id = user_id;
   this.token = token;
-  this.game_id = null;
   this.cookie = $.cookie('session', {"user_id": user_id, "token": token })
 };
 
-Cookie.prototype = {
+UserCookie.prototype = {
   remove: function() { $.removeCookie('session') },
-  setGameId: function(id) { this.game_id = id }
+};
+
+var GameCookie = function(id) {
+  this.game_id = id
+  this.cookie = $.cookie('game', { "game_id": id })
+};
+
+GameCookie.prototype = {
+  remove: function() { $.removeCookie('session') },
 };
 
 var PlayableCard = function(object) {
@@ -136,10 +143,9 @@ View.prototype = {
     $('#active-games-group').empty()
     $('#inactive-games-group').empty()
     var game_html = "<a href='#game-overview' class='active-game ui-btn ui-icon-check ui-btn-icon-right' data-role='button' style='text-align: left'>Game</a>"
-
     for (var i = 0; i < games.userGames.length; i++) {
-      var game = games.userGames[i];
-      var $game_html = $(game_html).text(game.game_name).on('click', function(event) { alert(game.leader_name)});
+      var game = games.userGames[i]; // cookie.setGameId(game.game_id)
+      var $game_html = $(game_html).text(game.game_name).attr("game_id", game.game_id);
       if (game.active == true && game.need_submission == true) {
         $('#active-games-group').append($game_html);
        }
@@ -147,7 +153,9 @@ View.prototype = {
         $('#active-games-group').append($game_html.removeClass('ui-icon-check ui-btn-icon-right'));
       }
       else {
-        $('#inactive-games-group').append($game_html.removeClass('ui-icon-check ui-btn-icon-right'));}
+        $('#inactive-games-group').append($game_html.removeClass('ui-icon-check ui-btn-icon-right'));
+      }
+      $('.active-game').on('click', function(event) { new GameCookie( $(this).attr('game_id') ) });
     }
   },
 
@@ -262,7 +270,6 @@ View.prototype = {
         listElement.append(listItem);
         listItem.find('.game-round').text(gameRecaps[i].round_num)
         listItem.find('a').attr('href', gameRecaps[i].round_num)
-        // debugger
         listItem.find('.leader-name').text(gameRecaps[i].leader_name)
         listItem.find('.leader-blackcard-content').text(gameRecaps[i].blackcard_content)
         listItem = listItem.clone();
@@ -283,7 +290,8 @@ var Controller = function(view) {
   this.game = null;
   this.leader = null;
   this.userGamesList = null;
-  this.cookie = null;
+  this.userCookie = null;
+  this.gameCookie = null
   this.gameRecapList = null;
 };
 
@@ -351,7 +359,7 @@ Controller.prototype = {
       data: { "user_email":user_email, "password":user_password}
     })
     .done( function(response) {
-      this.cookie = new Cookie(response.user_id, response.token)
+      this.userCookie = new UserCookie(response.user_id, response.token)
       this.getUserGames();
 
 
@@ -459,8 +467,8 @@ Controller.prototype = {
   },
 
   getUserGames: function() {
-    url = "/api/users/" +  this.cookie.user_id;
-    var posting = $.get(url, { "user_id": this.cookie.user_id } );
+    url = "/api/users/" +  this.userCookie.user_id;
+    var posting = $.get(url, { "user_id": this.userCookie.user_id } );
     posting.done(function( data ) {
       this.userGamesList = new UserGamesList(data)
       this.delegateUserGames();
