@@ -1,3 +1,5 @@
+$.cookie.json = true;
+
 $(document).on("ready page:load", function() {
   var view = new View;
   var controller = new Controller(view);
@@ -5,12 +7,20 @@ $(document).on("ready page:load", function() {
 
 
 var gameId = function(){
-  return parseInt( $.cookie('game').game_id )
-}
+  var cookie = $.cookie('game')
+  if (cookie != null) { return parseInt(cookie.game_id)}
+  else { return null };
+};
+
+var gravatar = function(email) {
+  return "http://www.gravatar.com/avatar/" + MD5(email)
+};
 
 var userId = function() {
-  return parseInt( $.cookie('session').user_id)
-}
+  var cookie = $.cookie('session')
+  if (cookie != null) { return parseInt(cookie.user_id)}
+  else { return null };
+};
 
 //MODELS
 var UserCookie = function(user_id, token) {
@@ -44,6 +54,7 @@ var User = function(object) {
   this.name = object.player_self.player_name;
   this.score = object.player_self.player_score;
   this.email = object.player_self.player_email;
+  this.gravatar = gravatar(object.player_self.player_email);
   this.playable_cards = [];
 
   for( var i = 0; i < object.player_self.player_cards.length; i++) {
@@ -71,6 +82,7 @@ var Leader = function(object) {
   this.name = object.leader_name;
   this.user_id = object.leader_user_id;
   this.email = object.leader_email;
+  this.gravatar = gravatar(object.leader_email);
   this.seat_id = object.leader_seat_id;
   this.blackcard = new Blackcard(object);
 };
@@ -83,12 +95,15 @@ var GameRecap = function(object) {
   this.active = object.active;
   this.blackcard_content = object.blackcard_content;
   this.leader_email = object.leader_email;
+  this.leader_gravatar = gravatar(object.leader_email);
   this.leader_id = object.leader_id;
   this.leader_name = object.leader_name;
   this.round_num = object.round_num;
   this.winner_email = object.winner_email;
   this.winner_id = object.winner_id;
   this.winner_name = object.winner_name;
+  // this.winner_gravatar = "http://www.gravatar.com/avatar/" + MD5(object.winner_email);
+
   this.winner_whitecard = object.winner_whitecard;
   this.game_name = object.game_name
 }
@@ -107,9 +122,12 @@ var UserGame = function(object) {
   this.current_round = object.current_round;
   this.need_submission = object.need_submission;
   this.leader_name = object.leader_name;
+  this.leader_email = object.leader_email;
+  this.leader_gravatar = gravatar(object.leader_email);
   this.winner_id = object.owner_user_id;
   this.game_name = object.game_name;
   this.winner_email = object.owner_email;
+  this.winner_gravatar = gravatar(object.leader_email);
   this.winner_name = object.owner_name;
   this.winner_whitecard = object.card_content;
 };
@@ -154,6 +172,7 @@ View.prototype = {
 
   drawLeaderContainer: function(leader) {
     $('.leader-container .leader-name').text(leader.name);
+    $('.leader-container .avatar').attr('src', leader.gravatar);
     $(".blackcard-content").text(leader.blackcard.content);
   },
 
@@ -172,8 +191,11 @@ View.prototype = {
     if (missing_submissions.length > 0) {
       for (var i = 0; i < missing_submissions.length; i++) {
         $('.player-list ul').append(listItem);
-        listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
-        listItem.find('.player-status').text(" has not submitted a white card.")
+        console.log("missing_submissions;");
+        console.log("Email" + submissions[i].player_email);
+        listItem.find('.player-data .player-name').text(missing_submissions[i].player_name);
+        listItem.find('.player-status').text(" has not submitted a white card.");
+        listItem.find('.avatar').attr("src", gravatar(missing_submissions[i].player_email));
         listItem.find('.player-score').text(missing_submissions[i].player_score);
         var listItem = $('.player-list ul li:first').clone();
       };
@@ -184,8 +206,11 @@ View.prototype = {
     if (submissions.length > 0) {
       for (var i = 0; i < submissions.length; i++) {
         $('.player-list ul').append(listItem);
+        console.log("given_submissions;");
+        console.log("Email" + submissions[i].player_email)
         listItem.find('.player-data .player-name').text(submissions[i].player_name)
         listItem.find('.player-status').text(" is in!")
+        listItem.find('.avatar').attr("src", gravatar(submissions[i].player_email));
         listItem.find('.player-score').text(submissions[i].player_score)
         var listItem = $('.player-list ul li:first').clone();
       };
@@ -214,6 +239,7 @@ View.prototype = {
     for (var i = 0; i < submissionCards.length; i++) {
       $('#choose .card-list').append(cardElement)
 
+
       // var cardSubmitLink = "/api/users/" + userId + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
       cardElement.find('a').attr('href', submissionCards[i].submission_id )
       cardElement.find('.card-content').text(submissionCards[i].submission_content)
@@ -228,7 +254,10 @@ View.prototype = {
 
   drawWinningSubmission: function(game) {
     var submissionDiv = $('.submission-winner-container ul li:first');
+    console.log("drawWinningSubmission")
+    debugger
     submissionDiv.find(".player-name").text(game.round.winning_submission.player_name);
+    submissionDiv.find(".avatar-container .avatar").attr("src", gravatar(game.round.winning_submission.player_email))
     submissionDiv.find(".player-card-content").text(game.round.winning_submission.submission_content);
   },
 
@@ -239,6 +268,7 @@ View.prototype = {
     for (var i = 0; i < losingSubmissions.length; i ++) {
       losingDiv.find(".player-name").text(losingSubmissions[i].player_name)
       losingDiv.find(".player-card-content").text(losingSubmissions[i].submission_content)
+      losingDiv.find(".avatar-container .avatar").attr("src", gravatar(losingSubmissions[i].player_email))
       $(".submission-loser-container ul").append(losingDiv)
       var losingDiv = $(".submission-loser-container ul li:first").clone();
     }
@@ -258,6 +288,7 @@ View.prototype = {
         listItem.find('.game-round').text(gameRecaps[i].round_num)
         listItem.find('a').attr('href', gameRecaps[i].round_num)
         listItem.find('.leader-name').text(gameRecaps[i].leader_name)
+        listItem.find('.round-recap-container .leader-avatar').attr("src", gameRecaps[i].leader_gravatar)
         listItem.find('.leader-blackcard-content').text(gameRecaps[i].blackcard_content)
         listItem = listItem.clone();
       }
@@ -283,6 +314,24 @@ var Controller = function(view) {
 
 Controller.prototype = {
 
+  accountManager: function() {
+    if (userId() == null) {
+      $(".login").show();
+      $(".create-account").show();
+      $(".user-logout").hide();
+      $(".create-game").hide();
+      $(".games-group").hide();
+    }
+    else {
+      $(".games-group").show();
+      $(".user-logout").show();
+      $(".create-game").show();
+      $(".login").hide();
+      $(".create-account").hide();
+    }
+  },
+
+
   delegateGame: function() {
     $.mobile.changePage("#game");
     // this.view.drawHeader(this.game, this.leader);
@@ -290,9 +339,11 @@ Controller.prototype = {
     this.view.drawLeaderContainer(this.leader);
     if (this.user.need_submission === false) {
       $('.choose-button-container').hide()
+      $('.game-submitted').show();
     }
     else {
-      $('.choose-button-container').hide().show()
+      $('.choose-button-container').show()
+      $('.game-submitted').hide();
     }
     this.view.drawPlayerList(this.game);
   },
@@ -347,17 +398,23 @@ Controller.prototype = {
     .done( function(response) {
       this.userCookie = new UserCookie(response.user_id, response.token)
       this.getUserGames();
-
-
-      // setTimeout(
-      //   function(){
-      //     location.reload();
-      //   },100
-      // );
+      setTimeout(
+        function(){
+          location.reload();
+        },100 );
     }.bind(this))
       .fail(function(jqXHR,response){
         alert("Signin failed");
       })
+  },
+
+  logoutUser: function(data) {
+    $.removeCookie('session');
+    $.mobile.changePage('#user', { reloadPage: true });
+    setTimeout(
+      function(){
+        location.reload();
+      },100 );
   },
 
   createGame: function(event) {
@@ -424,7 +481,6 @@ Controller.prototype = {
       cardId = parseInt($(el).attr('href'));
     }
     else {
-      debugger
     }
     url = "/api/games/" + gameId() + "/cards/" + cardId;
     var posting = $.post(url, { "user_id": userId() });
@@ -441,12 +497,14 @@ Controller.prototype = {
   },
 
   getUserGames: function() {
-    url = "/api/users/" +  this.userCookie.user_id;
-    var posting = $.get(url, { "user_id": this.userCookie.user_id } );
-    posting.done(function( data ) {
-      this.userGamesList = new UserGamesList(data)
-      this.delegateUserGames();
-    }.bind(this));
+    if (userId() != null) {
+      url = "/api/users/" +  userId();
+      var posting = $.get(url, { "user_id": userId() } );
+      posting.done(function( data ) {
+        this.userGamesList = new UserGamesList(data)
+        this.delegateUserGames();
+      }.bind(this));
+    }
   },
 
   bindEvents: function() {
@@ -456,29 +514,22 @@ Controller.prototype = {
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
-    $('#user-login').on('click', this.loginUser.bind(this)) //this.getUserGames.bind(this)
-    // $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
+    $('#user-login').on('click', this.loginUser.bind(this));
+    $('.user-logout').on('click', this.logoutUser.bind(this));
   },
 
   bindPageCreates: function() {
-    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
-
+    var that = this;
+    $("#user").on('pagebeforecreate', function() {
+      that.accountManager();
+      that.getUserGames(); });
+    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this))
   }
 }
 
 
 // ------------ GLOBAL -----------
-$.cookie.json = true;
 
-
-
-var bindClearCookie = function($el) {
-  $el.on("click", function(event) {
-    console.log("Running bindClearCookie event");
-    $.removeCookie('session');
-    location.reload();
-  });
-};
 
 // --------------------------------------
 // --------- PAGE INITIALIZERS ----------
@@ -491,29 +542,6 @@ var bindClearCookie = function($el) {
 $( document ).delegate("#create-account", "pageinit", function() {
   bindCreateUser( $("#user-create-button"),$("#user-name"),$("#user-password"),$("#user-phone"),$("#user-email") );
 });
-
-// $( document ).delegate("#user", "pageinit", function() {
-//   console.log("INIT RUNNING!")
-//   $('#user').trigger('create')
-//   cookie = $.cookie('session');
-//   bindSetCookie( $("#cookie-submit"),$("#cookie-user-email"),$("#cookie-user-password"),$("#cookie-game-ids") );
-//   bindClearCookie( $("#cookie-clear") );
-//   bindClearCookie( $(".user-logout") );
-//   if (cookie) {
-//     console.log("Detected cookie.")
-//     $(".login").hide();
-//     $(".create-account").hide();
-//     $(".user-logout").show();
-//     $(".create-game").show();
-//   }
-//   else {
-//     console.log("No cookie tected.")
-//     $(".login").show();
-//     $(".create-account").show();
-//     $(".user-logout").hide();
-//     $(".create-game").hide();
-//   }
-// });
 
 var bindCreateUser = function($submit, $user_name, $user_password, $user_phone, $user_email) {
   $submit.on("click", function(event) {
