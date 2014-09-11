@@ -479,12 +479,13 @@ Controller.prototype = {
     var cardId = null;
     if (!$(event.target.parents).hasClass("list-view")) {
       el = $(event.target).parents('.card-link')[0];
-      cardId = parseInt($(el).attr('href')); 
-      debugger
+      cardId = parseInt($(el).attr('href'));
     }
-    else {
-
+    else if ( $(event.target).hasClass("card-link") ){
+      cardId = parseInt( $(event.target).attr('href') )
     }
+    console.log(event.target)
+    console.log(cardId)
     url = "/api/games/" + gameId() + "/cards/" + cardId;
     var posting = $.post(url, { "user_id": userId() });
     posting.done(function( data ) {
