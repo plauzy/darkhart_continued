@@ -135,8 +135,8 @@ View.prototype = {
     var playable_cards = user.playable_cards
     for (var i = 0; i < playable_cards.length; i++) {
       $('#choose .card-list').append(cardElement)
-      var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + game.game_id + "/cards/" + playable_cards[i].id;
-      cardElement.find('a').attr('href', cardSubmitLink )
+      // var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + game.game_id + "/cards/" + playable_cards[i].id;
+      cardElement.find('a').attr('href', playable_cards[i].id)
       cardElement.find('.card-content').text(playable_cards[i].content)
       var cardElement = $('#choose .card-list li:first').clone();
     }
@@ -149,6 +149,7 @@ View.prototype = {
     var submissionCards = game.round.submissions
     for (var i = 0; i < submissionCards.length; i++) {
       $('#choose .card-list').append(cardElement)
+
       var cardSubmitLink = "/api/users/" + $.cookie('session').user_id + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
       cardElement.find('a').attr('href', cardSubmitLink )
       cardElement.find('.card-content').text(submissionCards[i].submission_content)
@@ -297,15 +298,11 @@ Controller.prototype = {
 
   getPreviousRoundRecap: function(event) {
     event.preventDefault();
-    var round_num = null
-    if (!$(event.target.parents).hasClass("prev-rounds-list")) {
+    var round_num = null;
+    // if (!$(event.target.parents).hasClass("prev-rounds-list")) {
       var el = $(event.target).parents('.game-round-link')[0];
       round_num = parseInt($(el).attr('href'));
-    }
-    else {
-      debugger
-    }
-    debugger
+    // }
     console.log('made it')
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0]
@@ -338,14 +335,15 @@ Controller.prototype = {
 
   makeSubmission: function(event) {
     event.preventDefault();
-    var htmlLink = $(event.target).attr('href')
-    var array = htmlLink.split("/");
-    var card_id = parseInt(array[array.length-1])
+    var cardId = null;
+    // if (!$(event.target.parents).hasClass("list-view")) {
+      el = $(event.target).parents('.card-link')[0];
+      cardId = parseInt($(el).attr('href'));
+    // }
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0];
-    url = "/api/games/" + game_id + "/cards/" + card_id;
-
-    var posting = $.post(url,  { "user_id": initiator_id });
+    url = "/api/games/" + game_id + "/cards/" + cardId;
+    var posting = $.post(url, { "user_id": initiator_id });
     posting.done(function( data ) {
       this.parseAjaxResponse(data);
 
