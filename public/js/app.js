@@ -1,35 +1,18 @@
-//http://demos.jquerymobile.com/1.0/docs/pages/page-scripting.html
-// $( document ).delegate("#user", "pageshow", function() {
-//   console.log("INIT RUNNING!")
-//   cookie = $.cookie('session');
-//   bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
-//   bindClearCookie( $("#cookie-clear") );
-//   bindClearCookie( $(".user-logout") );
-//   if (cookie) {
-//     console.log("Detected cookie.")
-//     $(".login").hide();
-//     $(".create-account").hide();
-//     $(".user-logout").show();
-//   }
-//   else {
-//     console.log("No cookie detected.")
-//     $(".login").show();
-//     $(".create-account").show();
-//     $(".user-logout").hide();
-//   }
-// });
-
 $(document).on("ready page:load", function() {
   var view = new View;
   var controller = new Controller(view);
 });
 
-//MODELS
 
 var gameId = function(){
   return parseInt( $.cookie('game').game_id )
 }
 
+var userId = function() {
+  return parseInt( $.cookie('session').user_id)
+}
+
+//MODELS
 var UserCookie = function(user_id, token) {
   this.user_id = user_id;
   this.token = token;
@@ -216,7 +199,7 @@ View.prototype = {
     var playable_cards = user.playable_cards
     for (var i = 0; i < playable_cards.length; i++) {
       $('#choose .card-list').append(cardElement)
-      // var cardSubmitLink = "/api/users/" + this.cookie.user_id + "/games/" + game.game_id + "/cards/" + playable_cards[i].id;
+      // var cardSubmitLink = "/api/users/" + userId + "/games/" + game.game_id + "/cards/" + playable_cards[i].id;
       cardElement.find('a').attr('href', playable_cards[i].id)
       cardElement.find('.card-content').text(playable_cards[i].content)
       var cardElement = $('#choose .card-list li:first').clone();
@@ -231,7 +214,7 @@ View.prototype = {
     for (var i = 0; i < submissionCards.length; i++) {
       $('#choose .card-list').append(cardElement)
 
-      // var cardSubmitLink = "/api/users/" + this.cookie.user_id + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
+      // var cardSubmitLink = "/api/users/" + userId + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
       cardElement.find('a').attr('href', submissionCards[i].submission_id )
       cardElement.find('.card-content').text(submissionCards[i].submission_content)
       var cardElement = $('#choose .card-list li:first').clone();
@@ -289,13 +272,12 @@ View.prototype = {
 //CONTROLLER
 var Controller = function(view) {
   this.bindEvents();
+  this.bindPageCreates();
   this.view = view;
   this.user = null;
   this.game = null;
   this.leader = null;
   this.userGamesList = null;
-  this.userCookie = null;
-  this.gameCookie = null
   this.gameRecapList = null;
 };
 
@@ -395,12 +377,9 @@ Controller.prototype = {
     }.bind(this));
   },
 
-  getGameOverview: function(event) {
-    event.preventDefault();
-    var initiator_id = this.cookie.user_id
-    var game_id = this.cookie.game_id
-    var url = "/api/games/" + game_id + "/recap";
-    var posting = $.get(url, { "user_id": initiator_id });
+  getGameOverview: function() {
+    var url = "/api/games/" + gameId() + "/recap";
+    var posting = $.get(url, { "user_id": userId() });
     posting.done(function( data ) {
       this.gameRecapList = new GameRecapList(data)
       this.delegateGameOverview();
@@ -414,12 +393,9 @@ Controller.prototype = {
       var el = $(event.target).parents('.game-round-link')[0];
       round_num = parseInt($(el).attr('href'));
     }
-    console.log('made it')
-    var initiator_id = this.cookie.user_id
-    var game_id = this.cookie.game_id
-    url = "/api/games/" + game_id + "/rounds/" + round_num;
+    url = "/api/games/" + gameId() + "/rounds/" + round_num;
 
-    var posting = $.get(url, { "user_id": initiator_id });
+    var posting = $.get(url, { "user_id": userId() });
     posting.done(function( data ) {
       console.log(data);
       this.parseAjaxResponse(data);
@@ -430,17 +406,13 @@ Controller.prototype = {
 
   getCurrentGameState: function(event) {
     event.preventDefault();
-    var form = $(event.target);
-    initiator_id = this.cookie.user_id
-    game_id = this.cookie.game_id
-    url = "/api/games/" + game_id;
-    var posting = $.get(url, { "user_id": initiator_id } );
+    url = "/api/games/" + gameId();
+    var posting = $.get(url, { "user_id": userId() } );
     posting.done(function( data ) {
       console.log(data);
       this.parseAjaxResponse(data);
       this.delegateGame();
       console.log("current game state fetched");
-
     }.bind(this));
   },
 
@@ -454,10 +426,8 @@ Controller.prototype = {
     else {
       debugger
     }
-    var initiator_id = this.cookie.user_id
-    var game_id = this.cookie.game_id;
-    url = "/api/games/" + game_id + "/cards/" + cardId;
-    var posting = $.post(url, { "user_id": initiator_id });
+    url = "/api/games/" + gameId() + "/cards/" + cardId;
+    var posting = $.post(url, { "user_id": userId() });
     posting.done(function( data ) {
       this.parseAjaxResponse(data);
       console.log(data)
@@ -481,14 +451,18 @@ Controller.prototype = {
 
   bindEvents: function() {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
-    $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this))
-
+    $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this));
+    // $("#user .active-game").on('click', this.getGameOverview.bind(this) )
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
     $('#user-login').on('click', this.loginUser.bind(this)) //this.getUserGames.bind(this)
-    $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
-    $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
+    // $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
+  },
+
+  bindPageCreates: function() {
+    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
+
   }
 }
 
