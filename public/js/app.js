@@ -1,4 +1,23 @@
 //http://demos.jquerymobile.com/1.0/docs/pages/page-scripting.html
+// $( document ).delegate("#user", "pageshow", function() {
+//   console.log("INIT RUNNING!")
+//   cookie = $.cookie('session');
+//   bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
+//   bindClearCookie( $("#cookie-clear") );
+//   bindClearCookie( $(".user-logout") );
+//   if (cookie) {
+//     console.log("Detected cookie.")
+//     $(".login").hide();
+//     $(".create-account").hide();
+//     $(".user-logout").show();
+//   }
+//   else {
+//     console.log("No cookie detected.")
+//     $(".login").show();
+//     $(".create-account").show();
+//     $(".user-logout").hide();
+//   }
+// });
 
 $(document).on("ready page:load", function() {
   var view = new View;
@@ -6,6 +25,17 @@ $(document).on("ready page:load", function() {
 });
 
 //MODELS
+
+var Cookie = function(user_id, token) {
+  this.user_id = user_id;
+  this.token = token;
+  this.cookie = $.cookie('session', {"user_id": user_id, "token": token })
+};
+
+Cookie.prototype = {
+  remove: function() { $.removeCookie('session') }
+};
+
 var PlayableCard = function(object) {
   this.id = object.playable_card_id;
   this.content = object.content;
@@ -68,17 +98,54 @@ var GameRecap = function(object) {
 var GameRecapList = function(jsonResponse) {
   this.gameRecaps = [];
   for (var i = jsonResponse.length; i > 0; i--) {
-    gameRecap = new GameRecap(jsonResponse[i-1])
-    this.gameRecaps.push(gameRecap)
+    gameRecap = new GameRecap(jsonResponse[i-1]);
+    this.gameRecaps.push(gameRecap);
   };
 }
 
-//VIEW
-var View = function() {
+var UserGame = function(object) {
+  this.game_id = object.game_id;
+  this.active = object.active;
+  this.current_round = object.current_round;
+  this.need_submission = object.need_submission;
+  this.leader_name = object.leader_name;
+  this.winner_id = object.owner_user_id;
+  this.game_name = object.game_name;
+  this.winner_email = object.owner_email;
+  this.winner_name = object.owner_name;
+  this.winner_whitecard = object.card_content;
+};
 
-}
+var UserGamesList = function(jsonResponse) {
+  this.userGames = [];
+  for (var i = jsonResponse.length; i > 0; i--) {
+    userGame = new UserGame(jsonResponse[i-1]);
+    this.userGames.push(userGame);
+  }
+};
+//VIEW
+var View = function() { }
 
 View.prototype = {
+
+  drawUserGames: function(games) {
+    $('#active-games-group').empty()
+    $('#inactive-games-group').empty()
+    var game_html = "<a href='#game-overview' class='active-game ui-btn ui-icon-check ui-btn-icon-right' data-role='button' style='text-align: left'>Game</a>"
+
+    for (var i = 0; i < games.userGames.length; i++) {
+      var game = games.userGames[i];
+      var $game_html = $(game_html).text(game.game_name).on('click', function(event) { alert(game.leader_name)});
+      if (game.active == true && game.need_submission == true) {
+        $('#active-games-group').append($game_html);
+       }
+      else if (game.active == true) {
+        $('#active-games-group').append($game_html.removeClass('ui-icon-check ui-btn-icon-right'));
+      }
+      else {
+        $('#inactive-games-group').append($game_html.removeClass('ui-icon-check ui-btn-icon-right'));}
+    }
+  },
 
   drawHeader: function(game, leader) {
     $('.game-header').text(game.game_name + " - Round " + game.round.round_num);
@@ -182,9 +249,11 @@ View.prototype = {
 var Controller = function(view) {
   this.bindEvents();
   this.view = view;
-  this.user;
-  this.game;
-  this.leader;
+  this.user = null;
+  this.game = null;
+  this.leader = null;
+  this.userGamesList = null;
+  this.cookie = null;
 };
 
 Controller.prototype = {
@@ -196,6 +265,11 @@ Controller.prototype = {
       $('.choose-button-container').hide()
     }
     this.view.drawPlayerList(this.game);
+  },
+  delegateUserGames: function() {
+    console.log("delegateUserGames")
+    $.mobile.changePage("#user");
+    this.view.drawUserGames(this.userGamesList);
   },
 
   delegateSubmission: function() {
@@ -244,7 +318,7 @@ Controller.prototype = {
     }.bind(this));
   },
 
- getPreviousRoundRecaps: function(event) {
+  getPreviousRoundRecaps: function(event) {
     event.preventDefault();
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0]
@@ -255,7 +329,6 @@ Controller.prototype = {
       var gameRecapList = new GameRecapList(data)
 
     }.bind(this));
-
   },
 
   // getPreviousRoundRecap: function(event) {
@@ -316,11 +389,24 @@ Controller.prototype = {
     }.bind(this));
   },
 
+  getUserGames: function(event) {
+    event.preventDefault();
+    var form = $(event.target);
+    var user_id = $('#cookie-user-id').val();
+    url = "/api/users/" + user_id;
+    var posting = $.get(url, { "user_id": user_id } );
+    posting.done(function( data ) {
+      console.log("getUserGames post done")
+      this.userGamesList = new UserGamesList(data)
+      this.delegateUserGames();
+    }.bind(this));
+  },
+
   bindEvents: function() {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
-
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this))
+    $('#cookie-submit').on('click', this.getUserGames.bind(this))
     // $('#active-games-group').on('click', 'a', this.getPreviousRoundRecaps)
 
     //Saving for refactoring later
@@ -366,24 +452,3 @@ var bindSetCookie = function($submit, $user_id, $game_ids) {
 // HOME
 
 
-// USER
-$( document ).delegate("#user", "pageinit", function() {
-  console.log("INIT RUNNING!")
-  $('#user').trigger('create')
-  cookie = $.cookie('session');
-  bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
-  bindClearCookie( $("#cookie-clear") );
-  bindClearCookie( $(".user-logout") );
-  if (cookie) {
-    console.log("Detected cookie.")
-    $(".login").hide();
-    $(".create-account").hide();
-    $(".user-logout").show();
-  }
-  else {
-    console.log("No cookie tected.")
-    $(".login").show();
-    $(".create-account").show();
-    $(".user-logout").hide();
-  }
-});
