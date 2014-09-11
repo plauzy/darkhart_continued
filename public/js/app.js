@@ -12,6 +12,10 @@ var gameId = function(){
   else { return null };
 };
 
+var gravatar = function(email) {
+  return "http://www.gravatar.com/avatar/" + MD5(email)
+};
+
 var userId = function() {
   var cookie = $.cookie('session')
   if (cookie != null) { return parseInt(cookie.user_id)}
@@ -50,6 +54,7 @@ var User = function(object) {
   this.name = object.player_self.player_name;
   this.score = object.player_self.player_score;
   this.email = object.player_self.player_email;
+  this.gravatar = gravatar(object.player_self.player_email);
   this.playable_cards = [];
 
   for( var i = 0; i < object.player_self.player_cards.length; i++) {
@@ -77,6 +82,7 @@ var Leader = function(object) {
   this.name = object.leader_name;
   this.user_id = object.leader_user_id;
   this.email = object.leader_email;
+  this.gravatar = gravatar(object.leader_email);
   this.seat_id = object.leader_seat_id;
   this.blackcard = new Blackcard(object);
 };
@@ -89,12 +95,15 @@ var GameRecap = function(object) {
   this.active = object.active;
   this.blackcard_content = object.blackcard_content;
   this.leader_email = object.leader_email;
+  this.leader_gravatar = gravatar(object.leader_email);
   this.leader_id = object.leader_id;
   this.leader_name = object.leader_name;
   this.round_num = object.round_num;
   this.winner_email = object.winner_email;
   this.winner_id = object.winner_id;
   this.winner_name = object.winner_name;
+  // this.winner_gravatar = "http://www.gravatar.com/avatar/" + MD5(object.winner_email);
+
   this.winner_whitecard = object.winner_whitecard;
   this.game_name = object.game_name
 }
@@ -113,9 +122,12 @@ var UserGame = function(object) {
   this.current_round = object.current_round;
   this.need_submission = object.need_submission;
   this.leader_name = object.leader_name;
+  this.leader_email = object.leader_email;
+  this.leader_gravatar = gravatar(object.leader_email);
   this.winner_id = object.owner_user_id;
   this.game_name = object.game_name;
   this.winner_email = object.owner_email;
+  this.winner_gravatar = gravatar(object.leader_email);
   this.winner_name = object.owner_name;
   this.winner_whitecard = object.card_content;
 };
@@ -160,6 +172,7 @@ View.prototype = {
 
   drawLeaderContainer: function(leader) {
     $('.leader-container .leader-name').text(leader.name);
+    $('.leader-container .avatar').attr('src', leader.gravatar);
     $(".blackcard-content").text(leader.blackcard.content);
   },
 
@@ -178,8 +191,11 @@ View.prototype = {
     if (missing_submissions.length > 0) {
       for (var i = 0; i < missing_submissions.length; i++) {
         $('.player-list ul').append(listItem);
-        listItem.find('.player-data .player-name').text(missing_submissions[i].player_name)
-        listItem.find('.player-status').text(" has not submitted a white card.")
+        console.log("missing_submissions;");
+        console.log("Email" + submissions[i].player_email);
+        listItem.find('.player-data .player-name').text(missing_submissions[i].player_name);
+        listItem.find('.player-status').text(" has not submitted a white card.");
+        listItem.find('.avatar').attr("src", gravatar(missing_submissions[i].player_email));
         listItem.find('.player-score').text(missing_submissions[i].player_score);
         var listItem = $('.player-list ul li:first').clone();
       };
@@ -190,8 +206,11 @@ View.prototype = {
     if (submissions.length > 0) {
       for (var i = 0; i < submissions.length; i++) {
         $('.player-list ul').append(listItem);
+        console.log("given_submissions;");
+        console.log("Email" + submissions[i].player_email)
         listItem.find('.player-data .player-name').text(submissions[i].player_name)
         listItem.find('.player-status').text(" is in!")
+        listItem.find('.avatar').attr("src", gravatar(submissions[i].player_email));
         listItem.find('.player-score').text(submissions[i].player_score)
         var listItem = $('.player-list ul li:first').clone();
       };
@@ -220,6 +239,7 @@ View.prototype = {
     for (var i = 0; i < submissionCards.length; i++) {
       $('#choose .card-list').append(cardElement)
 
+
       // var cardSubmitLink = "/api/users/" + userId + "/games/" + game.game_id + "/cards/" + submissionCards[i].submission_id;
       cardElement.find('a').attr('href', submissionCards[i].submission_id )
       cardElement.find('.card-content').text(submissionCards[i].submission_content)
@@ -234,7 +254,10 @@ View.prototype = {
 
   drawWinningSubmission: function(game) {
     var submissionDiv = $('.submission-winner-container ul li:first');
+    console.log("drawWinningSubmission")
+    debugger
     submissionDiv.find(".player-name").text(game.round.winning_submission.player_name);
+    submissionDiv.find(".avatar-container .avatar").attr("src", gravatar(game.round.winning_submission.player_email))
     submissionDiv.find(".player-card-content").text(game.round.winning_submission.submission_content);
   },
 
@@ -245,6 +268,7 @@ View.prototype = {
     for (var i = 0; i < losingSubmissions.length; i ++) {
       losingDiv.find(".player-name").text(losingSubmissions[i].player_name)
       losingDiv.find(".player-card-content").text(losingSubmissions[i].submission_content)
+      losingDiv.find(".avatar-container .avatar").attr("src", gravatar(losingSubmissions[i].player_email))
       $(".submission-loser-container ul").append(losingDiv)
       var losingDiv = $(".submission-loser-container ul li:first").clone();
     }
@@ -264,6 +288,7 @@ View.prototype = {
         listItem.find('.game-round').text(gameRecaps[i].round_num)
         listItem.find('a').attr('href', gameRecaps[i].round_num)
         listItem.find('.leader-name').text(gameRecaps[i].leader_name)
+        listItem.find('.round-recap-container .leader-avatar').attr("src", gameRecaps[i].leader_gravatar)
         listItem.find('.leader-blackcard-content').text(gameRecaps[i].blackcard_content)
         listItem = listItem.clone();
       }
