@@ -192,8 +192,6 @@ View.prototype = {
     if (missing_submissions.length > 0) {
       for (var i = 0; i < missing_submissions.length; i++) {
         $('.player-list ul').append(listItem);
-        console.log("missing_submissions;");
-
         listItem.find('.player-data .player-name').text(missing_submissions[i].player_name);
         listItem.find('.player-status').text(" has not submitted a white card.");
         listItem.find('.avatar').attr("src", gravatar(missing_submissions[i].player_email));
@@ -207,8 +205,6 @@ View.prototype = {
     if (submissions.length > 0) {
       for (var i = 0; i < submissions.length; i++) {
         $('.player-list ul').append(listItem);
-        console.log("given_submissions;");
-        console.log("Email" + submissions[i].player_email)
         listItem.find('.player-data .player-name').text(submissions[i].player_name)
         listItem.find('.player-status').text(" is in!")
         listItem.find('.avatar').attr("src", gravatar(submissions[i].player_email));

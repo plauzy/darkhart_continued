@@ -1,9 +1,15 @@
 module TestDataImporter
   def self.import
 
-    5.times do
-      FactoryGirl.create(:user)
-    end
+    # 5.times do
+    #   FactoryGirl.create(:user)
+    # end
+    User.create(name: "Cassidy Clawson", email: "cassidyclawson@gmail.com", password: "password" )
+    User.create(name: "Chandler Smith", email: "chandlerhsmithdev@gmail.com", password: "password" )
+    User.create(name: "Ian Bui", email: "thinkbui@gmail.com", password: "password" )
+    User.create(name: "Brooks Riley", email: "brooksroley@gmail.com", password: "password" )
+    User.create(name: "Pat Lauer", email: "plauer411@gmail.com", password: "password" )
+
 
     user_ids = [User.find(1), User.find(2), User.find(3), User.find(4), User.find(5)]
 
