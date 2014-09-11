@@ -385,8 +385,9 @@ Controller.prototype = {
 
   getGameOverview: function(event) {
     event.preventDefault();
+    debugger
     var initiator_id = this.cookie.user_id
-    var game_id = this.cookie.game_id
+    var game_id = this.cookie.game_id;
     var url = "/api/games/" + game_id + "/recap";
     var posting = $.get(url, { "user_id": initiator_id });
     posting.done(function( data ) {
@@ -469,14 +470,16 @@ Controller.prototype = {
 
   bindEvents: function() {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
-    $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this))
+    $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this));
+    // $("#user .active-game").on('click', this.getGameOverview.bind(this) )
+    $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
+
 
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
     $('#user-login').on('click', this.loginUser.bind(this)) //this.getUserGames.bind(this)
-    $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
-    $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
+    // $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
   }
 }
 
