@@ -542,9 +542,7 @@ Controller.prototype = {
   },
 
   bindEvents: function() {
-    // $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this));
-    // $("#user .active-game").on('click', this.getGameOverview.bind(this) )
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
@@ -556,8 +554,6 @@ Controller.prototype = {
     var that = this;
     $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this));
     $("#game").on('pagebeforecreate', this.getCurrentGameState.bind(this));
-    // $("#recap").on('pagebeforecreate', this.getPreviousRoundRecap.bind(this))
-    // $("#choose").on('pagebeforecreate', this.choosePageRefresh.bind(this));
     $("#user").on('pagebeforecreate', function() {
       that.accountManager();
       that.getUserGames(); });
