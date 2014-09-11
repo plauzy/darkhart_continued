@@ -68,14 +68,6 @@
     {"id":68,"cardType":"A","text":"Be sure to run your migrations.","numAnswers":0,"expansion": "Base"},
     {"id":69,"cardType":"A","text":"Using polymorphism to sound super cool.","numAnswers":0,"expansion": "Base"},
     {"id":70,"cardType":"A","text":"The real world.","numAnswers":0,"expansion": "Base"},
-
-
-
-
-
-
-
-
     {"id":71,"cardType":"Q","text":"_?  There's an app for that.","numAnswers":1,"expansion": "Base"},
     {"id":72,"cardType":"Q","text":"Why can't I sleep at night?","numAnswers":1,"expansion": "Base"},
     {"id":73,"cardType":"Q","text":"What's that smell?","numAnswers":1,"expansion": "Base"},
