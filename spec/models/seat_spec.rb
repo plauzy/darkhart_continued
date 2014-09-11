@@ -5,7 +5,7 @@ RSpec.describe Seat, :type => :model do
     Seat.destroy_all
     User.destroy_all
     Game.destroy_all
-    @user = User.create(name:"Test User")
+    @user = User.create(name:"Test User",password:"password")
     @game = Game.create(name:"Test Game")
   end
 
