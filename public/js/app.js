@@ -404,8 +404,8 @@ Controller.prototype = {
     }.bind(this));
   },
 
-  getCurrentGameState: function(event) {
-    event.preventDefault();
+  getCurrentGameState: function() {
+    // event.preventDefault();
     url = "/api/games/" + gameId();
     var posting = $.get(url, { "user_id": userId() } );
     posting.done(function( data ) {
@@ -450,7 +450,7 @@ Controller.prototype = {
   },
 
   bindEvents: function() {
-    $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
+    // $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this));
     // $("#user .active-game").on('click', this.getGameOverview.bind(this) )
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
@@ -462,6 +462,8 @@ Controller.prototype = {
 
   bindPageCreates: function() {
     $("#game-overview").on('pagebeforecreate', this.getGameOverview.bind(this) )
+    $("#game").on('pagebeforecreate', this.getCurrentGameState.bind(this))
+    // $("#recap").on('pagebeforecreate', this.getPreviousRoundRecap.bind(this))
 
   }
 }
@@ -480,40 +482,11 @@ var bindClearCookie = function($el) {
   });
 };
 
-// --------------------------------------
-// --------- PAGE INITIALIZERS ----------
-// --------------------------------------
-
-// HOME
-
-
 // USER
 $( document ).delegate("#create-account", "pageinit", function() {
   bindCreateUser( $("#user-create-button"),$("#user-name"),$("#user-password"),$("#user-phone"),$("#user-email") );
 });
 
-// $( document ).delegate("#user", "pageinit", function() {
-//   console.log("INIT RUNNING!")
-//   $('#user').trigger('create')
-//   cookie = $.cookie('session');
-//   bindSetCookie( $("#cookie-submit"),$("#cookie-user-email"),$("#cookie-user-password"),$("#cookie-game-ids") );
-//   bindClearCookie( $("#cookie-clear") );
-//   bindClearCookie( $(".user-logout") );
-//   if (cookie) {
-//     console.log("Detected cookie.")
-//     $(".login").hide();
-//     $(".create-account").hide();
-//     $(".user-logout").show();
-//     $(".create-game").show();
-//   }
-//   else {
-//     console.log("No cookie tected.")
-//     $(".login").show();
-//     $(".create-account").show();
-//     $(".user-logout").hide();
-//     $(".create-game").hide();
-//   }
-// });
 
 var bindCreateUser = function($submit, $user_name, $user_password, $user_phone, $user_email) {
   $submit.on("click", function(event) {
