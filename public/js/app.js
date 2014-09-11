@@ -193,7 +193,7 @@ View.prototype = {
       for (var i = 0; i < missing_submissions.length; i++) {
         $('.player-list ul').append(listItem);
         console.log("missing_submissions;");
-        console.log("Email" + submissions[i].player_email);
+
         listItem.find('.player-data .player-name').text(missing_submissions[i].player_name);
         listItem.find('.player-status').text(" has not submitted a white card.");
         listItem.find('.avatar').attr("src", gravatar(missing_submissions[i].player_email));
@@ -477,14 +477,19 @@ Controller.prototype = {
   makeSubmission: function(event) {
     event.preventDefault();
     var cardId = null;
-    if (!$(event.target.parents).hasClass("list-view")) {
-      el = $(event.target).parents('.card-link')[0];
-      cardId = parseInt($(el).attr('href'));
+    if (!$(event.target).parents().hasClass("list-view")) {
+      // var el = $(event.target).parents('.card-link')[0];
+      // cardId = parseInt($(el).attr('href'));
+
+      var el = $(event.target).parents('li').find('a').attr('href')
+      cardId = parseInt(el);
     }
-    else if ( $(event.target).hasClass("card-link") ){
-      cardId = parseInt( $(event.target).attr('href') )
-    }
+    // else if ( $(event.target).hasClass("card-link") ){
+    //   cardId = parseInt( $(event.target).attr('href') )
+
+    // }
     console.log(event.target)
+    debugger
     console.log(cardId)
     url = "/api/games/" + gameId() + "/cards/" + cardId;
     var posting = $.post(url, { "user_id": userId() });
