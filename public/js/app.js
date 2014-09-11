@@ -26,6 +26,10 @@ $(document).on("ready page:load", function() {
 
 //MODELS
 
+var gameId = function(){
+  return parseInt( $.cookie('game').game_id )
+}
+
 var UserCookie = function(user_id, token) {
   this.user_id = user_id;
   this.token = token;
@@ -42,7 +46,7 @@ var GameCookie = function(id) {
 };
 
 GameCookie.prototype = {
-  remove: function() { $.removeCookie('session') },
+  remove: function() { $.removeCookie('game') },
 };
 
 var PlayableCard = function(object) {
