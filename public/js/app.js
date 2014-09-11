@@ -381,9 +381,6 @@ Controller.prototype = {
 
   getGameOverview: function(event) {
     event.preventDefault();
-
-    // var initiator_id = userId
-    // var game_id = this.cookie.game_id;
     var url = "/api/games/" + gameId() + "/recap";
     var posting = $.get(url, { "user_id": userId() });
     posting.done(function( data ) {
@@ -399,12 +396,9 @@ Controller.prototype = {
       var el = $(event.target).parents('.game-round-link')[0];
       round_num = parseInt($(el).attr('href'));
     }
-    console.log('made it')
-    var initiator_id = userId
-    var game_id = this.cookie.game_id
-    url = "/api/games/" + game_id + "/rounds/" + round_num;
+    url = "/api/games/" + gameId() + "/rounds/" + round_num;
 
-    var posting = $.get(url, { "user_id": initiator_id });
+    var posting = $.get(url, { "user_id": userId() });
     posting.done(function( data ) {
       console.log(data);
       this.parseAjaxResponse(data);
@@ -422,7 +416,6 @@ Controller.prototype = {
       this.parseAjaxResponse(data);
       this.delegateGame();
       console.log("current game state fetched");
-
     }.bind(this));
   },
 
@@ -436,10 +429,8 @@ Controller.prototype = {
     else {
       debugger
     }
-    var initiator_id = userId
-    var game_id = this.cookie.game_id;
-    url = "/api/games/" + game_id + "/cards/" + cardId;
-    var posting = $.post(url, { "user_id": initiator_id });
+    url = "/api/games/" + gameId() + "/cards/" + cardId;
+    var posting = $.post(url, { "user_id": userId() });
     posting.done(function( data ) {
       this.parseAjaxResponse(data);
       console.log(data)
