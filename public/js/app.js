@@ -1,4 +1,23 @@
 //http://demos.jquerymobile.com/1.0/docs/pages/page-scripting.html
+// $( document ).delegate("#user", "pageshow", function() {
+//   console.log("INIT RUNNING!")
+//   cookie = $.cookie('session');
+//   bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-game-ids") );
+//   bindClearCookie( $("#cookie-clear") );
+//   bindClearCookie( $(".user-logout") );
+//   if (cookie) {
+//     console.log("Detected cookie.")
+//     $(".login").hide();
+//     $(".create-account").hide();
+//     $(".user-logout").show();
+//   }
+//   else {
+//     console.log("No cookie detected.")
+//     $(".login").show();
+//     $(".create-account").show();
+//     $(".user-logout").hide();
+//   }
+// });
 
 $(document).on("ready page:load", function() {
   var view = new View;
@@ -6,6 +25,19 @@ $(document).on("ready page:load", function() {
 });
 
 //MODELS
+
+var Cookie = function(user_id, token) {
+  this.user_id = user_id;
+  this.token = token;
+  this.game_id = null;
+  this.cookie = $.cookie('session', {"user_id": user_id, "token": token })
+};
+
+Cookie.prototype = {
+  remove: function() { $.removeCookie('session') },
+  setGameId: function(id) { this.game_id = id }
+};
+
 var PlayableCard = function(object) {
   this.id = object.playable_card_id;
   this.content = object.content;
@@ -70,17 +102,54 @@ var GameRecap = function(object) {
 var GameRecapList = function(jsonResponse) {
   this.gameRecaps = [];
   for (var i = jsonResponse.length; i > 0; i--) {
-    gameRecap = new GameRecap(jsonResponse[i-1])
-    this.gameRecaps.push(gameRecap)
+    gameRecap = new GameRecap(jsonResponse[i-1]);
+    this.gameRecaps.push(gameRecap);
   };
 }
 
-//VIEW
-var View = function() {
+var UserGame = function(object) {
+  this.game_id = object.game_id;
+  this.active = object.active;
+  this.current_round = object.current_round;
+  this.need_submission = object.need_submission;
+  this.leader_name = object.leader_name;
+  this.winner_id = object.owner_user_id;
+  this.game_name = object.game_name;
+  this.winner_email = object.owner_email;
+  this.winner_name = object.owner_name;
+  this.winner_whitecard = object.card_content;
+};
 
-}
+var UserGamesList = function(jsonResponse) {
+  this.userGames = [];
+  for (var i = jsonResponse.length; i > 0; i--) {
+    userGame = new UserGame(jsonResponse[i-1]);
+    this.userGames.push(userGame);
+  }
+};
+//VIEW
+var View = function() { }
 
 View.prototype = {
+
+  drawUserGames: function(games) {
+    $('#active-games-group').empty()
+    $('#inactive-games-group').empty()
+    var game_html = "<a href='#game-overview' class='active-game ui-btn ui-icon-check ui-btn-icon-right' data-role='button' style='text-align: left'>Game</a>"
+
+    for (var i = 0; i < games.userGames.length; i++) {
+      var game = games.userGames[i];
+      var $game_html = $(game_html).text(game.game_name).on('click', function(event) { alert(game.leader_name)});
+      if (game.active == true && game.need_submission == true) {
+        $('#active-games-group').append($game_html);
+       }
+      else if (game.active == true) {
+        $('#active-games-group').append($game_html.removeClass('ui-icon-check ui-btn-icon-right'));
+      }
+      else {
+        $('#inactive-games-group').append($game_html.removeClass('ui-icon-check ui-btn-icon-right'));}
+    }
+  },
 
   drawHeader: function(game) {
     $('.game-header').text(game.game_name + " - Round " + game.round.round_num);
@@ -206,7 +275,6 @@ View.prototype = {
   }
 }
 
-
 //CONTROLLER
 var Controller = function(view) {
   this.bindEvents();
@@ -214,6 +282,8 @@ var Controller = function(view) {
   this.user = null;
   this.game = null;
   this.leader = null;
+  this.userGamesList = null;
+  this.cookie = null;
   this.gameRecapList = null;
 };
 
@@ -231,6 +301,11 @@ Controller.prototype = {
       $('.choose-button-container').hide().show()
     }
     this.view.drawPlayerList(this.game);
+  },
+  delegateUserGames: function() {
+    console.log("delegateUserGames")
+    $.mobile.changePage("#user");
+    this.view.drawUserGames(this.userGamesList);
   },
 
   delegateSubmission: function() {
@@ -266,6 +341,31 @@ Controller.prototype = {
     this.leader = new Leader(data.leader)
   },
 
+  loginUser: function(data) {
+    event.preventDefault();
+    var user_email = $('#login-email').val();
+    var user_password = $('#login-password').val();
+    $.ajax({
+      type: "POST",
+      url: '/api/users/signin',
+      data: { "user_email":user_email, "password":user_password}
+    })
+    .done( function(response) {
+      this.cookie = new Cookie(response.user_id, response.token)
+      this.getUserGames();
+
+
+      // setTimeout(
+      //   function(){
+      //     location.reload();
+      //   },100
+      // );
+    }.bind(this))
+      .fail(function(jqXHR,response){
+        alert("Signin failed");
+      })
+  },
+
   createGame: function(event) {
     event.preventDefault();
     var form = $(event.target);
@@ -293,7 +393,6 @@ Controller.prototype = {
       this.gameRecapList = new GameRecapList(data)
       this.delegateGameOverview();
     }.bind(this));
-
   },
 
   getPreviousRoundRecap: function(event) {
@@ -349,7 +448,6 @@ Controller.prototype = {
     var posting = $.post(url, { "user_id": initiator_id });
     posting.done(function( data ) {
       this.parseAjaxResponse(data);
-
       console.log(data)
       if ( this.game.round.active ) {
         this.delegateGame();
@@ -360,19 +458,76 @@ Controller.prototype = {
     }.bind(this));
   },
 
+  getUserGames: function() {
+    url = "/api/users/" +  this.cookie.user_id;
+    var posting = $.get(url, { "user_id": this.cookie.user_id } );
+    posting.done(function( data ) {
+      this.userGamesList = new UserGamesList(data)
+      this.delegateUserGames();
+    }.bind(this));
+  },
+
   bindEvents: function() {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
-    $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
-    $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
-    $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
-    $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this))
+
+    $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
+    $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
+    $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
+    $('#user-login').on('click', this.loginUser.bind(this)) //this.getUserGames.bind(this)
+    $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
+    $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
   }
 }
 
 
 // ------------ GLOBAL -----------
 $.cookie.json = true;
+
+
+
+var bindClearCookie = function($el) {
+  $el.on("click", function(event) {
+    console.log("Running bindClearCookie event");
+    $.removeCookie('session');
+    location.reload();
+  });
+};
+
+// --------------------------------------
+// --------- PAGE INITIALIZERS ----------
+// --------------------------------------
+
+// HOME
+
+
+// USER
+$( document ).delegate("#create-account", "pageinit", function() {
+  bindCreateUser( $("#user-create-button"),$("#user-name"),$("#user-password"),$("#user-phone"),$("#user-email") );
+});
+
+// $( document ).delegate("#user", "pageinit", function() {
+//   console.log("INIT RUNNING!")
+//   $('#user').trigger('create')
+//   cookie = $.cookie('session');
+//   bindSetCookie( $("#cookie-submit"),$("#cookie-user-email"),$("#cookie-user-password"),$("#cookie-game-ids") );
+//   bindClearCookie( $("#cookie-clear") );
+//   bindClearCookie( $(".user-logout") );
+//   if (cookie) {
+//     console.log("Detected cookie.")
+//     $(".login").hide();
+//     $(".create-account").hide();
+//     $(".user-logout").show();
+//     $(".create-game").show();
+//   }
+//   else {
+//     console.log("No cookie tected.")
+//     $(".login").show();
+//     $(".create-account").show();
+//     $(".user-logout").hide();
+//     $(".create-game").hide();
+//   }
+// });
 
 var bindCreateUser = function($submit, $user_name, $user_password, $user_phone, $user_email) {
   $submit.on("click", function(event) {
@@ -403,75 +558,3 @@ var bindCreateUser = function($submit, $user_name, $user_password, $user_phone, 
     })
   });
 }
-
-var bindClearCookie = function($el) {
-  $el.on("click", function(event) {
-    console.log("Running bindClearCookie event");
-    $.removeCookie('session');
-    location.reload();
-  });
-};
-
-var bindSetCookie = function($submit, $user_id, $user_password, $game_ids) {
-  $submit.on("click", function(event) {
-    console.log("Running bindSetCookie event");
-    var user_id = $user_id.val();
-    var user_password = $user_password.val();
-    var game_ids = $game_ids.val().split(",");
-    for (var a in game_ids ) { game_ids[a] = parseInt(game_ids[a], 10); }
-    $.ajax({
-      type: "POST",
-      url: '/api/users/signin',
-      data: {user_id:user_id,password:user_password}
-    })
-    .done(function(response){
-      var cookie = { "user_id": user_id,
-                     "game_ids": game_ids,
-                     "token": response.token };
-      $.cookie('session', cookie);
-      setTimeout(
-        function(){
-          location.reload();
-        },100
-      );
-    })
-    .fail(function(jqXHR,response){
-      alert("Signin failed");
-    })
-  });
-};
-
-// --------------------------------------
-// --------- PAGE INITIALIZERS ----------
-// --------------------------------------
-
-// HOME
-
-
-// USER
-$( document ).delegate("#create-account", "pageinit", function() {
-  bindCreateUser( $("#user-create-button"),$("#user-name"),$("#user-password"),$("#user-phone"),$("#user-email") );
-});
-
-$( document ).delegate("#user", "pageinit", function() {
-  console.log("INIT RUNNING!")
-  $('#user').trigger('create')
-  cookie = $.cookie('session');
-  bindSetCookie( $("#cookie-submit"),$("#cookie-user-id"),$("#cookie-user-password"),$("#cookie-game-ids") );
-  bindClearCookie( $("#cookie-clear") );
-  bindClearCookie( $(".user-logout") );
-  if (cookie) {
-    console.log("Detected cookie.")
-    $(".login").hide();
-    $(".create-account").hide();
-    $(".user-logout").show();
-    $(".create-game").show();
-  }
-  else {
-    console.log("No cookie tected.")
-    $(".login").show();
-    $(".create-account").show();
-    $(".user-logout").hide();
-    $(".create-game").hide();
-  }
-});
