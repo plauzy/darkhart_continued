@@ -14,7 +14,8 @@ class Api::UsersController < ApplicationController
   end
 
   def signin
-    user = User.find(params[:user_id])
+    user = User.find_by(email: params[:user_email])
+    p user
     if user && user.authenticate(params[:password])
       render json: {token:user.remember_token,user_id:user.id}
     else
@@ -25,7 +26,7 @@ class Api::UsersController < ApplicationController
   def create
    user = User.new(name:params[:name],password:params[:password],email:params[:email])
     if user.save
-      render json: {token:user.remember_token}
+      render json: {token:user.remember_token,user_id:user.id}
       # flash[:success] = "Welcome to Dark Heart!"
       # session[:user_id] = @user.id
       # redirect_to @user
