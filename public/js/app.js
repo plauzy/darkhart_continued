@@ -191,6 +191,8 @@ View.prototype = {
       else {
         listElement.append(listItem);
         listItem.find('.game-round').text(gameRecaps[i].round_num)
+        listItem.find('a').attr('href', '1')
+        // debugger
         listItem.find('.leader-name').text(gameRecaps[i].leader_name)
         listItem.find('.leader-blackcard-content').text(gameRecaps[i].blackcard_content)
         listItem = listItem.clone();
@@ -285,7 +287,6 @@ Controller.prototype = {
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0]
     var url = "/api/games/" + game_id + "/recap";
-
     var posting = $.get(url, { "user_id": initiator_id });
     posting.done(function( data ) {
       this.gameRecapList = new GameRecapList(data)
@@ -295,16 +296,16 @@ Controller.prototype = {
   },
 
   getPreviousRoundRecap: function(event) {
+    debugger
     event.preventDefault();
-    var form = $(event.target);
-    initiator_id = form.find( "input[name='initiator_id']" ).val();
-    game_id=  form.find( "input[name='game_id']" ).val();
+    console.log('made it')
+    var initiator_id = $.cookie('session').user_id
+    var game_id = $.cookie('session').game_ids[0]
     round_num = form.find( "input[name='round_num']").val();
-    url = "/api/users/" + initiator_id + "/games/" + game_id + "/rounds/" + round_num;
+    url = "/api/games/" + game_id + "/rounds/" + round_num;
 
-    var posting = $.get(url);
+    var posting = $.get(url, { "user_id": initiator_id });
     posting.done(function( data ) {
-      $("#json").empty().append(JSON.stringify(data, undefined, 2))
       console.log(data);
       this.parseAjaxResponse(data);
     }.bind(this));
@@ -354,12 +355,10 @@ Controller.prototype = {
   bindEvents: function() {
     $("#game-overview .play-round-btn").on('click', this.getCurrentGameState.bind(this));
     $('#game .choose-button-container a').on('click', this.delegateSubmission.bind(this));
-
     $('#active-games-group a').on('click',  this.getGameOverview.bind(this))
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
-
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
-
+    $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this))
     // $('#active-games-group').on('click', 'a', this.getPreviousRoundRecaps)
 
     //Saving for refactoring later
