@@ -8,7 +8,8 @@ class Api::GamesController < ApplicationController
   end
 
   def game_state
-    round_num = params["round"] || 0
+    round_num = params["round_num"] || 0
+    puts "round num: #{round_num}"
     game = GameGetter.new(params["game_id"], params["user_id"], round_num.to_i)
     render :json => game.game_state
   end

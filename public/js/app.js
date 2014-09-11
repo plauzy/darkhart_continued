@@ -191,7 +191,7 @@ View.prototype = {
       else {
         listElement.append(listItem);
         listItem.find('.game-round').text(gameRecaps[i].round_num)
-        listItem.find('a').attr('href', '1')
+        listItem.find('a').attr('href', gameRecaps[i].round_num)
         // debugger
         listItem.find('.leader-name').text(gameRecaps[i].leader_name)
         listItem.find('.leader-blackcard-content').text(gameRecaps[i].blackcard_content)
@@ -296,18 +296,27 @@ Controller.prototype = {
   },
 
   getPreviousRoundRecap: function(event) {
-    debugger
     event.preventDefault();
+    var round_num = null
+    if (!$(event.target.parents).hasClass("prev-rounds-list")) {
+      var el = $(event.target).parents('.game-round-link')[0];
+      round_num = parseInt($(el).attr('href'));
+    }
+    else {
+      debugger
+    }
+    debugger
     console.log('made it')
     var initiator_id = $.cookie('session').user_id
     var game_id = $.cookie('session').game_ids[0]
-    round_num = form.find( "input[name='round_num']").val();
     url = "/api/games/" + game_id + "/rounds/" + round_num;
 
     var posting = $.get(url, { "user_id": initiator_id });
     posting.done(function( data ) {
       console.log(data);
       this.parseAjaxResponse(data);
+
+      this.delegateRecap();
     }.bind(this));
   },
 
@@ -347,8 +356,6 @@ Controller.prototype = {
       else {
         this.delegateRecap();
       }
-
-
     }.bind(this));
   },
 
@@ -359,13 +366,6 @@ Controller.prototype = {
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
     $("#game #game-refresh").on('click', this.getCurrentGameState.bind(this));
     $("#game-overview .prev-rounds-list").on('click', this.getPreviousRoundRecap.bind(this))
-    // $('#active-games-group').on('click', 'a', this.getPreviousRoundRecaps)
-
-    //Saving for refactoring later
-    // $("#newGameForm").on("submit", this.createGame.bind(this))
-    // $("#previousRoundRecap").on("submit", this.getPreviousRoundRecap.bind(this))
-    // $("#active-games-group a").on('click', this.getCurrentGameState.bind(this))
-    // $("#makeSubmission").on("submit", this.makeSubmission.bind(this))
   }
 }
 
