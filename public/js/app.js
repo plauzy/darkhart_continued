@@ -514,6 +514,16 @@ Controller.prototype = {
     $('#choose .listview').on('click', 'li a.card-link', this.makeSubmission.bind(this));
     $('#user-login').on('click', this.loginUser.bind(this));
     $('.user-logout').on('click', this.logoutUser.bind(this));
+
+    $("#recap .back-to-game-overview").on('click', function() { 
+      setTimeout(
+              function(){
+                
+                $.mobile.changePage("#game-overview");
+                location.reload();
+              },100
+            );
+      })
   },
 
   bindPageCreates: function() {
@@ -523,8 +533,6 @@ Controller.prototype = {
     $("#user").on('pagebeforecreate', function() {
       that.accountManager();
       that.getUserGames(); });
-
-    $("#game a")
   }
 }
 
