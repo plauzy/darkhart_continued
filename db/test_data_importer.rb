@@ -14,7 +14,7 @@ module TestDataImporter
 
     user_ids = [User.find(1), User.find(2), User.find(3), User.find(4), User.find(5)]
 
-    game = GameSkeleton.new(name = "Test", user_ids, 4).new_game
+    game = GameSkeleton.new(name = "Mule Deer Rules", user_ids, 4).new_game
 
 
     #each user besides blackcard submits card each round for 2 rounds

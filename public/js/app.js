@@ -273,6 +273,7 @@ View.prototype = {
         this.drawOpenRoundHeader(gameRecaps[i])
       }
       else {
+
         listElement.append(listItem);
         listItem.find('.game-round').text(gameRecaps[i].round_num)
         listItem.find('a').attr('href', gameRecaps[i].round_num)
@@ -362,6 +363,8 @@ Controller.prototype = {
 
   delegateGameOverview: function() {
     $.mobile.changePage("#game-overview");
+    console.log("here")
+    $('#game-overview .game-header').text(this.gameRecapList.gameRecaps[0].game_name)
     this.view.drawGameOverview(this.gameRecapList.gameRecaps)
   },
 
