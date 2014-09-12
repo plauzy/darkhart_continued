@@ -56,6 +56,12 @@ module TestDataImporter
       playable_card.save!
     end
 
+    playable_cards = seats[3].playable_cards.where("submitted = false").to_a
+    playable_card = playable_cards.pop
+    FactoryGirl.create(:submission, playable_card: playable_card, round: round)
+    playable_card.submitted = true
+    playable_card.save!
+
     #seat 1 and 2 have submitted cards, seats 4 and 5 need to submit
 
   end

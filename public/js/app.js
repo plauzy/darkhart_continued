@@ -524,7 +524,7 @@ Controller.prototype = {
       that.accountManager();
       that.getUserGames(); });
 
-    $("#game a[attr='back']")
+    $("#game a")
   }
 }
 
