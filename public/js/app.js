@@ -363,7 +363,6 @@ Controller.prototype = {
 
   delegateGameOverview: function() {
     $.mobile.changePage("#game-overview");
-    console.log("here")
     $('#game-overview .game-header').text(this.gameRecapList.gameRecaps[0].game_name)
     this.view.drawGameOverview(this.gameRecapList.gameRecaps)
   },
