@@ -1,39 +1,158 @@
-/*html body {
-  width:100%;
-  height:100%;
+body {
+  font-weight: bold!important;
+  text-shadow:0 0 0!important;
 }
 
-#left {
+.blackcard-container {
+  position: fixed;
+  width: 100%;
+  height: 10em;
+  background-color: black;
+  z-index: 1;
+}
 
+.leader-container {
   display: inline-block;
-  width:30%;
-  background-color:red;
+  white-space: normal;
+  background-color: black;
 }
 
-#right {
-  display: inline-block;
-  width: 69%;
-  background-color: lightgray;
+.ui-controlgroup-horizontal .ui-controlgroup-controls {
+    width: 100%!important;
+  }
+
+.full-width-btn-group a {
+  width: 38.5%;
 }
-*/
-<form role="form">
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-  <div class="form-group">
-    <label for="exampleInputFile">File input</label>
-    <input type="file" id="exampleInputFile">
-    <p class="help-block">Example block-level help text here.</p>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> Check me out
-    </label>
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
+
+.content-push-home {
+  margin-top: 10em;
+}
+
+.content-push {
+  margin-top: 12em;
+}
+
+.header-title {
+  padding: 3% 6% 0 6%;
+  color: white;
+  font-size: 2.2em;
+  line-height: 1.3em;
+}
+
+.header-title p {
+  margin: 0;
+  padding: 0;
+}
+
+.blackcard {
+  padding: 6%;
+  color: white;
+}
+
+.leader-avatar-container {
+  display: inline-block;
+}
+
+.avatar {
+  border-radius: 50%!important;
+  width: 3em;
+  height: 3em;
+}
+
+/*.leader-avatar {
+  padding: 1em;
+}*/
+
+.leader-name-container {
+  padding: 0 .5em;
+  font-size: .8em;
+  padding-top: .4em;
+  vertical-align: top;
+  height: 3em;
+  display: inline-block;
+}
+
+.blackcard-content {
+  padding-right:1em;
+  overflow: hidden;
+  font-size: 1.5em;
+}
+
+.listview {
+  padding-top: 1.7em;
+}
+
+.ui-header .ui-btn {
+  background-color: black!important;
+  border: 0px;
+  color: black;
+  text-decoration: none;
+}
+
+.ui-btn {
+  text-shadow: 0 0 0!important;
+}
+
+.listview .avatar {
+  margin: 6% 0;
+}
+
+li {
+  border-color:lightgray!important;
+}
+
+.ui-btn {
+  border-color: black!important;
+}
+
+.player-container {
+/*    background-color: red;
+*/}
+
+.avatar-container {
+  display: inline-block;
+}
+
+.player-data, .leader-data {
+  padding: .6em .5em;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.leader-data {
+  font-size: .8em;
+}
+
+.card-container {
+  white-space: normal;
+}
+
+.round-recap-container {
+  padding: 5%;
+  color: white;
+  white-space: normal;
+  background-color: black;
+}
+
+
+.player-data {
+  white-space: normal;
+  padding-right: 3em;
+}
+
+.leader-blackcard {
+  padding-top: 1em;
+}
+
+.player-card-content {
+  font-size: .8em;
+}
+
+
+
+* {
+ text-shadow: none;
+ box-shadow: none;
+ -webkit-box-shadow: none;
+}

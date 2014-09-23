@@ -1,13 +1,20 @@
 module TestDataImporter
   def self.import
 
-    5.times do
-      FactoryGirl.create(:user)
-    end
+    # 5.times do
+    #   FactoryGirl.create(:user)
+    # end
+
+    User.create(name: "Brooks Riley", email: "brooksroley@gmail.com", password: "password" )
+    User.create(name: "Chandler Smith", email: "chandlerhsmithdev@gmail.com", password: "password" )
+    User.create(name: "Cassidy Clawson", email: "cassidyclawson@gmail.com", password: "password" )
+    User.create(name: "Ian Bui", email: "thinkbui@gmail.com", password: "password" )
+    User.create(name: "Pat Lauer", email: "plauer411@gmail.com", password: "password" )
+
 
     user_ids = [User.find(1), User.find(2), User.find(3), User.find(4), User.find(5)]
 
-    game = GameSkeleton.new(name = "Test", user_ids, 4).new_game
+    game = GameSkeleton.new(name = "Mule Deer Rules", user_ids, 4).new_game
 
 
     #each user besides blackcard submits card each round for 2 rounds
@@ -48,6 +55,12 @@ module TestDataImporter
       playable_card.submitted = true
       playable_card.save!
     end
+
+    playable_cards = seats[3].playable_cards.where("submitted = false").to_a
+    playable_card = playable_cards.pop
+    FactoryGirl.create(:submission, playable_card: playable_card, round: round)
+    playable_card.submitted = true
+    playable_card.save!
 
     #seat 1 and 2 have submitted cards, seats 4 and 5 need to submit
 

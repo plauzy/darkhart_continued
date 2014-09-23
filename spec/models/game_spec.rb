@@ -7,7 +7,7 @@ RSpec.describe Game, :type => :model do
     User.destroy_all
     Round.destroy_all
     Blackcard.destroy_all
-    @user = User.create(name:"Test User")
+    @user = User.create(name:"Test User",password:"password")
     @blackcard = Blackcard.create(content:"Test black card")
   end
 
