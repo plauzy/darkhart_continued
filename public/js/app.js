@@ -518,6 +518,16 @@ Controller.prototype = {
     $('#user-login').on('click', this.loginUser.bind(this));
     $('.user-logout').on('click', this.logoutUser.bind(this));
 
+    $("#game-overview .back-to-user").on('click', function() {
+
+     setTimeout(
+      function(){
+        $.mobile.changePage("#user");
+        location.reload();
+      },100
+      );
+
+   });
     $("#game .back-to-game-overview").on('click', function() {
       setTimeout(
               function(){
@@ -527,7 +537,6 @@ Controller.prototype = {
               },100
             );
       });
-
     $("#recap .back-to-game-overview").on('click', function() { 
       setTimeout(
               function(){
