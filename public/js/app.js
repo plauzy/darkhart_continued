@@ -363,7 +363,6 @@ Controller.prototype = {
 
   delegateGameOverview: function() {
     $.mobile.changePage("#game-overview");
-    console.log("here")
     $('#game-overview .game-header').text(this.gameRecapList.gameRecaps[0].game_name)
     this.view.drawGameOverview(this.gameRecapList.gameRecaps)
   },
@@ -518,6 +517,25 @@ Controller.prototype = {
     $('#user-login').on('click', this.loginUser.bind(this));
     $('.user-logout').on('click', this.logoutUser.bind(this));
 
+    $("#game-overview .back-to-user").on('click', function() {
+
+     setTimeout(
+      function(){
+        $.mobile.changePage("#user");
+        location.reload();
+      },100
+      );
+
+   });
+    $("#game .back-to-game-overview").on('click', function() {
+      setTimeout(
+              function(){
+                
+                $.mobile.changePage("#game-overview");
+                location.reload();
+              },100
+            );
+      });
     $("#recap .back-to-game-overview").on('click', function() { 
       setTimeout(
               function(){
