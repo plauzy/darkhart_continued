@@ -1,6 +1,5 @@
-$.cookie.json = true;
-
 $(document).on("ready page:load", function() {
+  $.cookie.json = true;
   var view = new View;
   var controller = new Controller(view);
 });
