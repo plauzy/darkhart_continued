@@ -518,22 +518,22 @@ Controller.prototype = {
 
     $("#game-overview .back-to-user").on('click', function() {
 
-     // setTimeout(
-     //  function(){
+     setTimeout(
+      function(){
         $.mobile.changePage("#user");
-    //     location.reload();
-    //   },100
-    // );
+        location.reload();
+      },100
+    );
 
    });
     $("#game .back-to-game-overview").on('click', function() {
-      // setTimeout(
-      //         function(){
+      setTimeout(
+              function(){
                 
                 $.mobile.changePage("#game-overview");
-                // location.reload();
-            //   },100
-            // );
+                location.reload();
+              },100
+            );
       });
     $("#recap .back-to-game-overview").on('click', function() { 
       setTimeout(
