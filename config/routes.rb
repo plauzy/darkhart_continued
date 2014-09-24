@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+  root 'play#index'
   #return all users
   get 'api/users' => 'api/users#index'
 
@@ -23,7 +25,7 @@ Rails.application.routes.draw do
   get "/api/users/:user_id" => 'api/games#inventory'
 
   get '/tool' => "devtool#index"
-  root 'devtool#index'
+
 
   # get 'api/users/:user_id' => 'application#user_state' # Returns all games the user is in.
   # post 'api/users/:user_id/games' => 'application#new_game' # Creates new game and returns game_state
