@@ -14,3 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= require "md5.js"
+//= require "jquery-2.1.1.min.js"
+//= require "jquery.cookie.js"
+//= require "jquery.mobile-1.4.3.min.js"
